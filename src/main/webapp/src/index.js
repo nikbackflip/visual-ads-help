@@ -1,4 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
 
-ReactDOM.render(<h1>Hello, Visual-ADS-Help</h1>, document.getElementById('root'));
+ReactDOM.render(<App/>,
+    document.getElementById('App-container'));

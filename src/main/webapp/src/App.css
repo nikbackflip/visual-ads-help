@@ -1,0 +1,39 @@
+.App {
+    margin: 0;
+}
+
+.App-header {
+    background: #3C3F41;
+    height: 60px;
+}
+
+.App-line-split {
+    background: #25282A;
+    height: 5px;
+}
+
+.App-body {
+    height: calc(100vh - 65px);
+}
+
+.App-left {
+    height: 100%;
+    width: 10%;
+    background-color: #3C3F41;
+    float: left;
+}
+
+.App-middle {
+    background: #2B2B2B;
+    width: 70%;
+    height: 100%;
+    float: left;
+}
+
+.App-right {
+    height: 100%;
+    width: 20%;
+    background-color: #3C3F41;
+    float: left;
+}
+
