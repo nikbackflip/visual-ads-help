@@ -4,7 +4,7 @@
 
 .App-control-header {
     background: #3C3F41;
-    height: 60px;
+    height: 40px;
 }
 
 .App-line-split {
@@ -13,7 +13,7 @@
 }
 
 .App-body {
-    height: calc(100vh - 65px);
+    height: calc(100vh - 45px);
 }
 
 .App-info-panel {

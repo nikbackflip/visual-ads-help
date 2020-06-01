@@ -1,5 +1,6 @@
 import React from 'react';
 import {Stage, Layer, Circle} from 'react-konva';
+import './css/DrawingArea.css';
 
 const colors = [
     '#FF7EC7',
@@ -26,7 +27,7 @@ class DrawingArea extends React.Component {
     updateSize = () => {
         this.setState({
             stageWidth: this.container.offsetWidth,
-            stageHeight: this.container.offsetHeight
+            stageHeight: this.container.offsetHeight - 45 // App-drawing-area - (Drawing-area-header + App-line-split)
         });
     }
 
@@ -72,6 +73,9 @@ class DrawingArea extends React.Component {
                  ref={node => {
                      this.container = node;
                  }}>
+
+                <div className="Drawing-area-header"/>
+                <div className="App-line-split"/>
 
                 <Stage
                     width={this.state.stageWidth}
