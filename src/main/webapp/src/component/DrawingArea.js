@@ -10,6 +10,15 @@ const colors = [
 ];
 const circleRadius = 20;
 
+const MODE_NONE = 0;
+const MODE_ADD_NODE = 1;
+
+let drawingAreaMode = 0;
+
+function setDrawingMode(mode) {
+    drawingAreaMode = mode;
+}
+
 class DrawingArea extends React.Component {
 
     constructor(props) {
@@ -32,15 +41,19 @@ class DrawingArea extends React.Component {
     }
 
     handleStageClick = e => {
-        const newNodes = this.state.nodes.slice();
-        newNodes.push({
-            x: e.evt.layerX,
-            y: e.evt.layerY,
-            color: colors.sample()
-        });
-        this.setState({
-            nodes: newNodes,
-        });
+
+        if (drawingAreaMode === MODE_ADD_NODE) {
+            const newNodes = this.state.nodes.slice();
+            newNodes.push({
+                x: e.evt.layerX,
+                y: e.evt.layerY,
+                color: colors.sample()
+            });
+            this.setState({
+                nodes: newNodes,
+            });
+        }
+
     }
 
     dragBoundFunc(pos) {
@@ -74,7 +87,13 @@ class DrawingArea extends React.Component {
                      this.container = node;
                  }}>
 
-                <div className="Drawing-area-header"/>
+                <div className="Drawing-area-header">
+                    <button className="Drawing-area-header-button" onClick={() => setDrawingMode(MODE_NONE)}>NONE
+                    </button>
+                    <button className="Drawing-area-header-button" onClick={() => setDrawingMode(MODE_ADD_NODE)}>ADD
+                        NODE
+                    </button>
+                </div>
                 <div className="App-line-split"/>
 
                 <Stage
