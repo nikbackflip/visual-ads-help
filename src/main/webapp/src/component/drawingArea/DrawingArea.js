@@ -1,9 +1,8 @@
 import React from 'react';
 import {Circle, Layer, Line, Stage} from 'react-konva';
 import '../css/DrawingArea.css';
-import {black} from "color-name";
 import DrawingControlPanel from "./DrawingControlPanel";
-import {MODE_NONE, MODE_ADD_NODE, MODE_ADD_EDGE} from './DrawingModeConstants';
+import {MODE_NONE, MODE_ADD_NODE, MODE_ADD_EDGE, MODE_DEL_NODE, MODE_DEL_EDGE} from './DrawingModeConstants';
 
 const colors = [
     '#FF7EC7',
@@ -61,50 +60,100 @@ class DrawingArea extends React.Component {
         }
     }
 
-    dragBoundFunc = pos => {
-        let newY = pos.y < circleRadius ? circleRadius : pos.y;
-        newY = newY > this.state.stageHeight - circleRadius ? this.state.stageHeight - circleRadius : newY;
-
-        let newX = pos.x < circleRadius ? circleRadius : pos.x;
-        newX = newX > this.state.stageWidth - circleRadius ? this.state.stageWidth - circleRadius : newX;
-        return {
-            x: newX,
-            y: newY,
-        };
-    }
-
     onDragMove = e => {
         const nodes = this.state.nodes.slice();
-        const node = nodes[e.target.index];
+        const node = nodes.find(n => {
+            return n.id === e.target.attrs.id;
+        });
+
         node.x += e.evt.movementX;
         node.y += e.evt.movementY;
+
         this.setState({
             nodes: nodes,
         });
+    }
 
+    onDragEnd = e => {
+        const nodes = this.state.nodes.slice();
+        const node = nodes.find(n => {
+            return n.id === e.target.attrs.id;
+        });
+
+        let x = node.x;
+        let y = node.y;
+
+        x = x < circleRadius ? circleRadius : x;
+        x = x > this.state.stageWidth - circleRadius ? this.state.stageWidth - circleRadius : x;
+
+        y = y < circleRadius ? circleRadius : y;
+        y = y > this.state.stageHeight - circleRadius ? this.state.stageHeight - circleRadius : y;
+
+        node.x = x;
+        node.y = y;
+
+        this.setState({
+            nodes: nodes,
+        });
     }
 
     handleCircleClick = e => {
+        const nodes = this.state.nodes.slice();
+        let index = nodes.findIndex(n => {
+            return n.id === e.target.attrs.id;
+        });
 
         switch (this.state.drawingAreaMode) {
             case MODE_ADD_EDGE:
                 if (this.selectedNode == null) {
-                    const nodes = this.state.nodes.slice();
-                    this.selectedNode = nodes[e.target.index];
+                    this.selectedNode = nodes[index];
                 } else {
-                    const nodes = this.state.nodes.slice();
-                    const node = nodes[e.target.index];
-                    const newEdges = this.state.edges.slice();
-                    newEdges.push({
+                    const node = nodes[index];
+                    const updatedEdges = this.state.edges.slice();
+                    updatedEdges.push({
                         id: this.edgeId++,
                         from: this.selectedNode,
                         to: node
                     });
                     this.setState({
-                        edges: newEdges,
+                        edges: updatedEdges,
                     });
                     this.selectedNode = null;
                 }
+                break;
+            case MODE_DEL_NODE:
+                const nodeToRemove = nodes[index];
+                nodes.splice(index, 1);
+
+                const edges = this.state.edges.slice();
+                const toRemove = edges.filter(e => {
+                    return e.from === nodeToRemove || e.to === nodeToRemove;
+                });
+                const updatedEdges = edges.filter(e => !toRemove.includes(e))
+
+                this.setState({
+                    nodes: nodes,
+                    edges: updatedEdges
+                });
+                break;
+            default:
+                break;
+        }
+    }
+
+    handleEdgeClick = e => {
+        const edges = this.state.edges.slice();
+        let index = edges.findIndex(n => {
+            return n.id === e.target.attrs.id;
+        });
+
+        switch (this.state.drawingAreaMode) {
+            case MODE_DEL_EDGE:
+                edges.splice(index, 1);
+
+                this.setState({
+                    edges: edges
+                });
                 break;
             default:
                 break;
@@ -114,14 +163,15 @@ class DrawingArea extends React.Component {
     getCircle = (x, y, color, id, selected) => {
         return <Circle
             key={id}
+            id={id}
             x={x}
             y={y}
             radius={circleRadius}
             fill={color}
             opacity={0.9}
             draggable={true}
-            dragBoundFunc={this.dragBoundFunc}
             onDragMove={this.onDragMove}
+            onDragEnd={this.onDragEnd}
             strokeEnabled={selected}
             strokeWidth={3}
             stroke={"black"}
@@ -132,9 +182,11 @@ class DrawingArea extends React.Component {
     getEdge = (from, to, id) => {
         return <Line
             key={id}
+            id={id}
             points={[from.x, from.y, to.x, to.y]}
-            stroke={black}
-            strokeWidth={2}
+            stroke={"black"}
+            strokeWidth={3}
+            onClick={this.handleEdgeClick}
         />
     }
 

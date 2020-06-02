@@ -4,10 +4,6 @@ import {BUTTON_NAMES} from "./DrawingModeConstants";
 
 class DrawingControlButton extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     handleClick = (mode) => {
         this.props.handleButtonClick(mode);
     }
