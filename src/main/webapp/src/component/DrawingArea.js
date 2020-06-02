@@ -1,34 +1,34 @@
 import React from 'react';
-import {Stage, Layer, Circle} from 'react-konva';
+import {Circle, Layer, Line, Stage} from 'react-konva';
 import './css/DrawingArea.css';
+import {black} from "color-name";
 
 const colors = [
     '#FF7EC7',
     '#BF42FF',
     '#8A4BFF',
-    '#4C80FF'
-];
-const circleRadius = 20;
+    '#4C80FF'];
 
+const circleRadius = 20;
 const MODE_NONE = 0;
 const MODE_ADD_NODE = 1;
-
-let drawingAreaMode = 0;
-
-function setDrawingMode(mode) {
-    drawingAreaMode = mode;
-}
+const MODE_ADD_EDGE = 2;
 
 class DrawingArea extends React.Component {
+
+    nodeId = 0;
+    edgeId = 0;
+    selectedNode = null;
 
     constructor(props) {
         super(props);
         this.state = {
-            nodes: []
+            nodes: [],
+            edges: []
         }
     }
 
-    componentDidMount() {
+    componentDidMount = () => {
         this.updateSize();
         window.addEventListener("resize", this.updateSize);
     }
@@ -40,23 +40,34 @@ class DrawingArea extends React.Component {
         });
     }
 
-    handleStageClick = e => {
-
-        if (drawingAreaMode === MODE_ADD_NODE) {
-            const newNodes = this.state.nodes.slice();
-            newNodes.push({
-                x: e.evt.layerX,
-                y: e.evt.layerY,
-                color: colors.sample()
-            });
-            this.setState({
-                nodes: newNodes,
-            });
-        }
-
+    setDrawingMode = (mode) => {
+        this.setState({
+            drawingAreaMode: mode
+        });
     }
 
-    dragBoundFunc(pos) {
+    handleStageClick = e => {
+        switch (this.state.drawingAreaMode) {
+            case MODE_ADD_NODE:
+                const newNodes = this.state.nodes.slice();
+                const {layerY, layerX} = e.evt;
+                newNodes.push({
+                    id: this.nodeId++,
+                    x: layerX,
+                    y: layerY,
+                    color: colors.sample(),
+                    selected: false
+                });
+                this.setState({
+                    nodes: newNodes,
+                });
+                break;
+            default:
+                break;
+        }
+    }
+
+    dragBoundFunc = pos => {
         let newY = pos.y < circleRadius ? circleRadius : pos.y;
         newY = newY > this.state.stageHeight - circleRadius ? this.state.stageHeight - circleRadius : newY;
 
@@ -68,15 +79,68 @@ class DrawingArea extends React.Component {
         };
     }
 
-    getCircle(x, y, color) {
+    onDragMove = e => {
+        const nodes = this.state.nodes.slice();
+        const node = nodes[e.target.index];
+        node.x += e.evt.movementX;
+        node.y += e.evt.movementY;
+        this.setState({
+            nodes: nodes,
+        });
+
+    }
+
+    handleCircleClick = e => {
+
+        switch (this.state.drawingAreaMode) {
+            case MODE_ADD_EDGE:
+                if (this.selectedNode == null) {
+                    const nodes = this.state.nodes.slice();
+                    this.selectedNode = nodes[e.target.index];
+                } else {
+                    const nodes = this.state.nodes.slice();
+                    const node = nodes[e.target.index];
+                    const newEdges = this.state.edges.slice();
+                    newEdges.push({
+                        id: this.edgeId++,
+                        from: this.selectedNode,
+                        to: node
+                    });
+                    this.setState({
+                        edges: newEdges,
+                    });
+                    this.selectedNode = null;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    getCircle = (x, y, color, id, selected) => {
         return <Circle
+            key={id}
             x={x}
             y={y}
             radius={circleRadius}
             fill={color}
             opacity={0.9}
             draggable={true}
-            dragBoundFunc={(pos) => this.dragBoundFunc(pos)}
+            dragBoundFunc={this.dragBoundFunc}
+            onDragMove={this.onDragMove}
+            strokeEnabled={selected}
+            strokeWidth={3}
+            stroke={"black"}
+            onClick={this.handleCircleClick}
+        />
+    }
+
+    getEdge = (from, to, id) => {
+        return <Line
+            key={id}
+            points={[from.x, from.y, to.x, to.y]}
+            stroke={black}
+            strokeWidth={2}
         />
     }
 
@@ -88,10 +152,13 @@ class DrawingArea extends React.Component {
                  }}>
 
                 <div className="Drawing-area-header">
-                    <button className="Drawing-area-header-button" onClick={() => setDrawingMode(MODE_NONE)}>NONE
+                    <button className="Drawing-area-header-button" onClick={() => this.setDrawingMode(MODE_NONE)}>NONE
                     </button>
-                    <button className="Drawing-area-header-button" onClick={() => setDrawingMode(MODE_ADD_NODE)}>ADD
-                        NODE
+                    <button className="Drawing-area-header-button"
+                            onClick={() => this.setDrawingMode(MODE_ADD_NODE)}>ADD NODE
+                    </button>
+                    <button className="Drawing-area-header-button"
+                            onClick={() => this.setDrawingMode(MODE_ADD_EDGE)}>ADD EDGE
                     </button>
                 </div>
                 <div className="App-line-split"/>
@@ -101,9 +168,14 @@ class DrawingArea extends React.Component {
                     height={this.state.stageHeight}
                     onClick={this.handleStageClick}>
                     <Layer>
-                        {this.state.nodes.map(shape => {
-                            return (this.getCircle(shape.x, shape.y, shape.color));
+                        {this.state.nodes.map(node => {
+                            return (this.getCircle(node.x, node.y, node.color, node.id, node.selected));
                         })}
+
+                        {this.state.edges.map(edge => {
+                            return (this.getEdge(edge.from, edge.to, edge.id));
+                        })}
+
                     </Layer>
                 </Stage>
 
