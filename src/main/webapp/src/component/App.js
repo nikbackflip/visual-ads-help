@@ -1,9 +1,9 @@
 import React from 'react';
 import './css/App.css';
-import ControlHeader from "./ControlHeader";
-import InfoPanel from "./InfoPanel";
-import DrawingArea from "./DrawingArea";
-import CodePanel from "./CodePanel";
+import ControlHeader from "./controlHeader/ControlHeader";
+import InfoPanel from "./infoPanel/InfoPanel";
+import DrawingArea from "./drawingArea/DrawingArea";
+import CodePanel from "./codePanel/CodePanel";
 
 class App extends React.Component {
 

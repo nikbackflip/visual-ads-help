@@ -17,6 +17,12 @@
 }
 
 .Drawing-area-header-button-selected {
+    border: none;
     background-color: #8b8a8a;
+    outline: none;
+    height: 100%;
+    font-weight: bold;
+    font-family: Verdana, monospace;
+
 }
 

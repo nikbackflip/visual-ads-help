@@ -1,7 +1,9 @@
 import React from 'react';
 import {Circle, Layer, Line, Stage} from 'react-konva';
-import './css/DrawingArea.css';
+import '../css/DrawingArea.css';
 import {black} from "color-name";
+import DrawingControlPanel from "./DrawingControlPanel";
+import {MODE_NONE, MODE_ADD_NODE, MODE_ADD_EDGE} from './DrawingModeConstants';
 
 const colors = [
     '#FF7EC7',
@@ -10,9 +12,6 @@ const colors = [
     '#4C80FF'];
 
 const circleRadius = 20;
-const MODE_NONE = 0;
-const MODE_ADD_NODE = 1;
-const MODE_ADD_EDGE = 2;
 
 class DrawingArea extends React.Component {
 
@@ -24,8 +23,9 @@ class DrawingArea extends React.Component {
         super(props);
         this.state = {
             nodes: [],
-            edges: []
-        }
+            edges: [],
+            drawingAreaMode: MODE_NONE
+        };
     }
 
     componentDidMount = () => {
@@ -37,12 +37,6 @@ class DrawingArea extends React.Component {
         this.setState({
             stageWidth: this.container.offsetWidth,
             stageHeight: this.container.offsetHeight - 45 // App-drawing-area - (Drawing-area-header + App-line-split)
-        });
-    }
-
-    setDrawingMode = (mode) => {
-        this.setState({
-            drawingAreaMode: mode
         });
     }
 
@@ -144,6 +138,12 @@ class DrawingArea extends React.Component {
         />
     }
 
+    handleModeChange = (mode) => {
+        this.setState({
+            drawingAreaMode: mode
+        });
+    }
+
     render() {
         return (
             <div className="App-drawing-area"
@@ -151,16 +151,10 @@ class DrawingArea extends React.Component {
                      this.container = node;
                  }}>
 
-                <div className="Drawing-area-header">
-                    <button className="Drawing-area-header-button" onClick={() => this.setDrawingMode(MODE_NONE)}>NONE
-                    </button>
-                    <button className="Drawing-area-header-button"
-                            onClick={() => this.setDrawingMode(MODE_ADD_NODE)}>ADD NODE
-                    </button>
-                    <button className="Drawing-area-header-button"
-                            onClick={() => this.setDrawingMode(MODE_ADD_EDGE)}>ADD EDGE
-                    </button>
-                </div>
+                <DrawingControlPanel
+                    modeChange={this.handleModeChange}
+                />
+
                 <div className="App-line-split"/>
 
                 <Stage
