@@ -1,5 +1,5 @@
 import React from 'react';
-import {Circle, Layer, Line, Stage} from 'react-konva';
+import {Circle, Layer, Line, Stage, Text, Group,} from 'react-konva';
 import '../css/DrawingArea.css';
 import DrawingControlPanel from "./DrawingControlPanel";
 import {MODE_NONE, MODE_ADD_NODE, MODE_ADD_EDGE, MODE_DEL_NODE, MODE_DEL_EDGE} from './DrawingModeConstants';
@@ -45,12 +45,14 @@ class DrawingArea extends React.Component {
                 const newNodes = this.state.nodes.slice();
                 const {layerY, layerX} = e.evt;
                 newNodes.push({
-                    id: this.nodeId++,
+                    id: this.nodeId,
                     x: layerX,
                     y: layerY,
                     color: colors.sample(),
-                    selected: false
+                    selected: false,
+                    name: this.nodeId
                 });
+                this.nodeId++;
                 this.setState({
                     nodes: newNodes,
                 });
@@ -113,7 +115,8 @@ class DrawingArea extends React.Component {
                     updatedEdges.push({
                         id: this.edgeId++,
                         from: this.selectedNode,
-                        to: node
+                        to: node,
+                        weight: 1
                     });
                     this.setState({
                         edges: updatedEdges,
@@ -160,34 +163,73 @@ class DrawingArea extends React.Component {
         }
     }
 
-    getCircle = (x, y, color, id, selected) => {
-        return <Circle
+    getCircle = (x, y, color, id, selected, name) => {
+        return <Group
             key={id}
-            id={id}
-            x={x}
-            y={y}
-            radius={circleRadius}
-            fill={color}
-            opacity={0.9}
-            draggable={true}
-            onDragMove={this.onDragMove}
-            onDragEnd={this.onDragEnd}
-            strokeEnabled={selected}
-            strokeWidth={3}
-            stroke={"black"}
-            onClick={this.handleCircleClick}
-        />
+        >
+            <Circle
+                id={id}
+                x={x}
+                y={y}
+                radius={circleRadius}
+                fill={color}
+                opacity={0.9}
+                draggable={true}
+                onDragMove={this.onDragMove}
+                onDragEnd={this.onDragEnd}
+                strokeEnabled={selected}
+                strokeWidth={3}
+                stroke={"black"}
+                onClick={this.handleCircleClick}
+            />
+            <Text
+                id={id}
+                x={x}
+                y={y}
+                text={name}
+                fontStyle={"bold"}
+                fontFamily={"Verdana, monospace"}
+                onClick={this.handleCircleClick}
+                draggable={true}
+                onDragMove={this.onDragMove}
+                onDragEnd={this.onDragEnd}
+            />
+        </Group>
     }
 
-    getEdge = (from, to, id) => {
-        return <Line
+    getEdge = (from, to, id, weight) => {
+
+        let middle = {
+            x: Math.abs((to.x - from.x) / 2 + from.x),
+            y: Math.abs((to.y - from.y) / 2 + from.y)
+        }
+
+        let a = to.x - from.x;
+        let b = to.y - from.y;
+        let weightVisible = Math.sqrt(a * a + b * b) > 70;
+
+        return <Group
             key={id}
-            id={id}
-            points={[from.x, from.y, to.x, to.y]}
-            stroke={"black"}
-            strokeWidth={3}
-            onClick={this.handleEdgeClick}
-        />
+        >
+            <Line
+                id={id}
+                points={[from.x, from.y, to.x, to.y]}
+                stroke="black"
+                strokeWidth={3}
+                onClick={this.handleEdgeClick}
+            />
+            <Text
+                x={middle.x}
+                y={middle.y}
+                text={weight}
+                stroke="#9775A0"
+                strokeWidth={1}
+                fontSize={15}
+                fill="#9775A0"
+                fontFamily={"Verdana, monospace"}
+                visible={weightVisible}
+            />
+        </Group>
     }
 
     handleModeChange = (mode) => {
@@ -215,11 +257,11 @@ class DrawingArea extends React.Component {
                     onClick={this.handleStageClick}>
                     <Layer>
                         {this.state.nodes.map(node => {
-                            return (this.getCircle(node.x, node.y, node.color, node.id, node.selected));
+                            return (this.getCircle(node.x, node.y, node.color, node.id, node.selected, node.name));
                         })}
 
                         {this.state.edges.map(edge => {
-                            return (this.getEdge(edge.from, edge.to, edge.id));
+                            return (this.getEdge(edge.from, edge.to, edge.id, edge.weight));
                         })}
 
                     </Layer>
