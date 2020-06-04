@@ -3,10 +3,6 @@ import React from "react";
 
 class ElementsCounter extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         const label = "Total " + this.props.entityName + ": ";
 

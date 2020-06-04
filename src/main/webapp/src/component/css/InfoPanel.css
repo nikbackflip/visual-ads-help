@@ -3,3 +3,9 @@
     font-weight: bold;
     color: #8b8a8a;
 }
+
+.Info-panel-text {
+    word-break: break-all;
+    font-family: Verdana, monospace;
+    color: #8b8a8a;
+}

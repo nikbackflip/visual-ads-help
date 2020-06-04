@@ -17,6 +17,7 @@ class DrawingArea extends React.Component {
     nodeId = 0;
     edgeId = 0;
     selectedNode = null;
+    stageRef = null;
 
     constructor(props) {
         super(props);
@@ -57,6 +58,22 @@ class DrawingArea extends React.Component {
                     nodes: newNodes,
                 });
                 this.props.handleNodesCount(1);
+                break;
+            case MODE_NONE:
+                if (e.currentTarget.clickEndShape !== null) {
+                    break;
+                }
+                const nodes = this.state.nodes.slice();
+                nodes.forEach(n => n.selected = false)
+
+                const edges = this.state.edges.slice();
+                edges.forEach(n => n.selected = false)
+
+                this.setState({
+                    nodes: nodes,
+                    edges: edges
+                });
+                this.props.handleElementSelection({});
                 break;
             default:
                 break;
@@ -117,7 +134,8 @@ class DrawingArea extends React.Component {
                         id: this.edgeId++,
                         from: this.selectedNode,
                         to: node,
-                        weight: 1
+                        weight: 1,
+                        selected: false
                     });
                     this.setState({
                         edges: updatedEdges,
@@ -143,6 +161,18 @@ class DrawingArea extends React.Component {
                 this.props.handleNodesCount(-1);
                 this.props.handleEdgesCount(-(toRemove.length));
                 break;
+            case MODE_NONE: {
+                const edges = this.state.edges.slice();
+                edges.forEach(n => n.selected = false)
+
+                nodes.forEach(n => n.selected = false)
+                nodes[index].selected = true;
+                this.setState({
+                    nodes: nodes
+                });
+                this.props.handleElementSelection(nodes[index]);
+            }
+                break;
             default:
                 break;
         }
@@ -162,6 +192,18 @@ class DrawingArea extends React.Component {
                     edges: edges
                 });
                 this.props.handleEdgesCount(-1);
+                break;
+            case MODE_NONE:
+                edges.forEach(n => n.selected = false)
+                edges[index].selected = true;
+                this.setState({
+                    edges: edges
+                });
+
+                const nodes = this.state.nodes.slice();
+                nodes.forEach(n => n.selected = false)
+
+                this.props.handleElementSelection(edges[index]);
                 break;
             default:
                 break;
@@ -202,7 +244,7 @@ class DrawingArea extends React.Component {
         </Group>
     }
 
-    getEdge = (from, to, id, weight) => {
+    getEdge = (from, to, id, weight, selected) => {
 
         let middle = {
             x: Math.abs((to.x - from.x) / 2 + from.x),
@@ -219,7 +261,7 @@ class DrawingArea extends React.Component {
             <Line
                 id={id}
                 points={[from.x, from.y, to.x, to.y]}
-                stroke="black"
+                stroke={selected ? "red" : "black"}
                 strokeWidth={3}
                 onClick={this.handleEdgeClick}
             />
@@ -243,6 +285,11 @@ class DrawingArea extends React.Component {
         });
     }
 
+    wtf = () => {
+        this.stageRef.clickStartShape = null;
+        this.stageRef.clickEndShape = null;
+    };
+
     render() {
         return (
             <div className="App-drawing-area"
@@ -257,16 +304,20 @@ class DrawingArea extends React.Component {
                 <div className="App-line-split"/>
 
                 <Stage
+                    ref={ref => {
+                        this.stageRef = ref;
+                    }}
                     width={this.state.stageWidth}
                     height={this.state.stageHeight}
-                    onClick={this.handleStageClick}>
+                    onClick={this.handleStageClick}
+                    onContentMouseup={this.wtf}>
                     <Layer>
                         {this.state.nodes.map(node => {
                             return (this.getCircle(node.x, node.y, node.color, node.id, node.selected, node.name));
                         })}
 
                         {this.state.edges.map(edge => {
-                            return (this.getEdge(edge.from, edge.to, edge.id, edge.weight));
+                            return (this.getEdge(edge.from, edge.to, edge.id, edge.weight, edge.selected));
                         })}
 
                     </Layer>

@@ -11,7 +11,8 @@ class App extends React.Component {
         super(props);
         this.state = {
             nodesCount: 0,
-            edgesCount: 0
+            edgesCount: 0,
+            selectedElement: {}
         };
     }
 
@@ -30,6 +31,12 @@ class App extends React.Component {
         });
     }
 
+    handleElementSelection = (elem) => {
+        this.setState({
+            selectedElement: elem
+        });
+    }
+
     render() {
         return (
             <div className="App">
@@ -38,10 +45,12 @@ class App extends React.Component {
                     <InfoPanel
                         nodesCount={this.state.nodesCount}
                         edgesCount={this.state.edgesCount}
+                        selectedElement={this.state.selectedElement}
                     />
                     <DrawingArea
                         handleNodesCount={this.handleNodesCount}
                         handleEdgesCount={this.handleEdgesCount}
+                        handleElementSelection={this.handleElementSelection}
                     />
                     <CodePanel/>
                 </div>
