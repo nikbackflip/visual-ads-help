@@ -56,6 +56,7 @@ class DrawingArea extends React.Component {
                 this.setState({
                     nodes: newNodes,
                 });
+                this.props.handleNodesCount(1);
                 break;
             default:
                 break;
@@ -122,6 +123,7 @@ class DrawingArea extends React.Component {
                         edges: updatedEdges,
                     });
                     this.selectedNode = null;
+                    this.props.handleEdgesCount(1);
                 }
                 break;
             case MODE_DEL_NODE:
@@ -138,6 +140,8 @@ class DrawingArea extends React.Component {
                     nodes: nodes,
                     edges: updatedEdges
                 });
+                this.props.handleNodesCount(-1);
+                this.props.handleEdgesCount(-(toRemove.length));
                 break;
             default:
                 break;
@@ -157,6 +161,7 @@ class DrawingArea extends React.Component {
                 this.setState({
                     edges: edges
                 });
+                this.props.handleEdgesCount(-1);
                 break;
             default:
                 break;
