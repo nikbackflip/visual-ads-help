@@ -2,15 +2,15 @@ import React from 'react';
 import {Circle, Layer, Line, Stage, Text, Group,} from 'react-konva';
 import '../css/DrawingArea.css';
 import DrawingControlPanel from "./DrawingControlPanel";
-import {MODE_NONE, MODE_ADD_NODE, MODE_ADD_EDGE, MODE_DEL_NODE, MODE_DEL_EDGE} from './DrawingModeConstants';
-
-const colors = [
-    '#FF7EC7',
-    '#BF42FF',
-    '#8A4BFF',
-    '#4C80FF'];
-
-const circleRadius = 20;
+import {
+    MODE_NONE,
+    MODE_ADD_NODE,
+    MODE_ADD_EDGE,
+    MODE_DEL_NODE,
+    MODE_DEL_EDGE,
+    colors,
+    circleRadius
+} from './DrawingModeConstants';
 
 class DrawingArea extends React.Component {
 
@@ -41,43 +41,40 @@ class DrawingArea extends React.Component {
     }
 
     handleStageClick = e => {
+        const nodes = this.state.nodes.slice();
+        const edges = this.state.edges.slice();
         switch (this.state.drawingAreaMode) {
-            case MODE_ADD_NODE:
-                const newNodes = this.state.nodes.slice();
+            case MODE_ADD_NODE: {
                 const {layerY, layerX} = e.evt;
-                newNodes.push({
-                    id: this.nodeId,
+                const nextNodeId = this.nodeId++;
+                nodes.push({
+                    id: nextNodeId,
                     x: layerX,
                     y: layerY,
                     color: colors.sample(),
                     selected: false,
-                    name: this.nodeId
-                });
-                this.nodeId++;
-                this.setState({
-                    nodes: newNodes,
+                    name: nextNodeId
                 });
                 this.props.handleNodesCount(1);
                 break;
-            case MODE_NONE:
+            }
+            case MODE_NONE: {
                 if (e.currentTarget.clickEndShape !== null) {
                     break;
                 }
-                const nodes = this.state.nodes.slice();
                 nodes.forEach(n => n.selected = false)
-
-                const edges = this.state.edges.slice();
                 edges.forEach(n => n.selected = false)
-
-                this.setState({
-                    nodes: nodes,
-                    edges: edges
-                });
                 this.props.handleElementSelection({});
                 break;
+            }
             default:
                 break;
         }
+
+        this.setState({
+            nodes: nodes,
+            edges: edges
+        });
     }
 
     onDragMove = e => {
@@ -119,18 +116,19 @@ class DrawingArea extends React.Component {
 
     handleCircleClick = e => {
         const nodes = this.state.nodes.slice();
+        const edges = this.state.edges.slice();
         let index = nodes.findIndex(n => {
             return n.id === e.target.attrs.id;
         });
 
         switch (this.state.drawingAreaMode) {
-            case MODE_ADD_EDGE:
+            case MODE_ADD_EDGE: {
                 if (this.selectedNode == null) {
                     this.selectedNode = nodes[index];
                 } else {
                     const node = nodes[index];
-                    const updatedEdges = this.state.edges.slice();
-                    updatedEdges.push({
+
+                    edges.push({
                         id: this.edgeId++,
                         from: this.selectedNode,
                         to: node,
@@ -138,17 +136,17 @@ class DrawingArea extends React.Component {
                         selected: false
                     });
                     this.setState({
-                        edges: updatedEdges,
+                        edges: edges,
                     });
                     this.selectedNode = null;
                     this.props.handleEdgesCount(1);
                 }
                 break;
-            case MODE_DEL_NODE:
+            }
+            case MODE_DEL_NODE: {
                 const nodeToRemove = nodes[index];
                 nodes.splice(index, 1);
 
-                const edges = this.state.edges.slice();
                 const toRemove = edges.filter(e => {
                     return e.from === nodeToRemove || e.to === nodeToRemove;
                 });
@@ -161,18 +159,17 @@ class DrawingArea extends React.Component {
                 this.props.handleNodesCount(-1);
                 this.props.handleEdgesCount(-(toRemove.length));
                 break;
+            }
             case MODE_NONE: {
-                const edges = this.state.edges.slice();
                 edges.forEach(n => n.selected = false)
-
                 nodes.forEach(n => n.selected = false)
                 nodes[index].selected = true;
                 this.setState({
                     nodes: nodes
                 });
                 this.props.handleElementSelection(nodes[index]);
-            }
                 break;
+            }
             default:
                 break;
         }
@@ -180,31 +177,30 @@ class DrawingArea extends React.Component {
 
     handleEdgeClick = e => {
         const edges = this.state.edges.slice();
+        const nodes = this.state.nodes.slice();
         let index = edges.findIndex(n => {
             return n.id === e.target.attrs.id;
         });
 
         switch (this.state.drawingAreaMode) {
-            case MODE_DEL_EDGE:
+            case MODE_DEL_EDGE: {
                 edges.splice(index, 1);
-
                 this.setState({
                     edges: edges
                 });
                 this.props.handleEdgesCount(-1);
                 break;
-            case MODE_NONE:
-                edges.forEach(n => n.selected = false)
+            }
+            case MODE_NONE: {
+                edges.forEach(n => n.selected = false);
+                nodes.forEach(n => n.selected = false);
                 edges[index].selected = true;
                 this.setState({
                     edges: edges
                 });
-
-                const nodes = this.state.nodes.slice();
-                nodes.forEach(n => n.selected = false)
-
                 this.props.handleElementSelection(edges[index]);
                 break;
+            }
             default:
                 break;
         }
@@ -285,7 +281,7 @@ class DrawingArea extends React.Component {
         });
     }
 
-    wtf = () => {
+    cleanStageStage = () => {
         this.stageRef.clickStartShape = null;
         this.stageRef.clickEndShape = null;
     };
@@ -310,7 +306,7 @@ class DrawingArea extends React.Component {
                     width={this.state.stageWidth}
                     height={this.state.stageHeight}
                     onClick={this.handleStageClick}
-                    onContentMouseup={this.wtf}>
+                    onContentMouseup={this.cleanStageStage}>
                     <Layer>
                         {this.state.nodes.map(node => {
                             return (this.getCircle(node.x, node.y, node.color, node.id, node.selected, node.name));
