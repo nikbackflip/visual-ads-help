@@ -16,18 +16,10 @@ class App extends React.Component {
         };
     }
 
-
-    handleNodesCount = (delta) => {
-        const newCount = this.state.nodesCount + delta;
+    handleElementsCount = (nodesCount, edgesCount) => {
         this.setState({
-            nodesCount: newCount
-        });
-    }
-
-    handleEdgesCount = (delta) => {
-        const newCount = this.state.edgesCount + delta;
-        this.setState({
-            edgesCount: newCount
+            edgesCount: edgesCount,
+            nodesCount: nodesCount
         });
     }
 
@@ -48,8 +40,7 @@ class App extends React.Component {
                         selectedElement={this.state.selectedElement}
                     />
                     <DrawingArea
-                        handleNodesCount={this.handleNodesCount}
-                        handleEdgesCount={this.handleEdgesCount}
+                        handleElementsCount={this.handleElementsCount}
                         handleElementSelection={this.handleElementSelection}
                     />
                     <CodePanel/>
