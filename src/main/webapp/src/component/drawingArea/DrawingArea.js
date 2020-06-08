@@ -75,9 +75,6 @@ class DrawingArea extends React.Component {
     clearSelection = () => {
         this.nodes.forEach(n => n.selected = false)
         this.edges.forEach(n => n.selected = false)
-        this.props.handleElementSelection({
-            nodeId: null, edgeId: null
-        });
     }
 
     handleStageClick = e => {
@@ -92,6 +89,7 @@ class DrawingArea extends React.Component {
                 if (e.currentTarget.clickEndShape === null) {
                     this.clearSelection();
                     this.updateGraph();
+                    this.publishGraph();
                 }
                 break;
             }
@@ -162,11 +160,8 @@ class DrawingArea extends React.Component {
             case MODE_NONE: {
                 this.clearSelection();
                 clickedNode.selected = true;
-                this.props.handleElementSelection({
-                    nodeId: clickedNode.id, edgeId: null
-                });
-
                 this.updateGraph();
+                this.publishGraph();
                 break;
             }
             default:
@@ -191,16 +186,12 @@ class DrawingArea extends React.Component {
                 this.clearSelection();
                 this.edges[index].selected = true;
                 this.updateGraph();
-                this.props.handleElementSelection({
-                    nodeId: null, edgeId: this.edges[index].id
-                });
+                this.publishGraph();
                 break;
             }
             default:
                 break;
         }
-
-
     }
 
     updateGraph = () => {

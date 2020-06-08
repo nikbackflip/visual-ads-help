@@ -16,7 +16,6 @@ class KonvaEdge extends React.Component {
     }
 
     render() {
-
         console.log("Rendering edge: " + this.props.id);
 
         let middle = {
@@ -32,7 +31,7 @@ class KonvaEdge extends React.Component {
             <Line
                 id={this.props.id}
                 points={[this.props.from.x, this.props.from.y, this.props.to.x, this.props.to.y]}
-                stroke={this.props.selected ? "red" : "black"}
+                stroke={this.props.selected ? "#FF7EC7" : "black"}
                 strokeWidth={3}
                 onClick={this.props.handleEdgeClick}
             />

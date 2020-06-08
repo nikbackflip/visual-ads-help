@@ -24,12 +24,6 @@ class App extends React.Component {
         });
     }
 
-    handleElementSelection = (elemId) => {
-        this.setState({
-            selectedElement: elemId
-        });
-    }
-
     render() {
 
         console.log("Rendering App");
@@ -43,7 +37,6 @@ class App extends React.Component {
                         selectedElement={this.state.selectedElement}
                     />
                     <DrawingArea
-                        handleElementSelection={this.handleElementSelection}
                         handleGraphUpdate={this.handleGraphUpdate}
                     />
                     <CodePanel/>

@@ -6,9 +6,13 @@ class DisplayNode extends React.Component {
     render() {
         console.log("Rendering Display Node");
 
-        const e = JSON.stringify(this.props.element);
+        const node = this.props.element;
         return (
-            <p className="Info-panel-text">{e}</p>
+            <div>
+                <p className="Info-panel-text">Id: {node.id}</p>
+                <p className="Info-panel-text">Name: {node.name}</p>
+                <div className="App-line-split"/>
+            </div>
         );
     }
 }

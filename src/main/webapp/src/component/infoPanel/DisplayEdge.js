@@ -1,16 +1,22 @@
 import React from "react";
 
 
-class ElementDisplay extends React.Component {
+class DisplayEdge extends React.Component {
 
     render() {
         console.log("Rendering Display Edge");
 
-        const e = JSON.stringify(this.props.element);
+        const edge = this.props.element;
         return (
-            <p className="Info-panel-text">{e}</p>
+            <div>
+                <p className="Info-panel-text">Id: {edge.id}</p>
+                <p className="Info-panel-text">Weight: {edge.weight}</p>
+                <p className="Info-panel-text">From: {edge.fromId}</p>
+                <p className="Info-panel-text">To: {edge.toId}</p>
+                <div className="App-line-split"/>
+            </div>
         );
     }
 }
 
-export default ElementDisplay;
+export default DisplayEdge;
