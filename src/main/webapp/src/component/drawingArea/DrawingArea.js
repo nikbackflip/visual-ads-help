@@ -23,6 +23,8 @@ class DrawingArea extends React.Component {
 
     nodes = []
     edges = []
+    nodesProps = []
+    edgesPops = []
 
     constructor(props) {
         super(props);
@@ -186,7 +188,24 @@ class DrawingArea extends React.Component {
             nodes: this.nodes.slice(),
             edges: this.edges.slice()
         });
-        this.props.handleElementsCount(this.nodes.length, this.edges.length);
+
+        // todo not always
+        this.props.handleGraphUpdate({
+            nodes: this.nodes.map(n => {
+                return {
+                    id: n.id,
+                    name: n.name
+                }
+            }),
+            edges: this.edges.map(e => {
+                return {
+                    id: e.id,
+                    fromId: e.fromId,
+                    toId: e.toId,
+                    weight: e.weight
+                }
+            })
+        });
     }
 
     handleModeChange = (mode) => {

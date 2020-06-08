@@ -10,17 +10,18 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            nodesCount: 0,
-            edgesCount: 0,
+            graph: {
+                nodes: [],
+                edges: []
+            },
             selectedElement: {}
         };
     }
 
-    handleElementsCount = (nodesCount, edgesCount) => {
+    handleGraphUpdate = (graph) => {
         this.setState({
-            edgesCount: edgesCount,
-            nodesCount: nodesCount
-        });
+            graph: graph
+        })
     }
 
     handleElementSelection = (elem) => {
@@ -35,13 +36,12 @@ class App extends React.Component {
                 <ControlHeader/>
                 <div className="App-body">
                     <InfoPanel
-                        nodesCount={this.state.nodesCount}
-                        edgesCount={this.state.edgesCount}
+                        graph={this.state.graph}
                         selectedElement={this.state.selectedElement}
                     />
                     <DrawingArea
-                        handleElementsCount={this.handleElementsCount}
                         handleElementSelection={this.handleElementSelection}
+                        handleGraphUpdate={this.handleGraphUpdate}
                     />
                     <CodePanel/>
                 </div>
