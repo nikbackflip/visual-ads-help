@@ -1,5 +1,5 @@
 import React from 'react';
-import {Circle, Layer, Line, Stage, Text, Group,} from 'react-konva';
+import {Layer, Stage} from 'react-konva';
 import '../css/DrawingArea.css';
 import DrawingControlPanel from "./DrawingControlPanel";
 import {
@@ -20,18 +20,20 @@ class DrawingArea extends React.Component {
     edgeId = 0;
     edgeFromNode = null;
     stageRef = null;
+    drawingAreaMode = MODE_NONE;
 
     nodes = []
     edges = []
-    nodesProps = []
-    edgesPops = []
+
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        return true;
+    }
 
     constructor(props) {
         super(props);
         this.state = {
             nodes: [],
-            edges: [],
-            drawingAreaMode: MODE_NONE
+            edges: []
         };
     }
 
@@ -73,25 +75,29 @@ class DrawingArea extends React.Component {
     clearSelection = () => {
         this.nodes.forEach(n => n.selected = false)
         this.edges.forEach(n => n.selected = false)
-        this.props.handleElementSelection({});
+        this.props.handleElementSelection({
+            nodeId: null, edgeId: null
+        });
     }
 
     handleStageClick = e => {
-        switch (this.state.drawingAreaMode) {
+        switch (this.drawingAreaMode) {
             case MODE_ADD_NODE: {
                 this.addNewNodeOnCoords(e.evt.layerX, e.evt.layerY);
+                this.updateGraph();
+                this.publishGraph();
                 break;
             }
             case MODE_NONE: {
                 if (e.currentTarget.clickEndShape === null) {
                     this.clearSelection();
+                    this.updateGraph();
                 }
                 break;
             }
             default:
                 break;
         }
-        this.updateGraph();
     }
 
     onDragMove = e => {
@@ -130,12 +136,14 @@ class DrawingArea extends React.Component {
             return n.id === e.target.attrs.id;
         });
 
-        switch (this.state.drawingAreaMode) {
+        switch (this.drawingAreaMode) {
             case MODE_ADD_EDGE: {
                 if (this.edgeFromNode == null) {
                     this.edgeFromNode = clickedNode;
                 } else {
                     this.addNewEdgeFromTo(this.edgeFromNode, clickedNode);
+                    this.updateGraph();
+                    this.publishGraph();
                 }
                 break;
             }
@@ -146,18 +154,25 @@ class DrawingArea extends React.Component {
                     return e.fromId === clickedNode.id || e.toId === clickedNode.id;
                 });
                 this.edges = this.edges.filter(e => !toRemove.includes(e))
+
+                this.updateGraph();
+                this.publishGraph();
                 break;
             }
             case MODE_NONE: {
                 this.clearSelection();
                 clickedNode.selected = true;
-                this.props.handleElementSelection(clickedNode);
+                this.props.handleElementSelection({
+                    nodeId: clickedNode.id, edgeId: null
+                });
+
+                this.updateGraph();
                 break;
             }
             default:
                 break;
         }
-        this.updateGraph();
+
     }
 
     handleEdgeClick = e => {
@@ -165,22 +180,27 @@ class DrawingArea extends React.Component {
             return n.id === e.target.attrs.id;
         });
 
-        switch (this.state.drawingAreaMode) {
+        switch (this.drawingAreaMode) {
             case MODE_DEL_EDGE: {
                 this.edges.splice(index, 1);
+                this.updateGraph();
+                this.publishGraph();
                 break;
             }
             case MODE_NONE: {
                 this.clearSelection();
                 this.edges[index].selected = true;
-                this.props.handleElementSelection(this.edges[index]);
+                this.updateGraph();
+                this.props.handleElementSelection({
+                    nodeId: null, edgeId: this.edges[index].id
+                });
                 break;
             }
             default:
                 break;
         }
 
-        this.updateGraph();
+
     }
 
     updateGraph = () => {
@@ -188,30 +208,21 @@ class DrawingArea extends React.Component {
             nodes: this.nodes.slice(),
             edges: this.edges.slice()
         });
+    }
 
-        // todo not always
+    publishGraph = () => {
         this.props.handleGraphUpdate({
             nodes: this.nodes.map(n => {
-                return {
-                    id: n.id,
-                    name: n.name
-                }
+                return n
             }),
             edges: this.edges.map(e => {
-                return {
-                    id: e.id,
-                    fromId: e.fromId,
-                    toId: e.toId,
-                    weight: e.weight
-                }
+                return e
             })
         });
     }
 
     handleModeChange = (mode) => {
-        this.setState({
-            drawingAreaMode: mode
-        });
+        this.drawingAreaMode = mode;
     }
 
     cleanStageState = () => {
@@ -220,6 +231,9 @@ class DrawingArea extends React.Component {
     };
 
     render() {
+
+        console.log("Rendering drawing area");
+
         return (
             <div className="App-drawing-area"
                  ref={node => {

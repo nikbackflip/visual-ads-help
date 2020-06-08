@@ -17,6 +17,8 @@ class KonvaEdge extends React.Component {
 
     render() {
 
+        console.log("Rendering edge: " + this.props.id);
+
         let middle = {
             x: Math.abs((this.props.to.x - this.props.from.x) / 2 + this.props.from.x),
             y: Math.abs((this.props.to.y - this.props.from.y) / 2 + this.props.from.y)

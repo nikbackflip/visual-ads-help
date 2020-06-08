@@ -21,16 +21,19 @@ class App extends React.Component {
     handleGraphUpdate = (graph) => {
         this.setState({
             graph: graph
-        })
+        });
     }
 
-    handleElementSelection = (elem) => {
+    handleElementSelection = (elemId) => {
         this.setState({
-            selectedElement: elem
+            selectedElement: elemId
         });
     }
 
     render() {
+
+        console.log("Rendering App");
+
         return (
             <div className="App">
                 <ControlHeader/>

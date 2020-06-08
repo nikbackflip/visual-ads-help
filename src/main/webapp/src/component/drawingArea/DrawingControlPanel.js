@@ -5,6 +5,10 @@ import DrawingControlButton from "./DrawingModeButton";
 
 class DrawingControlPanel extends React.Component {
 
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        return nextState.drawingAreaMode !== this.state.drawingAreaMode;
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -24,6 +28,9 @@ class DrawingControlPanel extends React.Component {
     }
 
     render() {
+
+        console.log("Rendering control panel");
+
         return (
             <div className="Drawing-area-header">
                 <DrawingControlButton

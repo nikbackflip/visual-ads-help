@@ -15,6 +15,8 @@ class KonvaNode extends React.Component {
 
     render() {
 
+        console.log("Rendering node: " + this.props.id);
+
         return <Group>
             <Circle
                 id={this.props.id}

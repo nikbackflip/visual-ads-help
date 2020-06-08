@@ -1,9 +1,11 @@
 import React from "react";
 
 
-class ElementDisplay extends React.Component {
+class DisplayNode extends React.Component {
 
     render() {
+        console.log("Rendering Display Node");
+
         const e = JSON.stringify(this.props.element);
         return (
             <p className="Info-panel-text">{e}</p>
@@ -11,4 +13,4 @@ class ElementDisplay extends React.Component {
     }
 }
 
-export default ElementDisplay;
+export default DisplayNode;
