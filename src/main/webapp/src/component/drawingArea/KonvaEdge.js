@@ -31,7 +31,7 @@ class KonvaEdge extends React.Component {
             <Line
                 id={this.props.id}
                 points={[this.props.from.x, this.props.from.y, this.props.to.x, this.props.to.y]}
-                stroke={this.props.selected ? "#FF7EC7" : "black"}
+                stroke={this.props.selected ? "#1d9797" : "black"}
                 strokeWidth={3}
                 onClick={this.props.handleEdgeClick}
             />
@@ -39,10 +39,10 @@ class KonvaEdge extends React.Component {
                 x={middle.x}
                 y={middle.y}
                 text={this.props.weight}
-                stroke="#9775A0"
                 strokeWidth={1}
-                fontSize={15}
-                fill="#9775A0"
+                fontSize={18}
+                fill={this.props.selected ? "black" : "#1d9797"}
+                stroke={this.props.selected ? "black" : "#1d9797"}
                 fontFamily={"Verdana, monospace"}
                 visible={weightVisible}
             />

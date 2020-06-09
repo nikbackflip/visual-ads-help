@@ -17,6 +17,8 @@ class KonvaNode extends React.Component {
 
         console.log("Rendering node: " + this.props.id);
 
+        const textLength = this.props.name.toString().length;
+
         return <Group>
             <Circle
                 id={this.props.id}
@@ -35,8 +37,8 @@ class KonvaNode extends React.Component {
             />
             <Text
                 id={this.props.id}
-                x={this.props.x}
-                y={this.props.y}
+                x={this.props.x - (textLength * 4)}
+                y={this.props.y - 4}
                 text={this.props.name}
                 fontStyle={"bold"}
                 fontFamily={"Verdana, monospace"}

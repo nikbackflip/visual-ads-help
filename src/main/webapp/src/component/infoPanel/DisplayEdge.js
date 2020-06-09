@@ -22,6 +22,7 @@ class DisplayEdge extends React.Component {
                     value={edge.id}
                     readOnly={true}
                     updateElementProperty={this.updateElement}
+                    inputType="text"
                 />
                 <DisplayGraphProperty
                     label="Weight"
@@ -29,6 +30,7 @@ class DisplayEdge extends React.Component {
                     value={edge.weight}
                     readOnly={false}
                     updateElementProperty={this.updateElement}
+                    inputType="number"
                 />
                 <DisplayGraphProperty
                     label="From"
@@ -36,6 +38,7 @@ class DisplayEdge extends React.Component {
                     value={edge.fromId}
                     readOnly={true}
                     updateElementProperty={this.updateElement}
+                    inputType="text"
                 />
                 <DisplayGraphProperty
                     label="To"
@@ -43,6 +46,7 @@ class DisplayEdge extends React.Component {
                     value={edge.toId}
                     readOnly={true}
                     updateElementProperty={this.updateElement}
+                    inputType="text"
                 />
 
                 <div className="App-line-split"/>

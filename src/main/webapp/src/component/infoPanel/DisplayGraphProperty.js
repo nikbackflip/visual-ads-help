@@ -14,10 +14,11 @@ class DisplayGraphProperty extends React.Component {
                     className="Info-panel-span">
                     <input
                         className="Info-panel-input"
-                        type="text"
+                        type={this.props.inputType}
                         value={this.props.value}
                         onChange={this.onChange}
                         readOnly={this.props.readOnly}
+                        maxLength={this.props.maxLength}
                     />
                 </span>
             </div>
