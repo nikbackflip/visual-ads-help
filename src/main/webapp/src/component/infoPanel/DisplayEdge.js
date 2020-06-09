@@ -1,4 +1,5 @@
 import React from "react";
+import UpdateGraphProperty from "./UpdateGraphProperty";
 
 
 class DisplayEdge extends React.Component {
@@ -10,7 +11,10 @@ class DisplayEdge extends React.Component {
         return (
             <div>
                 <p className="Info-panel-text">Id: {edge.id}</p>
-                <p className="Info-panel-text">Weight: {edge.weight}</p>
+                <UpdateGraphProperty
+                    label="Weight"
+                    value={edge.weight}
+                />
                 <p className="Info-panel-text">From: {edge.fromId}</p>
                 <p className="Info-panel-text">To: {edge.toId}</p>
                 <div className="App-line-split"/>

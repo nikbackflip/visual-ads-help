@@ -22,19 +22,13 @@ class DrawingArea extends React.Component {
     stageRef = null;
     drawingAreaMode = MODE_NONE;
 
-    nodes = []
-    edges = []
-
     shouldComponentUpdate(nextProps, nextState, nextContext) {
         return true;
     }
 
     constructor(props) {
         super(props);
-        this.state = {
-            nodes: [],
-            edges: []
-        };
+        this.state = {};
     }
 
     componentDidMount = () => {
@@ -51,7 +45,8 @@ class DrawingArea extends React.Component {
 
     addNewNodeOnCoords = (x, y) => {
         const nextNodeId = this.nodeId++;
-        this.nodes.push({
+        const nodes = this.props.graph.nodes.slice();
+        nodes.push({
             id: nextNodeId,
             x: x,
             y: y,
@@ -59,10 +54,12 @@ class DrawingArea extends React.Component {
             selected: false,
             name: nextNodeId
         });
+        this.publishAndUpdateGraph(nodes, this.props.graph.edges.slice());
     }
 
     addNewEdgeFromTo = (from, to) => {
-        this.edges.push({
+        const edges = this.props.graph.edges.slice();
+        edges.push({
             id: this.edgeId++,
             fromId: from.id,
             toId: to.id,
@@ -70,26 +67,22 @@ class DrawingArea extends React.Component {
             selected: false
         });
         this.edgeFromNode = null;
-    }
-
-    clearSelection = () => {
-        this.nodes.forEach(n => n.selected = false)
-        this.edges.forEach(n => n.selected = false)
+        this.publishAndUpdateGraph(this.props.graph.nodes.slice(), edges);
     }
 
     handleStageClick = e => {
         switch (this.drawingAreaMode) {
             case MODE_ADD_NODE: {
                 this.addNewNodeOnCoords(e.evt.layerX, e.evt.layerY);
-                this.updateGraph();
-                this.publishGraph();
                 break;
             }
             case MODE_NONE: {
                 if (e.currentTarget.clickEndShape === null) {
-                    this.clearSelection();
-                    this.updateGraph();
-                    this.publishGraph();
+                    const nodes = this.props.graph.nodes.slice();
+                    const edges = this.props.graph.edges.slice();
+                    nodes.forEach(n => n.selected = false);
+                    edges.forEach(n => n.selected = false);
+                    this.publishAndUpdateGraph(nodes, edges);
                 }
                 break;
             }
@@ -99,18 +92,20 @@ class DrawingArea extends React.Component {
     }
 
     onDragMove = e => {
-        const node = this.nodes.find(n => {
+        const nodes = this.props.graph.nodes.slice();
+        const node = nodes.find(n => {
             return n.id === e.target.attrs.id;
         });
 
         node.x += e.evt.movementX;
         node.y += e.evt.movementY;
 
-        this.updateGraph();
+        this.publishAndUpdateGraph(nodes, this.props.graph.edges.slice());
     }
 
     onDragEnd = e => {
-        const node = this.nodes.find(n => {
+        const nodes = this.props.graph.nodes.slice();
+        const node = nodes.find(n => {
             return n.id === e.target.attrs.id;
         });
 
@@ -126,11 +121,12 @@ class DrawingArea extends React.Component {
         node.x = x;
         node.y = y;
 
-        this.updateGraph();
+        this.publishAndUpdateGraph(nodes, this.props.graph.edges.slice());
     }
 
     handleCircleClick = e => {
-        const clickedNode = this.nodes.find(n => {
+        const nodes = this.props.graph.nodes.slice();
+        const clickedNode = nodes.find(n => {
             return n.id === e.target.attrs.id;
         });
 
@@ -140,53 +136,65 @@ class DrawingArea extends React.Component {
                     this.edgeFromNode = clickedNode;
                 } else {
                     this.addNewEdgeFromTo(this.edgeFromNode, clickedNode);
-                    this.updateGraph();
-                    this.publishGraph();
                 }
                 break;
             }
             case MODE_DEL_NODE: {
-                const index = this.nodes.indexOf(clickedNode);
-                this.nodes.splice(index, 1);
-                const toRemove = this.edges.filter(e => {
+                let edges = this.props.graph.edges.slice();
+
+                const index = nodes.indexOf(clickedNode);
+                nodes.splice(index, 1);
+                const toRemove = edges.filter(e => {
                     return e.fromId === clickedNode.id || e.toId === clickedNode.id;
                 });
-                this.edges = this.edges.filter(e => !toRemove.includes(e))
+                edges = edges.filter(e => !toRemove.includes(e))
 
-                this.updateGraph();
-                this.publishGraph();
+                this.publishAndUpdateGraph(nodes, edges);
                 break;
             }
             case MODE_NONE: {
-                this.clearSelection();
-                clickedNode.selected = true;
-                this.updateGraph();
-                this.publishGraph();
+                const nodes = this.props.graph.nodes.slice();
+                const edges = this.props.graph.edges.slice();
+                nodes.forEach(n => n.selected = false);
+                edges.forEach(n => n.selected = false);
+
+                const clicked = nodes.find(n => {
+                    return n.id === e.target.attrs.id;
+                });
+                clicked.selected = true;
+
+                this.publishAndUpdateGraph(nodes, edges);
                 break;
             }
             default:
                 break;
         }
-
     }
 
     handleEdgeClick = e => {
-        let index = this.edges.findIndex(n => {
+        let index = this.props.graph.edges.findIndex(n => {
             return n.id === e.target.attrs.id;
         });
 
         switch (this.drawingAreaMode) {
             case MODE_DEL_EDGE: {
-                this.edges.splice(index, 1);
-                this.updateGraph();
-                this.publishGraph();
+                const edges = this.props.graph.edges.slice();
+                edges.splice(index, 1);
+                this.publishAndUpdateGraph(this.props.graph.nodes.slice(), edges);
                 break;
             }
             case MODE_NONE: {
-                this.clearSelection();
-                this.edges[index].selected = true;
-                this.updateGraph();
-                this.publishGraph();
+                const nodes = this.props.graph.nodes.slice();
+                const edges = this.props.graph.edges.slice();
+                nodes.forEach(n => n.selected = false);
+                edges.forEach(n => n.selected = false);
+
+                const clicked = edges.find(n => {
+                    return n.id === e.target.attrs.id;
+                });
+                clicked.selected = true;
+
+                this.publishAndUpdateGraph(nodes, edges);
                 break;
             }
             default:
@@ -194,21 +202,10 @@ class DrawingArea extends React.Component {
         }
     }
 
-    updateGraph = () => {
-        this.setState({
-            nodes: this.nodes.slice(),
-            edges: this.edges.slice()
-        });
-    }
-
-    publishGraph = () => {
+    publishAndUpdateGraph = (nodes, edges) => {
         this.props.handleGraphUpdate({
-            nodes: this.nodes.map(n => {
-                return n
-            }),
-            edges: this.edges.map(e => {
-                return e
-            })
+            nodes: nodes,
+            edges: edges
         });
     }
 
@@ -245,12 +242,12 @@ class DrawingArea extends React.Component {
                     onClick={this.handleStageClick}
                     onContentMouseup={this.cleanStageState}>
                     <Layer>
-                        {this.state.edges.map(edge => {
+                        {this.props.graph.edges.map(edge => {
 
-                            const fromNode = this.state.nodes.find(n => {
+                            const fromNode = this.props.graph.nodes.find(n => {
                                 return n.id === edge.fromId;
                             });
-                            const toNode = this.state.nodes.find(n => {
+                            const toNode = this.props.graph.nodes.find(n => {
                                 return n.id === edge.toId;
                             });
 
@@ -264,7 +261,7 @@ class DrawingArea extends React.Component {
                                 handleEdgeClick={this.handleEdgeClick}
                             />
                         })}
-                        {this.state.nodes.map(node => {
+                        {this.props.graph.nodes.map(node => {
                             return <KonvaNode
                                 key={node.id}
                                 id={node.id}

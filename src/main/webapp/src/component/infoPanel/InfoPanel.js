@@ -6,6 +6,18 @@ import DisplayEdge from "./DisplayEdge";
 
 class InfoPanel extends React.Component {
 
+    updateNode = (node) => {
+        let nodes = this.props.graph.nodes.slice();
+        const index = nodes.findIndex(n => {
+            return n.id === node.id
+        });
+        nodes[index] = node;
+
+        this.props.handleGraphUpdate({
+            nodes: nodes,
+            edges: this.props.graph.edges.slice()
+        });
+    }
 
     getSelectedNodeDisplay = () => {
         const selectedNode = this.props.graph.nodes.find(n => {
@@ -13,7 +25,10 @@ class InfoPanel extends React.Component {
         });
         let renderedNode = null;
         if (selectedNode != null) {
-            renderedNode = <DisplayNode element={selectedNode}/>
+            renderedNode = <DisplayNode
+                element={selectedNode}
+                updateElement={this.updateNode}
+            />
         }
         return renderedNode;
     }

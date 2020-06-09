@@ -13,14 +13,16 @@ class App extends React.Component {
             graph: {
                 nodes: [],
                 edges: []
-            },
-            selectedElement: {}
+            }
         };
     }
 
     handleGraphUpdate = (graph) => {
         this.setState({
-            graph: graph
+            graph: {
+                nodes: graph.nodes,
+                edges: graph.edges
+            }
         });
     }
 
@@ -34,9 +36,10 @@ class App extends React.Component {
                 <div className="App-body">
                     <InfoPanel
                         graph={this.state.graph}
-                        selectedElement={this.state.selectedElement}
+                        handleGraphUpdate={this.handleGraphUpdate}
                     />
                     <DrawingArea
+                        graph={this.state.graph}
                         handleGraphUpdate={this.handleGraphUpdate}
                     />
                     <CodePanel/>
