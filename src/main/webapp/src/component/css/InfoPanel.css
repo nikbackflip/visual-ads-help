@@ -8,9 +8,25 @@
     word-break: break-all;
     font-family: Verdana, monospace;
     color: #8b8a8a;
+    float: left;
 }
 
 .Info-panel-input {
     font-family: Verdana, monospace;
     color: #8b8a8a;
+    background-color: #3C3F41;
+    width: 100%;
+    border: 0;
+    border-bottom: 2px solid;
+    outline: 0;
+}
+
+.Info-panel-span {
+    display: block;
+    overflow: hidden;
+    padding: 0 4px 0 6px;
+}
+
+.Info-panel-div {
+    padding: 7px 0;
 }
