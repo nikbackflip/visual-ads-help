@@ -1,5 +1,7 @@
 import React from "react";
-import DisplayGraphProperty from "./DisplayGraphProperty";
+import DisplayTextGraphProperty from "./DisplayTextGraphProperty";
+import DisplayDropdownGraphProperty from "./DisplayDropdownGraphProperty";
+import {EDGE_DIRECTION_NAMES} from "../drawingArea/DrawingModeConstants";
 
 
 class DisplayEdge extends React.Component {
@@ -16,37 +18,40 @@ class DisplayEdge extends React.Component {
         const edge = this.props.element;
         return this.props.element == null ? <div/> : (
             <div>
-                <DisplayGraphProperty
+                <DisplayTextGraphProperty
                     label="Id"
                     propertyName="id"
                     value={edge.id}
                     readOnly={true}
                     updateElementProperty={this.updateElement}
-                    inputType="text"
                 />
-                <DisplayGraphProperty
+                <DisplayTextGraphProperty
                     label="Weight"
                     propertyName="weight"
                     value={edge.weight}
-                    readOnly={false}
                     updateElementProperty={this.updateElement}
-                    inputType="number"
+                    inputFormat="number"
                 />
-                <DisplayGraphProperty
+                <DisplayDropdownGraphProperty
+                    label="Direction"
+                    propertyName="direction"
+                    value={edge.direction}
+                    updateElementProperty={this.updateElement}
+                    options={EDGE_DIRECTION_NAMES}
+                />
+                <DisplayTextGraphProperty
                     label="From"
                     propertyName="fromId"
                     value={edge.fromId}
                     readOnly={true}
                     updateElementProperty={this.updateElement}
-                    inputType="text"
                 />
-                <DisplayGraphProperty
+                <DisplayTextGraphProperty
                     label="To"
                     propertyName="toId"
                     value={edge.toId}
                     readOnly={true}
                     updateElementProperty={this.updateElement}
-                    inputType="text"
                 />
 
                 <div className="App-line-split"/>

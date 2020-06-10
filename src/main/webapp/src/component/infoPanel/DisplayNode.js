@@ -1,5 +1,5 @@
 import React from "react";
-import DisplayGraphProperty from "./DisplayGraphProperty";
+import DisplayTextGraphProperty from "./DisplayTextGraphProperty";
 
 
 class DisplayNode extends React.Component {
@@ -16,22 +16,19 @@ class DisplayNode extends React.Component {
         const node = this.props.element;
         return this.props.element == null ? <div/> : (
             <div>
-                <DisplayGraphProperty
+                <DisplayTextGraphProperty
                     label="Id"
                     propertyName="id"
                     value={node.id}
                     readOnly={true}
                     updateElementProperty={this.updateElement}
-                    inputType="text"
                 />
-                <DisplayGraphProperty
+                <DisplayTextGraphProperty
                     label="Name"
                     propertyName="name"
                     value={node.name}
-                    readOnly={false}
                     updateElementProperty={this.updateElement}
                     maxLength={4}
-                    inputType="text"
                 />
                 <div className="App-line-split"/>
             </div>

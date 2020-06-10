@@ -1,6 +1,6 @@
 import React from "react";
 
-class DisplayGraphProperty extends React.Component {
+class DisplayTextGraphProperty extends React.Component {
 
     onChange = (e) => {
         this.props.updateElementProperty(this.props.propertyName, e.target.value)
@@ -14,18 +14,16 @@ class DisplayGraphProperty extends React.Component {
                     className="Info-panel-span">
                     <input
                         className="Info-panel-input"
-                        type={this.props.inputType}
+                        type={this.props.inputFormat == null ? "text" : this.props.inputFormat}
                         value={this.props.value}
                         onChange={this.onChange}
-                        readOnly={this.props.readOnly}
+                        readOnly={this.props.readOnly == null ? false : this.props.readOnly}
                         maxLength={this.props.maxLength}
                     />
                 </span>
             </div>
         )
     }
-
-
 }
 
-export default DisplayGraphProperty;
+export default DisplayTextGraphProperty;

@@ -1,6 +1,11 @@
 import React from "react";
-import {Group, Line, Text} from "react-konva";
-import {circleRadius} from "./DrawingModeConstants";
+import {Group, Arrow, Text} from "react-konva";
+import {
+    BOTH_DIRECTIONS,
+    circleRadius,
+    NO_DIRECTIONS,
+    REVERSE_DIRECTION
+} from "./DrawingModeConstants";
 
 
 class KonvaEdge extends React.Component {
@@ -12,7 +17,8 @@ class KonvaEdge extends React.Component {
             this.props.to.x === nextProps.to.x &&
             this.props.to.y === nextProps.to.y &&
             this.props.selected === nextProps.selected &&
-            this.props.weight === nextProps.weight
+            this.props.weight === nextProps.weight &&
+            this.props.direction === nextProps.direction
         );
     }
 
@@ -44,13 +50,20 @@ class KonvaEdge extends React.Component {
         const fromYdash = ((halfLengthDash * (fromY - middle.y)) / halfLength) + middle.y;
 
 
+        let points = this.props.direction === REVERSE_DIRECTION ?
+            [toXdash, toYdash, fromXdash, fromYdash] :
+            [fromXdash, fromYdash, toXdash, toYdash];
+
         return <Group>
-            <Line
+            <Arrow
                 id={this.props.id}
-                points={[fromXdash, fromYdash, toXdash, toYdash]}
+                points={points}
                 stroke={this.props.selected ? "#1d9797" : "black"}
+                fill={this.props.selected ? "#1d9797" : "black"}
                 strokeWidth={3}
                 onClick={this.props.handleEdgeClick}
+                pointerAtBeginning={this.props.direction === BOTH_DIRECTIONS}
+                pointerWidth={this.props.direction === NO_DIRECTIONS ? 0 : 10}
             />
             <Text
                 x={middle.x}
@@ -58,8 +71,8 @@ class KonvaEdge extends React.Component {
                 text={this.props.weight}
                 strokeWidth={1}
                 fontSize={18}
-                fill={this.props.selected ? "black" : "#1d9797"}
-                stroke={this.props.selected ? "black" : "#1d9797"}
+                fill={"#1d9797"}
+                stroke={"#1d9797"}
                 fontFamily={"Verdana, monospace"}
                 visible={weightVisible}
             />

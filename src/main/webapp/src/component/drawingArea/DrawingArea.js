@@ -9,7 +9,7 @@ import {
     MODE_DEL_NODE,
     MODE_DEL_EDGE,
     colors,
-    circleRadius
+    circleRadius, NO_DIRECTIONS, BOTH_DIRECTIONS
 } from './DrawingModeConstants';
 import KonvaNode from "./KonvaNode";
 import KonvaEdge from "./KonvaEdge";
@@ -64,7 +64,8 @@ class DrawingArea extends React.Component {
             fromId: from.id,
             toId: to.id,
             weight: 1,
-            selected: false
+            selected: false,
+            direction: BOTH_DIRECTIONS
         });
         this.edgeFromNode = null;
         this.publishAndUpdateGraph(this.props.graph.nodes.slice(), edges);
@@ -259,6 +260,7 @@ class DrawingArea extends React.Component {
                                 selected={edge.selected}
                                 weight={edge.weight}
                                 handleEdgeClick={this.handleEdgeClick}
+                                direction={edge.direction}
                             />
                         })}
                         {this.props.graph.nodes.map(node => {
