@@ -13,11 +13,20 @@
     "react-konva": "^16.13.0-3",
     "react-scripts": "3.4.1"
   },
+  "devDependencies": {
+    "@babel/core": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.2",
+    "webpack": "^4.19.1",
+    "webpack-cli": "^3.1.0"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "watch": "webpack --watch -d --output ./target/classes/static/built/bundle.js"
   },
   "eslintConfig": {
     "extends": "react-app"

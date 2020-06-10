@@ -128,3 +128,17 @@ src/main/webapp/npm-debug.log*
 src/main/webapp/yarn-debug.log*
 src/main/webapp/yarn-error.log*
 
+.idea
+target
+bower_components
+node_modules
+node
+asciidoctor.css
+README.html
+built
+dump.rdb
+package-lock.json
+.classpath
+.project
+org.eclipse.*
+settings.json
