@@ -1,5 +1,11 @@
 import React from "react";
-import {MODE_NONE, MODE_ADD_NODE, MODE_ADD_EDGE, MODE_DEL_NODE, MODE_DEL_EDGE} from './DrawingModeConstants';
+import {
+    MODE_NONE,
+    MODE_ADD_NODE,
+    MODE_ADD_EDGE,
+    MODE_DEL_NODE,
+    MODE_DEL_EDGE
+} from './DrawingModeConstants';
 import DrawingControlButton from "./DrawingModeButton";
 
 
@@ -62,6 +68,14 @@ class DrawingControlPanel extends React.Component {
                     handleButtonClick={this.setDrawingMode}
                     isActive={this.isButtonActive(MODE_DEL_EDGE)}
                 />
+
+                <button
+                    className={"Drawing-area-header-button Drawing-area-refresh-button"}
+                    onClick={this.props.graphReset}
+                >
+                    <i className="fa fa-refresh"/>
+                </button>
+
             </div>
 
         )

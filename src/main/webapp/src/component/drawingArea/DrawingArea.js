@@ -9,7 +9,8 @@ import {
     MODE_DEL_NODE,
     MODE_DEL_EDGE,
     colors,
-    circleRadius, NO_DIRECTIONS, BOTH_DIRECTIONS
+    circleRadius,
+    BOTH_DIRECTIONS
 } from './DrawingModeConstants';
 import KonvaNode from "./KonvaNode";
 import KonvaEdge from "./KonvaEdge";
@@ -41,6 +42,12 @@ class DrawingArea extends React.Component {
             stageWidth: this.container.offsetWidth,
             stageHeight: this.container.offsetHeight - 45 // App-drawing-area - (Drawing-area-header + App-line-split)
         });
+    }
+
+    resetGraph = () => {
+        this.publishAndUpdateGraph([], []);
+        this.nodeId = 0;
+        this.edgeId = 0;
     }
 
     addNewNodeOnCoords = (x, y) => {
@@ -231,6 +238,7 @@ class DrawingArea extends React.Component {
 
                 <DrawingControlPanel
                     modeChange={this.handleModeChange}
+                    graphReset={this.resetGraph}
                 />
                 <div className="App-line-split"/>
 
