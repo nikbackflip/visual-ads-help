@@ -1,5 +1,6 @@
 import React from "react";
 import {Group, Line, Text} from "react-konva";
+import {circleRadius} from "./DrawingModeConstants";
 
 
 class KonvaEdge extends React.Component {
@@ -18,19 +19,35 @@ class KonvaEdge extends React.Component {
     render() {
         console.log("Rendering edge: " + this.props.id);
 
-        let middle = {
-            x: Math.abs((this.props.to.x - this.props.from.x) / 2 + this.props.from.x),
-            y: Math.abs((this.props.to.y - this.props.from.y) / 2 + this.props.from.y)
+        const toX = this.props.to.x;
+        const toY = this.props.to.y;
+        const fromX = this.props.from.x;
+        const fromY = this.props.from.y;
+
+        const middle = {
+            x: Math.abs((toX - fromX) / 2 + fromX),
+            y: Math.abs((toY - fromY) / 2 + fromY)
         }
 
-        let a = this.props.to.x - this.props.from.x;
-        let b = this.props.to.y - this.props.from.y;
-        let weightVisible = Math.sqrt(a * a + b * b) > 70;
+        const a = toX - fromX;
+        const b = toY - fromY;
+        const l = Math.sqrt(a * a + b * b);
+        const weightVisible = l > 70;
+
+        const halfLength = l / 2;
+        const halfLengthDash = halfLength - circleRadius;
+
+        const toXdash = ((halfLengthDash * (toX - middle.x)) / halfLength) + middle.x;
+        const toYdash = ((halfLengthDash * (toY - middle.y)) / halfLength) + middle.y;
+
+        const fromXdash = ((halfLengthDash * (fromX - middle.x)) / halfLength) + middle.x;
+        const fromYdash = ((halfLengthDash * (fromY - middle.y)) / halfLength) + middle.y;
+
 
         return <Group>
             <Line
                 id={this.props.id}
-                points={[this.props.from.x, this.props.from.y, this.props.to.x, this.props.to.y]}
+                points={[fromXdash, fromYdash, toXdash, toYdash]}
                 stroke={this.props.selected ? "#1d9797" : "black"}
                 strokeWidth={3}
                 onClick={this.props.handleEdgeClick}
