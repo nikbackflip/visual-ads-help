@@ -18,10 +18,8 @@ class DisplayNode extends React.Component {
             <div>
                 <DisplayTextGraphProperty
                     label="Id"
-                    propertyName="id"
                     value={node.id}
                     readOnly={true}
-                    updateElementProperty={this.updateElement}
                 />
                 <DisplayTextGraphProperty
                     label="Name"

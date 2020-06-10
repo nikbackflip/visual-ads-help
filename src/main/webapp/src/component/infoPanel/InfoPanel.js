@@ -32,6 +32,12 @@ class InfoPanel extends React.Component {
         });
     }
 
+    getNodeName = (id) => {
+        return this.props.graph.nodes.find(n => {
+            return n.id === id
+        });
+    }
+
     render() {
         console.log("Rendering info panel");
 
@@ -56,6 +62,7 @@ class InfoPanel extends React.Component {
                 />
                 <DisplayEdge
                     element={selectedEdge}
+                    getNodeName={this.getNodeName}
                     updateElement={this.updateEdge}
                 />
             </div>

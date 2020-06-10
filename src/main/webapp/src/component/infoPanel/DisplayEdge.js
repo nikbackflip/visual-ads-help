@@ -20,10 +20,8 @@ class DisplayEdge extends React.Component {
             <div>
                 <DisplayTextGraphProperty
                     label="Id"
-                    propertyName="id"
                     value={edge.id}
                     readOnly={true}
-                    updateElementProperty={this.updateElement}
                 />
                 <DisplayTextGraphProperty
                     label="Weight"
@@ -41,17 +39,13 @@ class DisplayEdge extends React.Component {
                 />
                 <DisplayTextGraphProperty
                     label="From"
-                    propertyName="fromId"
-                    value={edge.fromId}
+                    value={this.props.getNodeName(edge.fromId).name}
                     readOnly={true}
-                    updateElementProperty={this.updateElement}
                 />
                 <DisplayTextGraphProperty
                     label="To"
-                    propertyName="toId"
-                    value={edge.toId}
+                    value={this.props.getNodeName(edge.toId).name}
                     readOnly={true}
-                    updateElementProperty={this.updateElement}
                 />
 
                 <div className="App-line-split"/>
