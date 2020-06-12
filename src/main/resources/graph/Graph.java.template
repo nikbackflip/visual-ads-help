@@ -1,0 +1,76 @@
+package com.backflip.vadsh.graph;
+
+import java.util.*;
+
+import static java.util.stream.Collectors.*;
+
+public class Graph {
+
+    public static final class Edge {
+        public Edge(int from, int to, double weight) {
+            this.from = from;
+            this.to = to;
+            this.weight = weight;
+        }
+
+        private final int from;
+        private final int to;
+        private final double weight;
+
+        public int from() {
+            return from;
+        }
+
+        public int to() {
+            return to;
+        }
+
+        public double weight() {
+            return weight;
+        }
+    }
+
+    private final Map<Integer, String> nodeIdToNameMap = new HashMap<>() {{
+        ${nodeIdToNameMap}
+    }};
+
+    private final List<Edge> edgesList = new ArrayList<>() {{
+        ${edgesList}
+    }};
+
+    private final int n = nodeIdToNameMap.size();
+
+    public double[][] adjacencyMatrix() {
+        double[][] graph = new double[n][n];
+        edgesList.forEach(e -> graph[e.from()][e.to()] = e.weight());
+        return graph;
+    }
+
+    public List<Edge> edgeList() {
+        return new ArrayList<>(edgesList);
+    }
+
+    public Edge[] edgeArray() {
+        return edgesList.toArray(new Edge[0]);
+    }
+
+    public List<List<Integer>> adjacencyList() {
+        return new ArrayList<>(edgesList.stream()
+                .collect(groupingBy(Edge::from, mapping(Edge::to, toList())))
+                .values());
+    }
+
+    public Map<Integer, List<Edge>> adjacencyListAsMap() {
+        return edgesList.stream()
+                .collect(groupingBy(Edge::from));
+    }
+
+    public List<List<Edge>> adjacencyListOfEdges() {
+        return new ArrayList<>(edgesList.stream()
+                .collect(groupingBy(Edge::from))
+                .values());
+    }
+
+}
+
+
