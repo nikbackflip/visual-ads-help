@@ -1,8 +1,10 @@
-package com.backflip.vadsh.graph;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.*;
+
 
 public class Graph {
 
@@ -31,14 +33,22 @@ public class Graph {
     }
 
     private final Map<Integer, String> nodeIdToNameMap = new HashMap<>() {{
-        ${nodeIdToNameMap}
+        {nodeIdToNameMap}
     }};
 
     private final List<Edge> edgesList = new ArrayList<>() {{
-        ${edgesList}
+        {edgesList}
     }};
 
     private final int n = nodeIdToNameMap.size();
+
+    public String getNodeName(Integer id) {
+        return nodeIdToNameMap.get(id);
+    }
+
+    public int nodesCount() {
+        return n;
+    }
 
     public double[][] adjacencyMatrix() {
         double[][] graph = new double[n][n];
@@ -55,22 +65,39 @@ public class Graph {
     }
 
     public List<List<Integer>> adjacencyList() {
-        return new ArrayList<>(edgesList.stream()
-                .collect(groupingBy(Edge::from, mapping(Edge::to, toList())))
-                .values());
+
+        Map<Integer, List<Edge>> groupedEdges = edgesList.stream()
+                .collect(groupingBy(Edge::from));
+
+        return IntStream.range(0, n)
+                .mapToObj(i -> {
+                    List<Edge> list = groupedEdges.getOrDefault(i, emptyList());
+                    return list.stream().map(Edge::to).collect(toList());
+                })
+                .collect(toList());
     }
 
     public Map<Integer, List<Edge>> adjacencyListAsMap() {
-        return edgesList.stream()
+        Map<Integer, List<Edge>> groupedEdges = edgesList.stream()
                 .collect(groupingBy(Edge::from));
+
+        Map<Integer, List<Edge>> result = new HashMap<>();
+        IntStream.range(0, n)
+                .forEach(i -> {
+                    List<Edge> list = groupedEdges.getOrDefault(i, emptyList());
+                    result.put(i, list);
+                });
+
+        return result;
     }
 
     public List<List<Edge>> adjacencyListOfEdges() {
-        return new ArrayList<>(edgesList.stream()
-                .collect(groupingBy(Edge::from))
-                .values());
+        Map<Integer, List<Edge>> groupedEdges = edgesList.stream()
+                .collect(groupingBy(Edge::from));
+
+        return IntStream.range(0, n)
+                .mapToObj(i -> groupedEdges.getOrDefault(i, emptyList()))
+                .collect(toList());
     }
 
 }
-
-
