@@ -1,5 +1,6 @@
 package com.backflip.vadsh.template.graph;
 
+import com.backflip.vadsh.templates.graph.GraphArgs;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -7,21 +8,21 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import static com.backflip.vadsh.templates.graph.GraphArgs.builder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class NoEdgesGraphTest extends AbstractGraphTest {
 
     @BeforeAll
     static void init() throws IOException {
-        Map<String, String> args = Map.of(
-                "edgesList", ""
-                ,
-                "nodeIdToNameMap", "" +
-                        "put(0, \"0\");" +
-                        "put(1, \"1\");" +
-                        "put(2, \"2\");" +
-                        "put(3, \"3\");"
-        );
+        GraphArgs args = builder()
+                .withNode(0, "0")
+                .withNode(1, "1")
+                .withNode(2, "2")
+                .withNode(3, "3")
+
+                .build();
+
         init(args);
     }
 

@@ -1,5 +1,6 @@
 package com.backflip.vadsh.template.graph;
 
+import com.backflip.vadsh.templates.graph.GraphArgs;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -7,6 +8,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import static com.backflip.vadsh.templates.graph.GraphArgs.builder;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.emptyArray;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,11 +17,8 @@ public class EmptyGraphTest extends AbstractGraphTest {
 
     @BeforeAll
     static void init() throws IOException {
-        Map<String, String> args = Map.of(
-                "edgesList", ""
-                ,
-                "nodeIdToNameMap", ""
-        );
+        GraphArgs args = builder().build();
+
         init(args);
     }
 

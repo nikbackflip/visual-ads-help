@@ -1,6 +1,7 @@
 package com.backflip.vadsh.template.graph;
 
 import com.backflip.vadsh.template.graph.proxy.IEdge;
+import com.backflip.vadsh.templates.graph.GraphArgs;
 import org.joor.Reflect;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -9,36 +10,37 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import static com.backflip.vadsh.templates.graph.GraphArgs.builder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CompleteGraphTest extends AbstractGraphTest {
 
     @BeforeAll
     static void init() throws IOException {
-        Map<String, String> args = Map.of(
-                "edgesList", "" +
-                        "add(new Edge(0, 1, 1));" +
-                        "add(new Edge(0, 2, 1));" +
-                        "add(new Edge(0, 3, 1));" +
+        GraphArgs args = builder()
+                .withEdge(0, 1, 1)
+                .withEdge(0, 2, 1)
+                .withEdge(0, 3, 1)
 
-                        "add(new Edge(1, 0, 1));" +
-                        "add(new Edge(1, 2, 1));" +
-                        "add(new Edge(1, 3, 1));" +
+                .withEdge(1, 0, 1)
+                .withEdge(1, 2, 1)
+                .withEdge(1, 3, 1)
 
-                        "add(new Edge(2, 0, 1));" +
-                        "add(new Edge(2, 1, 1));" +
-                        "add(new Edge(2, 3, 1));" +
+                .withEdge(2, 0, 1)
+                .withEdge(2, 1, 1)
+                .withEdge(2, 3, 1)
 
-                        "add(new Edge(3, 0, 1));" +
-                        "add(new Edge(3, 1, 1));" +
-                        "add(new Edge(3, 2, 1));"
-                ,
-                "nodeIdToNameMap", "" +
-                        "put(0, \"0\");" +
-                        "put(1, \"1\");" +
-                        "put(2, \"2\");" +
-                        "put(3, \"3\");"
-        );
+                .withEdge(3, 0, 1)
+                .withEdge(3, 1, 1)
+                .withEdge(3, 2, 1)
+
+                .withNode(0, "0")
+                .withNode(1, "1")
+                .withNode(2, "2")
+                .withNode(3, "3")
+
+                .build();
+
         init(args);
     }
 

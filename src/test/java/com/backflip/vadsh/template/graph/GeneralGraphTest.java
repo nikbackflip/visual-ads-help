@@ -1,26 +1,26 @@
 package com.backflip.vadsh.template.graph;
 
+import com.backflip.vadsh.templates.graph.GraphArgs;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.Map;
 
+import static com.backflip.vadsh.templates.graph.GraphArgs.builder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GeneralGraphTest extends AbstractGraphTest {
 
     @BeforeAll
     static void init() throws IOException {
-        Map<String, String> args = Map.of(
-                "edgesList", ""
-                ,
-                "nodeIdToNameMap", "" +
-                        "put(0, \"node0\");" +
-                        "put(1, \"node1\");" +
-                        "put(2, \"node2\");" +
-                        "put(3, \"node3\");"
-        );
+        GraphArgs args = builder()
+                .withNode(0, "node0")
+                .withNode(1, "node1")
+                .withNode(2, "node2")
+                .withNode(3, "node3")
+
+                .build();
+
         init(args);
     }
 
