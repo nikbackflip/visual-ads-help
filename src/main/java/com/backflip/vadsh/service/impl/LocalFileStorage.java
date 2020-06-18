@@ -13,7 +13,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 @Component
 public class LocalFileStorage implements FileStorage {
 
-    @Value("${path}")
+    @Value("${storage.local.path}")
     private String pathBase;
 
     public void setPathBase(String pathBase) {
