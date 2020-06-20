@@ -42,7 +42,9 @@ class App extends React.Component {
                         graph={this.state.graph}
                         handleGraphUpdate={this.handleGraphUpdate}
                     />
-                    <CodePanel/>
+                    <CodePanel
+                        graph={this.state.graph}
+                    />
                 </div>
             </div>
         );
