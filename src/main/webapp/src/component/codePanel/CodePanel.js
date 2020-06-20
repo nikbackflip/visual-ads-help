@@ -1,9 +1,10 @@
+import '../css/CodePanel.css';
 import React from 'react';
 
 class CodePanel extends React.Component {
 
-    handleClick = () => {
-        fetch('http://localhost:8080/api/download', {
+    downloadGraphFile = () => {
+        fetch('/api/generator/graph', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -23,9 +24,9 @@ class CodePanel extends React.Component {
         return (
             <div className="App-code-panel">
                 <button
-                    className="Drawing-area-header-button"
-                    onClick={() => this.handleClick()}
-                    >
+                    className="Code-panel-button"
+                    onClick={this.downloadGraphFile}
+                >
                     DOWNLOAD
                 </button>
             </div>

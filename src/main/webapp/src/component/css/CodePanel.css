@@ -1,0 +1,12 @@
+.Code-panel-button {
+    border: none;
+    background-color: transparent;
+    outline: none;
+    height: 100%;
+    font-weight: bold;
+    font-family: Verdana, monospace;
+}
+
+.Code-panel-button:hover {
+    background-color: #8b8a8a;
+}
