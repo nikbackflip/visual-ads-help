@@ -24,7 +24,7 @@ public abstract class Template<T extends TemplateArgs> {
             content = RegExUtils.replaceAll(content, "\\{" + argName + "}", replacement);
         }
 
-        return getStorage().saveToFile(getFinalName(), content);
+        return getStorage().save(content);
     }
 
     public abstract String getSource();

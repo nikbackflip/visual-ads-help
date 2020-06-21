@@ -2,6 +2,9 @@ package com.backflip.vadsh.service;
 
 public interface FileStorage {
 
-    String saveToFile(String name, String content);
+    String save(String content);
 
+    byte[] getContent(String contentId);
+
+    void clearStorage();
 }

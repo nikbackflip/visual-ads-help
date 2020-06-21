@@ -24,11 +24,11 @@ public abstract class AbstractGraphTest {
     static IGraph graphReflect;
 
     static void init(GraphArgs args) throws IOException {
-        storage.setPathBase(tempDirPath.toString());
+        storage.setPathBase(tempDirPath.toString() + File.separator);
 
-        String path = new GraphTemplate(storage).construct(args);
+        String fileName = new GraphTemplate(storage).construct(args);
 
-        File file = new File(path);
+        File file = new File(tempDirPath.toString() + File.separator + fileName);
         String content = FileUtils.readFileToString(file, UTF_8);
         graphReflect = Reflect.compile("Graph", content).create().as(IGraph.class);
     }
