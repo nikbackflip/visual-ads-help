@@ -56,14 +56,14 @@ public class Graph {
         add(new Edge(2, 0, 1.0));
         add(new Edge(0, 1, 1.0));
         add(new Edge(1, 0, 1.0));
-        add(new Edge(3, 1, 1.0));
-        add(new Edge(1, 3, 1.0));
-        add(new Edge(2, 3, 1.0));
         add(new Edge(3, 2, 1.0));
-        add(new Edge(5, 6, 1.0));
-        add(new Edge(8, 7, 1.0));
-        add(new Edge(9, 10, 1.0));
+        add(new Edge(2, 3, 1.0));
+        add(new Edge(1, 3, 1.0));
+        add(new Edge(3, 1, 1.0));
+        add(new Edge(6, 5, 1.0));
+        add(new Edge(7, 8, 1.0));
         add(new Edge(10, 9, 1.0));
+        add(new Edge(9, 10, 1.0));
 
     }};
 

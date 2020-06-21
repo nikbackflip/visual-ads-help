@@ -77,35 +77,35 @@
     {
       "id": 4,
       "fromId": 3,
-      "toId": 1,
+      "toId": 2,
       "weight": 1,
       "direction": "bothDirections"
     },
     {
       "id": 5,
-      "fromId": 2,
+      "fromId": 1,
       "toId": 3,
       "weight": 1,
       "direction": "bothDirections"
     },
     {
       "id": 6,
-      "fromId": 5,
-      "toId": 6,
+      "fromId": 6,
+      "toId": 5,
       "weight": 1,
       "direction": "forwardDirection"
     },
     {
       "id": 7,
-      "fromId": 7,
-      "toId": 8,
+      "fromId": 8,
+      "toId": 7,
       "weight": 1,
       "direction": "reverseDirection"
     },
     {
       "id": 8,
-      "fromId": 9,
-      "toId": 10,
+      "fromId": 10,
+      "toId": 9,
       "weight": 1,
       "direction": "noDirections"
     }
