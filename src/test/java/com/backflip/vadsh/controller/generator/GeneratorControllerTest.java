@@ -1,5 +1,6 @@
 package com.backflip.vadsh.controller.generator;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -13,12 +14,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+
 public class GeneratorControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
+    @Disabled
     public void generateFromValidModel() throws Exception {
         mockMvc.perform(post("/generator/graph")
                 .contentType(APPLICATION_JSON)
