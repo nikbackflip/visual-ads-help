@@ -15,7 +15,7 @@ public class GraphTemplate extends Template<GraphArgs> {
 
     @Override
     public String getSource() {
-        return "/sources/Graph.java.template";
+        return "sources/Graph.java.template";
     }
 
     @Override

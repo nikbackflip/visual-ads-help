@@ -2,10 +2,11 @@ package com.backflip.vadsh.templates;
 
 import com.backflip.vadsh.service.FileStorage;
 import lombok.SneakyThrows;
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RegExUtils;
+import org.springframework.core.io.ClassPathResource;
 
-import java.io.File;
+import java.io.InputStream;
 import java.util.Map;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -15,8 +16,8 @@ public abstract class Template<T extends TemplateArgs> {
     @SneakyThrows
     public String construct(T args) {
 
-        File file = new File(getClass().getResource(getSource()).getFile());
-        String content = FileUtils.readFileToString(file, UTF_8);
+        InputStream file = new ClassPathResource(getSource(), this.getClass().getClassLoader()).getInputStream();
+        String content = IOUtils.toString(file, UTF_8);
 
         for (Map.Entry<String, String> entry : args.getArgs().entrySet()) {
             String argName = entry.getKey();
