@@ -19,11 +19,6 @@ class DisplayEdge extends React.Component {
         return this.props.element == null ? <div/> : (
             <div>
                 <DisplayTextGraphProperty
-                    label="Id"
-                    value={edge.id}
-                    readOnly={true}
-                />
-                <DisplayTextGraphProperty
                     label="Weight"
                     propertyName="weight"
                     value={edge.weight}

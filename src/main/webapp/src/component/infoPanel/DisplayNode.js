@@ -17,11 +17,6 @@ class DisplayNode extends React.Component {
         return this.props.element == null ? <div/> : (
             <div>
                 <DisplayTextGraphProperty
-                    label="Id"
-                    value={node.id}
-                    readOnly={true}
-                />
-                <DisplayTextGraphProperty
                     label="Name"
                     propertyName="name"
                     value={node.name}
