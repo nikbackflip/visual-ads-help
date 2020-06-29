@@ -4,7 +4,7 @@ import React from 'react';
 class CodePanel extends React.Component {
 
     downloadGraphFile = () => {
-        fetch('/api/generator/graph', {
+        fetch('/generator/graph', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

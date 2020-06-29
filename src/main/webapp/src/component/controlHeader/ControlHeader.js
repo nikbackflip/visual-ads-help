@@ -14,7 +14,7 @@ class ControlHeader extends React.Component {
 
     getVersion = () => {
         console.log("Version requested");
-        fetch('/api/version', {
+        fetch('/version', {
             method: 'GET'
         }).then(response => {
             if (response.ok) {
