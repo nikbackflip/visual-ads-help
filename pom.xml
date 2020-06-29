@@ -10,10 +10,9 @@
     </parent>
     <groupId>com.backflip</groupId>
     <artifactId>VADSH</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.0</version>
     <packaging>war</packaging>
     <name>Visual ADS Helper</name>
-    <description>Demo project for Spring Boot</description>
 
     <dependencies>
         <dependency>
