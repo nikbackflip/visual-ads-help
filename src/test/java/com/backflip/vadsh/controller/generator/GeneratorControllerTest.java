@@ -14,7 +14,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-
 public class GeneratorControllerTest {
 
     @Autowired
@@ -26,6 +25,19 @@ public class GeneratorControllerTest {
         mockMvc.perform(post("/generator/graph")
                 .contentType(APPLICATION_JSON)
                 .content(fromFile("graph/valid_model.json")))
+
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/plain"))
+                .andExpect(header().string("Content-Disposition", "attachment; filename=Graph.java"))
+                .andExpect(content().bytes(fromFile("graph/ValidGraph.java")));
+    }
+
+    @Test
+    @Disabled
+    public void generateFromValidWithSkippedIds() throws Exception {
+        mockMvc.perform(post("/generator/graph")
+                .contentType(APPLICATION_JSON)
+                .content(fromFile("graph/valid_model_skipped_ids.json")))
 
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/plain"))

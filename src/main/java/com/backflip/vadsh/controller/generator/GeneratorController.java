@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+import static java.util.Comparator.comparingInt;
+
 @Controller
 @RequestMapping("/generator")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -26,6 +28,7 @@ public class GeneratorController {
             @RequestBody GraphGenerationRequest graphRequest,
             HttpServletResponse response) throws Exception {
 
+        fixIds(graphRequest);
         GraphArgs.Builder graphModel = GraphArgs.builder();
         withEdges(graphModel, graphRequest.getEdges());
         withNodes(graphModel, graphRequest.getNodes());
@@ -36,6 +39,23 @@ public class GeneratorController {
         response.addHeader("Content-Disposition", "attachment; filename=" + template.getFinalName());
         response.getOutputStream().write(storage.getContent(contentId));
         response.getOutputStream().flush();
+    }
+
+    private void fixIds(GraphGenerationRequest graphRequest) {
+        List<NodeModel> nodes = graphRequest.getNodes();
+        List<EdgeModel> edges = graphRequest.getEdges();
+
+        nodes.sort(comparingInt(NodeModel::getId));
+        int n = nodes.size();
+        for (int i = 0; i < n; i++) {
+            NodeModel node = nodes.get(i);
+            int oldId = node.getId();
+            for (EdgeModel edge: edges) {
+                if (edge.getFromId() == oldId) edge.setFromId(i);
+                if (edge.getToId() == oldId) edge.setToId(i);
+            }
+            node.setId(i);
+        }
     }
 
     private void withEdges(GraphArgs.Builder builder, List<EdgeModel> list) {
