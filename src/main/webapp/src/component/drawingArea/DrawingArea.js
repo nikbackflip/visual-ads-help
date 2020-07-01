@@ -71,6 +71,10 @@ class DrawingArea extends React.Component {
     }
 
     addNewEdgeFromTo = (from, to) => {
+        if (this.isDuplicateEdge(from, to)) {
+            return;
+        }
+
         const edges = this.props.graph.edges.slice();
         edges.push({
             id: this.edgeId++,
@@ -242,6 +246,11 @@ class DrawingArea extends React.Component {
         this.stageRef.clickStartShape = null;
         this.stageRef.clickEndShape = null;
     };
+
+    isDuplicateEdge = (from, to) => {
+        return this.props.graph.edges.filter(e => {
+            return e.fromId === from.id && e.toId === to.id}).length !== 0;
+    }
 
     drawTempEdge = (e) => {
         switch (this.drawingAreaMode) {
