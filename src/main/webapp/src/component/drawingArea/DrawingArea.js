@@ -14,6 +14,7 @@ import {
 } from './DrawingModeConstants';
 import KonvaNode from "./KonvaNode";
 import KonvaEdge from "./KonvaEdge";
+import TempKonvaEdge from "./TempKonvaEdge";
 
 class DrawingArea extends React.Component {
 
@@ -29,7 +30,7 @@ class DrawingArea extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {tempEdge : {}};
     }
 
     componentDidMount = () => {
@@ -48,6 +49,11 @@ class DrawingArea extends React.Component {
         this.publishAndUpdateGraph([], []);
         this.nodeId = 0;
         this.edgeId = 0;
+    }
+
+    resetTempEdge = () => {
+        this.edgeFromNode = null;
+        this.setState({tempEdge:{}});
     }
 
     addNewNodeOnCoords = (x, y) => {
@@ -74,7 +80,7 @@ class DrawingArea extends React.Component {
             selected: false,
             direction: BOTH_DIRECTIONS
         });
-        this.edgeFromNode = null;
+        this.resetTempEdge();
         this.publishAndUpdateGraph(this.props.graph.nodes.slice(), edges);
     }
 
@@ -97,6 +103,10 @@ class DrawingArea extends React.Component {
             default:
                 break;
         }
+    }
+
+    handleStageDoubleClick = () => {
+        this.resetTempEdge();
     }
 
     onDragMove = e => {
@@ -142,6 +152,13 @@ class DrawingArea extends React.Component {
             case MODE_ADD_EDGE: {
                 if (this.edgeFromNode == null) {
                     this.edgeFromNode = clickedNode;
+                    this.setState({
+                        tempEdge: {
+                            from : {
+                                x: clickedNode.x,
+                                y: clickedNode.y
+                            }
+                        }});
                 } else {
                     this.addNewEdgeFromTo(this.edgeFromNode, clickedNode);
                 }
@@ -226,6 +243,27 @@ class DrawingArea extends React.Component {
         this.stageRef.clickEndShape = null;
     };
 
+    drawTempEdge = (e) => {
+        switch (this.drawingAreaMode) {
+            case MODE_ADD_EDGE: {
+                if (this.edgeFromNode !== null) {
+                    this.setState({
+                        tempEdge: {
+                            from: this.state.tempEdge.from,
+                            to : {
+                                x: e.evt.layerX,
+                                y: e.evt.layerY
+                            }
+                        }});
+                }
+                break;
+            }
+            default:
+                this.resetTempEdge();
+                break;
+        }
+    }
+
     render() {
 
         console.log("Rendering drawing area");
@@ -249,8 +287,13 @@ class DrawingArea extends React.Component {
                     width={this.state.stageWidth}
                     height={this.state.stageHeight}
                     onClick={this.handleStageClick}
-                    onContentMouseup={this.cleanStageState}>
+                    onContentMouseup={this.cleanStageState}
+                    onMouseMove={this.drawTempEdge}
+                    onDblClick={this.handleStageDoubleClick}>
                     <Layer>
+                        <TempKonvaEdge
+                            edge={this.state.tempEdge}
+                        />
                         {this.props.graph.edges.map(edge => {
 
                             const fromNode = this.props.graph.nodes.find(n => {
