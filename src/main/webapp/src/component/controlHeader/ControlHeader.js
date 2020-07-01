@@ -31,7 +31,10 @@ class ControlHeader extends React.Component {
         return (
             <div>
                 <div className="App-control-header">
-                    <label className="Control-header-text">
+                    <header className="Control-header-title">
+                        Visual ADS Helper
+                    </header>
+                    <label className="Control-header-version">
                          version: {this.state.version}
                     </label>
                 </div>

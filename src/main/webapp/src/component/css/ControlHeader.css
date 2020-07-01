@@ -1,6 +1,14 @@
-.Control-header-text {
+.Control-header-version {
     font-family: Verdana, monospace;
     font-size: 10px;
     color: #8b8a8a;
     float: right;
+}
+
+.Control-header-title {
+    font-family: Verdana, monospace;
+    font-size: 24px;
+    font-weight: bold;
+    color: #8b8a8a;
+    text-align:center;
 }
