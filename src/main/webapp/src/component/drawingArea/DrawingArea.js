@@ -159,10 +159,7 @@ class DrawingArea extends React.Component {
                     this.edgeFromNode = clickedNode;
                     this.setState({
                         tempEdge: {
-                            from : {
-                                x: clickedNode.x,
-                                y: clickedNode.y
-                            }
+                            from: clickedNode
                         }});
                 } else {
                     this.addNewEdgeFromTo(this.edgeFromNode, clickedNode);
