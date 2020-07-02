@@ -49,6 +49,7 @@ class DrawingArea extends React.Component {
         this.publishAndUpdateGraph([], []);
         this.nodeId = 0;
         this.edgeId = 0;
+        this.resetTempEdge();
     }
 
     resetTempEdge = () => {
