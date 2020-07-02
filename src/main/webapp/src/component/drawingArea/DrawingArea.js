@@ -247,7 +247,8 @@ class DrawingArea extends React.Component {
 
     isDuplicateEdge = (from, to) => {
         return this.props.graph.edges.filter(e => {
-            return e.fromId === from.id && e.toId === to.id}).length !== 0;
+            return (e.fromId === from.id && e.toId === to.id) ||
+                   (e.fromId === to.id && e.toId === from.id)}).length !== 0;
     }
 
     drawTempEdge = (e) => {
