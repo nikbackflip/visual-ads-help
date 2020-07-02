@@ -72,7 +72,7 @@ class DrawingArea extends React.Component {
     }
 
     addNewEdgeFromTo = (from, to) => {
-        if (this.isDuplicateEdge(from, to)) {
+        if (this.isDuplicateEdge(from, to) || this.isSelfEdge(from, to)) {
             return;
         }
 
@@ -249,6 +249,9 @@ class DrawingArea extends React.Component {
         return this.props.graph.edges.filter(e => {
             return (e.fromId === from.id && e.toId === to.id) ||
                    (e.fromId === to.id && e.toId === from.id)}).length !== 0;
+    }
+    isSelfEdge = (from, to) => {
+        return from.id === to.id;
     }
 
     drawTempEdge = (e) => {
