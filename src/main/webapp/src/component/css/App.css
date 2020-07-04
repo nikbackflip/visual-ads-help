@@ -18,21 +18,23 @@
 
 .App-info-panel {
     height: 100%;
-    width: 10%;
+    width: 100%;
     background-color: #3C3F41;
     float: left;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .App-drawing-area {
     background: #2B2B2B;
-    width: 70%;
+    width: 100%;
     height: 100%;
     float: left;
 }
 
 .App-code-panel {
     height: 100%;
-    width: 20%;
+    width: 100%;
     background-color: #3C3F41;
     float: left;
 }

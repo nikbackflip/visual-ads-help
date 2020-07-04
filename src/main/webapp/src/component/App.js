@@ -4,6 +4,7 @@ import ControlHeader from "./controlHeader/ControlHeader";
 import InfoPanel from "./infoPanel/InfoPanel";
 import DrawingArea from "./drawingArea/DrawingArea";
 import CodePanel from "./codePanel/CodePanel";
+import ResizablePanels from "resizable-panels-react";
 
 class App extends React.Component {
 
@@ -34,17 +35,27 @@ class App extends React.Component {
             <div className="App">
                 <ControlHeader/>
                 <div className="App-body">
-                    <InfoPanel
-                        graph={this.state.graph}
-                        handleGraphUpdate={this.handleGraphUpdate}
-                    />
-                    <DrawingArea
-                        graph={this.state.graph}
-                        handleGraphUpdate={this.handleGraphUpdate}
-                    />
-                    <CodePanel
-                        graph={this.state.graph}
-                    />
+                    <ResizablePanels
+                        displayDirection="row"
+                        width="100%"
+                        height="100%"
+                        panelsSize={[10, 70, 20]}
+                        sizeUnitMeasure="%"
+                        resizerColor="#25282A"
+                        resizerSize="5px"
+                    >
+                        <InfoPanel
+                            graph={this.state.graph}
+                            handleGraphUpdate={this.handleGraphUpdate}
+                        />
+                        <DrawingArea
+                            graph={this.state.graph}
+                            handleGraphUpdate={this.handleGraphUpdate}
+                        />
+                        <CodePanel
+                            graph={this.state.graph}
+                        />
+                    </ResizablePanels>
                 </div>
             </div>
         );
