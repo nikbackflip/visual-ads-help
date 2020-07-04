@@ -1,5 +1,10 @@
-import '../css/CodePanel.css';
 import React from 'react';
+
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/theme/darcula.css';
+import 'codemirror/mode/clike/clike.js';
+import {UnControlled} from "react-codemirror2";
+import '../css/CodePanel.css';
 
 class CodePanel extends React.Component {
 
@@ -21,14 +26,22 @@ class CodePanel extends React.Component {
     }
 
     render() {
+        let src = "Hello, World!";
         return (
             <div className="App-code-panel">
-                <button
-                    className="Code-panel-button"
-                    onClick={this.downloadGraphFile}
-                >
-                    DOWNLOAD
-                </button>
+                <UnControlled
+                    value={src}
+                    options={{
+                        lineNumbers: true,
+                        mode: "text/x-java",
+                        matchBrackets: true,
+                        theme: "darcula"
+                    }}
+                    onBeforeChange={(editor, data, value) => {
+                    }}
+                    onChange={(editor, data, value) => {
+                    }}
+                />
             </div>
         );
     }

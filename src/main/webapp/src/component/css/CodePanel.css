@@ -10,3 +10,7 @@
 .Code-panel-button:hover {
     background-color: #8b8a8a;
 }
+
+.CodeMirror {
+    height: calc(100vh - 45px);
+}

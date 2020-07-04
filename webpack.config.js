@@ -28,6 +28,14 @@ module.exports = {
                     'style-loader',
                     'css-loader'
                 ],
+            },
+            {
+                test: /\.css$/,
+                loaders: ['style-loader', 'css-loader'],
+                include: [
+                    path.resolve(__dirname, './node_modules/codemirror/lib/'),
+                    path.resolve(__dirname, './node_modules/codemirror/theme/')
+                ]
             }
         ]
     }
