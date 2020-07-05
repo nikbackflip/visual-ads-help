@@ -6,6 +6,7 @@ import 'codemirror/mode/clike/clike.js';
 import {UnControlled} from "react-codemirror2";
 import '../css/CodePanel.css';
 
+
 class CodePanel extends React.Component {
 
     downloadGraphFile = () => {
@@ -35,7 +36,9 @@ class CodePanel extends React.Component {
                         lineNumbers: true,
                         mode: "text/x-java",
                         matchBrackets: true,
-                        theme: "darcula"
+                        theme: "darcula",
+                        scrollbarStyle: null,
+                        readOnly: true
                     }}
                     onBeforeChange={(editor, data, value) => {
                     }}
