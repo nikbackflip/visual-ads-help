@@ -3,79 +3,50 @@ import React from 'react';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/darcula.css';
 import 'codemirror/mode/clike/clike.js';
-import {UnControlled} from "react-codemirror2";
 import '../css/CodePanel.css';
+import TabPanel from "./TabPanel";
+import JavaTab from "./JavaTab";
+import {JAVA_MODE, MATRIX_EDGE_MODE} from "./CodePanelConstants";
+import MatrixEdgeTab from "./MatrixEdgeTab";
 
 
 class CodePanel extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {activeTab: JAVA_MODE};
     }
 
-    componentDidMount() {
-        this.fetchGraphCode();
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (JSON.stringify(prevProps) !== JSON.stringify(this.props)) {
-            this.fetchGraphCode();
-        }
-    }
-
-    fetchGraphCode = () => {
-        let self = this;
-        fetch('/generator/graph', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(this.props.graph)
-        }).then((response) => {
-            return response.text();
-        }).then((data) => {
-            self.setState({code: data});
+    handleTabChange = (tab) => {
+        this.setState({
+            activeTab: tab
         });
     }
-
-    // downloadGraphFile = () => {
-    //     fetch('/generator/graph', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify(this.props.graph)
-    //     }).then(response =>
-    //         response.blob().then(blob => {
-    //             let url = window.URL.createObjectURL(blob);
-    //             let a = document.createElement('a');
-    //             a.href = url;
-    //             a.download = 'Graph.java';
-    //             a.click();
-    //         }));
-    // }
 
     render() {
         console.log("Rendering code panel");
 
+        let activeTabRender;
+        switch (this.state.activeTab) {
+            case JAVA_MODE:
+                activeTabRender = <JavaTab
+                    graph={this.props.graph}
+                />
+                break;
+            case MATRIX_EDGE_MODE: {
+                activeTabRender = <MatrixEdgeTab
+                    graph={this.props.graph}
+                />
+                break;
+            }
+        }
+
         return (
             <div className="App-code-panel">
-                <UnControlled
-                    value={this.state.code}
-                    options={{
-                        lineNumbers: true,
-                        mode: "text/x-java",
-                        matchBrackets: true,
-                        theme: "darcula",
-                        scrollbarStyle: null,
-                        readOnly: true
-                    }}
-                    onBeforeChange={(editor, data, value) => {
-                    }}
-                    onChange={(editor, data, value) => {
-                    }}
+                <TabPanel
+                    tabChange={this.handleTabChange}
                 />
+                {activeTabRender}
             </div>
         );
     }
