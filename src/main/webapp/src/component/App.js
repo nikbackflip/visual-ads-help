@@ -4,9 +4,12 @@ import ControlHeader from "./controlHeader/ControlHeader";
 import InfoPanel from "./infoPanel/InfoPanel";
 import DrawingArea from "./drawingArea/DrawingArea";
 import CodePanel from "./codePanel/CodePanel";
-import ResizablePanels from "resizable-panels-react";
+import PropagatingResizablePanels from "./app/PropagatingResizablePanels";
 
 class App extends React.Component {
+
+    container = React.createRef();
+    resizables = React.createRef();
 
     constructor(props) {
         super(props);
@@ -27,15 +30,28 @@ class App extends React.Component {
         });
     }
 
-    render() {
+    componentDidMount() {
+        this.onPanelsSizeUpdate();
+        window.addEventListener("resize", this.onPanelsSizeUpdate);
+    }
 
+    onPanelsSizeUpdate = () => {
+        let percent = this.resizables.current.state.panelsSize[1] !== undefined ? this.resizables.current.state.panelsSize[1] : 70;
+        this.setState({
+            stageHeight: this.container.current.getBoundingClientRect().height - 90,
+            stageWidth: this.container.current.getBoundingClientRect().width / 100 * percent - 10
+        })
+    }
+
+    render() {
         console.log("Rendering App");
 
         return (
-            <div className="App">
+            <div className="App"
+                 ref={this.container}>
                 <ControlHeader/>
                 <div className="App-body">
-                    <ResizablePanels
+                    <PropagatingResizablePanels
                         displayDirection="row"
                         width="100%"
                         height="100%"
@@ -43,6 +59,8 @@ class App extends React.Component {
                         sizeUnitMeasure="%"
                         resizerColor="#25282A"
                         resizerSize="5px"
+                        onUpdate={this.onPanelsSizeUpdate}
+                        ref={this.resizables}
                     >
                         <InfoPanel
                             graph={this.state.graph}
@@ -51,11 +69,13 @@ class App extends React.Component {
                         <DrawingArea
                             graph={this.state.graph}
                             handleGraphUpdate={this.handleGraphUpdate}
+                            stageHeight={this.state.stageHeight}
+                            stageWidth={this.state.stageWidth}
                         />
                         <CodePanel
                             graph={this.state.graph}
                         />
-                    </ResizablePanels>
+                    </PropagatingResizablePanels>
                 </div>
             </div>
         );

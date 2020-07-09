@@ -33,18 +33,6 @@ class DrawingArea extends React.Component {
         this.state = {tempEdge : {}};
     }
 
-    componentDidMount = () => {
-        this.updateSize();
-        window.addEventListener("resize", this.updateSize);
-    }
-
-    updateSize = () => {
-        this.setState({
-            stageWidth: this.container.offsetWidth,
-            stageHeight: this.container.offsetHeight - 45 // App-drawing-area - (Drawing-area-header + App-line-split)
-        });
-    }
-
     resetGraph = () => {
         this.publishAndUpdateGraph([], []);
         this.nodeId = 0;
@@ -136,10 +124,10 @@ class DrawingArea extends React.Component {
         let y = node.y;
 
         x = x < circleRadius ? circleRadius : x;
-        x = x > this.state.stageWidth - circleRadius ? this.state.stageWidth - circleRadius : x;
+        x = x > this.props.stageWidth - circleRadius ? this.props.stageWidth - circleRadius : x;
 
         y = y < circleRadius ? circleRadius : y;
-        y = y > this.state.stageHeight - circleRadius ? this.state.stageHeight - circleRadius : y;
+        y = y > this.props.stageHeight - circleRadius ? this.props.stageHeight - circleRadius : y;
 
         node.x = x;
         node.y = y;
@@ -261,29 +249,28 @@ class DrawingArea extends React.Component {
                     this.setState({
                         tempEdge: {
                             from: this.state.tempEdge.from,
-                            to : {
+                            to: {
                                 x: e.evt.layerX,
                                 y: e.evt.layerY
                             }
-                        }});
+                        }
+                    });
                 }
                 break;
             }
             default:
-                this.resetTempEdge();
+                if (this.edgeFromNode !== null) {
+                    this.resetTempEdge();
+                }
                 break;
         }
     }
 
     render() {
-
         console.log("Rendering drawing area");
 
         return (
-            <div className="App-drawing-area"
-                 ref={node => {
-                     this.container = node;
-                 }}>
+            <div className="App-drawing-area">
 
                 <DrawingControlPanel
                     modeChange={this.handleModeChange}
@@ -295,8 +282,8 @@ class DrawingArea extends React.Component {
                     ref={ref => {
                         this.stageRef = ref;
                     }}
-                    width={this.state.stageWidth}
-                    height={this.state.stageHeight}
+                    width={this.props.stageWidth}
+                    height={this.props.stageHeight}
                     onClick={this.handleStageClick}
                     onContentMouseup={this.cleanStageState}
                     onMouseMove={this.drawTempEdge}
