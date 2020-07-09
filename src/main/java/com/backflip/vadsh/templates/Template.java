@@ -1,6 +1,5 @@
 package com.backflip.vadsh.templates;
 
-import com.backflip.vadsh.service.FileStorage;
 import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RegExUtils;
@@ -25,13 +24,11 @@ public abstract class Template<T extends TemplateArgs> {
             content = RegExUtils.replaceAll(content, "\\{" + argName + "}", replacement);
         }
 
-        return getStorage().save(content);
+        return content;
     }
 
     public abstract String getSource();
 
     public abstract String getFinalName();
-
-    public abstract FileStorage getStorage();
 
 }

@@ -1,6 +1,5 @@
 package com.backflip.vadsh.controller.generator;
 
-import com.backflip.vadsh.service.FileStorage;
 import com.backflip.vadsh.templates.graph.GraphArgs;
 import com.backflip.vadsh.templates.graph.GraphTemplate;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,6 @@ import static java.util.Comparator.comparingInt;
 public class GeneratorController {
 
     private final GraphTemplate template;
-    private final FileStorage storage;
 
     @PostMapping(path = "/graph")
     public void generateGraph(
@@ -33,11 +31,11 @@ public class GeneratorController {
         withEdges(graphModel, graphRequest.getEdges());
         withNodes(graphModel, graphRequest.getNodes());
 
-        String contentId = template.construct(graphModel.build());
+        String content = template.construct(graphModel.build());
 
         response.setContentType("application/plain");
         response.addHeader("Content-Disposition", "attachment; filename=" + template.getFinalName());
-        response.getOutputStream().write(storage.getContent(contentId));
+        response.getOutputStream().write(content.getBytes());
         response.getOutputStream().flush();
     }
 
