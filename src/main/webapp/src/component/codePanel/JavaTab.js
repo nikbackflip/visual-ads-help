@@ -28,9 +28,9 @@ class JavaTab extends React.Component {
             },
             body: JSON.stringify(this.props.graph)
         }).then((response) => {
-            return response.text();
+            return response.json();
         }).then((data) => {
-            self.setState({code: data});
+            self.setState({code: data.generated});
         });
     }
 

@@ -5,15 +5,17 @@ import com.backflip.vadsh.templates.graph.GraphTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 import static java.util.Comparator.comparingInt;
+import static org.springframework.http.MediaType.*;
 
 @Log4j2
 @Controller
@@ -23,10 +25,10 @@ public class GeneratorController {
 
     private final GraphTemplate template;
 
-    @PostMapping(path = "/graph")
-    public void generateGraph(
-            @RequestBody GraphGenerationRequest graphRequest,
-            HttpServletResponse response) throws Exception {
+    @ResponseBody
+    @PostMapping(path = "/graph", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public GraphGeneratorResponse generateGraph(
+            @RequestBody GraphGenerationRequest graphRequest) {
 
         fixIds(graphRequest);
         GraphArgs.Builder graphModel = GraphArgs.builder();
@@ -35,12 +37,8 @@ public class GeneratorController {
 
         String content = template.construct(graphModel.build());
 
-        response.setContentType("application/plain");
-        response.addHeader("Content-Disposition", "attachment; filename=" + template.getFinalName());
-        response.getOutputStream().write(content.getBytes());
-        response.getOutputStream().flush();
-
         log.debug("Graph generated");
+        return new GraphGeneratorResponse(content);
     }
 
     private void fixIds(GraphGenerationRequest graphRequest) {
