@@ -3,6 +3,7 @@ package com.backflip.vadsh.controller.generator;
 import com.backflip.vadsh.templates.graph.GraphArgs;
 import com.backflip.vadsh.templates.graph.GraphTemplate;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import java.util.List;
 
 import static java.util.Comparator.comparingInt;
 
+@Log4j2
 @Controller
 @RequestMapping("/generator")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -37,6 +39,8 @@ public class GeneratorController {
         response.addHeader("Content-Disposition", "attachment; filename=" + template.getFinalName());
         response.getOutputStream().write(content.getBytes());
         response.getOutputStream().flush();
+
+        log.debug("Graph generated");
     }
 
     private void fixIds(GraphGenerationRequest graphRequest) {
