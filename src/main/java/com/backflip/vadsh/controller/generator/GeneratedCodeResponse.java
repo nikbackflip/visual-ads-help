@@ -7,6 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GraphGeneratorResponse {
+public class GeneratedCodeResponse {
     String generated;
 }

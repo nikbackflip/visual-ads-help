@@ -5,14 +5,16 @@ import com.backflip.vadsh.templates.graph.GraphTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static java.util.Comparator.comparingInt;
 import static org.springframework.http.MediaType.*;
@@ -27,7 +29,7 @@ public class GeneratorController {
 
     @ResponseBody
     @PostMapping(path = "/graph", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public GraphGeneratorResponse generateGraph(
+    public GeneratedCodeResponse generateGraph(
             @RequestBody GraphGenerationRequest graphRequest) {
 
         fixIds(graphRequest);
@@ -37,8 +39,69 @@ public class GeneratorController {
 
         String content = template.construct(graphModel.build());
 
-        log.debug("Graph generated");
-        return new GraphGeneratorResponse(content);
+        log.debug("Code generated");
+        return new GeneratedCodeResponse(content);
+    }
+
+    @ResponseBody
+    @PostMapping(path = "/matrix", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public GeneratedMatrixResponse generateMatrix(
+            @RequestBody GraphGenerationRequest graphRequest) {
+
+        fixIds(graphRequest);
+
+        int n = graphRequest.getNodes().size();
+        Double[][] graph = new Double[n][n];
+        Arrays.stream(graph).forEach(r -> Arrays.fill(r, 0.0));
+
+        graphRequest.getEdges().forEach(e -> {
+            switch (e.getDirection()) {
+                case NO_DIRECTIONS:
+                case BOTH_DIRECTIONS:
+                    graph[e.getFromId()][e.getToId()] = e.getWeight();
+                    graph[e.getToId()][e.getFromId()] = e.getWeight();
+                    break;
+                case FORWARD_DIRECTION:
+                    graph[e.getFromId()][e.getToId()] = e.getWeight();
+                    break;
+                case REVERSE_DIRECTION:
+                    graph[e.getToId()][e.getFromId()] = e.getWeight();
+                    break;
+            }
+        });
+        log.debug("Matrix generated");
+        return new GeneratedMatrixResponse(graph);
+    }
+
+    @ResponseBody
+    @PostMapping(path = "/list", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public GeneratedListResponse generateList(
+            @RequestBody GraphGenerationRequest graphRequest) {
+
+        fixIds(graphRequest);
+
+        int n = graphRequest.getNodes().size();
+        List<List<Integer>> graph = new LinkedList<>();
+        IntStream.range(0, n).forEach(i -> graph.add(new LinkedList<>()));
+
+        graphRequest.getEdges().forEach(e -> {
+            switch (e.getDirection()) {
+                case NO_DIRECTIONS:
+                case BOTH_DIRECTIONS:
+                    graph.get(e.getFromId()).add(e.getToId());
+                    graph.get(e.getToId()).add(e.getFromId());
+                    break;
+                case FORWARD_DIRECTION:
+                    graph.get(e.getFromId()).add(e.getToId());
+                    break;
+                case REVERSE_DIRECTION:
+                    graph.get(e.getToId()).add(e.getFromId());
+                    break;
+            }
+        });
+
+        log.debug("List generated");
+        return new GeneratedListResponse(graph);
     }
 
     private void fixIds(GraphGenerationRequest graphRequest) {
