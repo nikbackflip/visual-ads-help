@@ -7,7 +7,7 @@ import '../css/CodePanel.css';
 import TabPanel from "./TabPanel";
 import JavaTab from "./JavaTab";
 import {JAVA_MODE, MATRIX_EDGE_MODE} from "./CodePanelConstants";
-import MatrixEdgeTab from "./MatrixEdgeTab";
+import MatrixListTab from "./MatrixListTab";
 
 
 class CodePanel extends React.Component {
@@ -34,7 +34,7 @@ class CodePanel extends React.Component {
                 />
                 break;
             case MATRIX_EDGE_MODE: {
-                activeTabRender = <MatrixEdgeTab
+                activeTabRender = <MatrixListTab className="Code-panel-whole-height"
                     graph={this.props.graph}
                 />
                 break;

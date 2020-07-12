@@ -14,3 +14,36 @@
 .CodeMirror {
     height: calc(100vh - 45px);
 }
+
+.Code-panel-theader {
+    white-space: pre;
+    font-family: Verdana, monospace;
+    color: #8b8a8a;
+    font-size: 18px;
+}
+
+.Code-panel-tbody {
+    font-family: Verdana, monospace;
+    font-size: 18px;
+}
+
+.Code-panel-space {
+    height: 20px;
+}
+
+.Code-panel-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.Code-panel-scroll {
+    height: 100%;
+    overflow: scroll;
+}
+
+.Code-panel-half-height {
+    height: 50%;
+}
+
+.Code-panel-whole-height {
+    height: 100%;
+}
