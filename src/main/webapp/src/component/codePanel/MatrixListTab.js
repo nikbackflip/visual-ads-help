@@ -12,6 +12,7 @@ class MatrixListTab extends React.Component {
 
     componentDidMount() {
         this.fetchMatrix();
+        this.fetchList();
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
