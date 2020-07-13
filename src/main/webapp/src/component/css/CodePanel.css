@@ -1,16 +1,3 @@
-.Code-panel-button {
-    border: none;
-    background-color: transparent;
-    outline: none;
-    height: 100%;
-    font-weight: bold;
-    font-family: Verdana, monospace;
-}
-
-.Code-panel-button:hover {
-    background-color: #8b8a8a;
-}
-
 .CodeMirror {
     height: calc(100vh - 45px);
 }
@@ -31,19 +18,78 @@
     height: 20px;
 }
 
-.Code-panel-scroll::-webkit-scrollbar {
-    display: none;
-}
-
-.Code-panel-scroll {
-    height: 100%;
-    overflow: scroll;
-}
-
 .Code-panel-half-height {
-    height: 50%;
+    height: calc((100% - 86px) / 2)
 }
 
 .Code-panel-whole-height {
     height: 100%;
+}
+
+.Code-panel-text {
+    font-weight: bold;
+    font-family: Verdana, monospace;
+    white-space: nowrap;
+}
+
+.Code-panel-float-left {
+    float: left;
+}
+
+.Code-panel-textarea {
+    font-size: 16px;
+    height: calc(95% - 27px);
+    width: calc(100% - 10px);
+    background: transparent;
+    border: none;
+    resize: none;
+    white-space: nowrap;
+}
+
+.Code-panel-textarea::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    background-color: transparent;
+}
+
+.Code-panel-textarea::-webkit-scrollbar-corner {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.Code-panel-textarea::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #25282A;
+}
+
+.Code-panel-textarea::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: transparent;
+}
+
+.Code-panel-table {
+    height: 95%;
+    width: calc(100% - 3px);
+    overflow: scroll;
+}
+
+.Code-panel-table::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    background-color: transparent;
+}
+
+.Code-panel-table::-webkit-scrollbar-corner {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.Code-panel-table::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #25282A;
+}
+
+.Code-panel-table::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: transparent;
 }

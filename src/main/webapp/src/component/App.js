@@ -55,7 +55,7 @@ class App extends React.Component {
                         displayDirection="row"
                         width="100%"
                         height="100%"
-                        panelsSize={[10, 70, 20]}
+                        panelsSize={[10, 50, 40]}
                         sizeUnitMeasure="%"
                         resizerColor="#25282A"
                         resizerSize="5px"

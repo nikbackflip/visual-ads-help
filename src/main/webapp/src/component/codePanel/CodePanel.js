@@ -46,6 +46,7 @@ class CodePanel extends React.Component {
                 <TabPanel
                     tabChange={this.handleTabChange}
                 />
+                <div className="App-line-split"/>
                 {activeTabRender}
             </div>
         );

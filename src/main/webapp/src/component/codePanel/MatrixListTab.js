@@ -1,6 +1,5 @@
 import React from 'react';
-import MatrixDisplay from "./MatrixDisplay";
-import ListDisplay from "./ListDisplay";
+import {ListDisplay, MatrixDisplay} from "./EditableView";
 
 
 class MatrixListTab extends React.Component {
@@ -55,13 +54,18 @@ class MatrixListTab extends React.Component {
     render() {
         return (
             <div className="Code-panel-whole-height">
-                <MatrixDisplay
-                    code={this.state.codeMatrix}
-                />
+                <div className="Code-panel-half-height">
+                    <MatrixDisplay
+                        code={this.state.codeMatrix}
+                    />
+                </div>
                 <div className="Code-panel-space"/>
-                <ListDisplay
-                    code={this.state.codeList}
-                />
+                <div className="App-line-split"/>
+                <div className="Code-panel-half-height">
+                    <ListDisplay
+                        code={this.state.codeList}
+                    />
+                </div>
             </div>
         )
     }
