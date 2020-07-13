@@ -1,6 +1,6 @@
 import React from 'react';
-import TabButton from "./TabButton";
-import {JAVA_MODE, MATRIX_EDGE_MODE} from "./CodePanelConstants";
+import {JAVA_MODE, MATRIX_EDGE_MODE, TABS_NAMES} from "./CodePanelConstants";
+import ControlButton from "../controlPanel/ControlButton";
 
 
 class TabPanel extends React.Component {
@@ -31,15 +31,17 @@ class TabPanel extends React.Component {
         console.log("Rendering tab panel");
 
         return (
-            <div className="Drawing-area-header">
-                <TabButton
+            <div className="Control-panel-header">
+                <ControlButton
                     mode={JAVA_MODE}
+                    name={TABS_NAMES[JAVA_MODE]}
                     handleButtonClick={this.setActiveTab}
                     isActive={this.isButtonActive(JAVA_MODE)}
                 />
 
-                <TabButton
+                <ControlButton
                     mode={MATRIX_EDGE_MODE}
+                    name={TABS_NAMES[MATRIX_EDGE_MODE]}
                     handleButtonClick={this.setActiveTab}
                     isActive={this.isButtonActive(MATRIX_EDGE_MODE)}
                 />

@@ -1,33 +1,5 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
 
-.Drawing-area-header {
-    background: #3C3F41;
-    height: 40px;
-    overflow: hidden;
-}
-
-.Drawing-area-header-button {
-    border: none;
-    background-color: transparent;
-    outline: none;
-    height: 100%;
-    font-weight: bold;
-    font-family: Verdana, monospace;
-}
-
-.Drawing-area-header-button:hover {
-    background-color: #8b8a8a;
-}
-
-.Drawing-area-header-button-selected {
-    border: none;
-    background-color: #8b8a8a;
-    outline: none;
-    height: 100%;
-    font-weight: bold;
-    font-family: Verdana, monospace;
-}
-
 .Drawing-area-refresh-button {
     float: right;
 }

@@ -4,9 +4,10 @@ import {
     MODE_ADD_NODE,
     MODE_ADD_EDGE,
     MODE_DEL_NODE,
-    MODE_DEL_EDGE
+    MODE_DEL_EDGE,
+    BUTTON_NAMES
 } from './DrawingModeConstants';
-import DrawingControlButton from "./DrawingModeButton";
+import ControlButton from "../controlPanel/ControlButton";
 
 
 class DrawingControlPanel extends React.Component {
@@ -38,39 +39,44 @@ class DrawingControlPanel extends React.Component {
         console.log("Rendering control panel");
 
         return (
-            <div className="Drawing-area-header">
-                <DrawingControlButton
+            <div className="Control-panel-header">
+                <ControlButton
                     mode={MODE_NONE}
+                    name={BUTTON_NAMES[MODE_NONE]}
                     handleButtonClick={this.setDrawingMode}
                     isActive={this.isButtonActive(MODE_NONE)}
                 />
 
-                <DrawingControlButton
+                <ControlButton
                     mode={MODE_ADD_NODE}
+                    name={BUTTON_NAMES[MODE_ADD_NODE]}
                     handleButtonClick={this.setDrawingMode}
                     isActive={this.isButtonActive(MODE_ADD_NODE)}
                 />
 
-                <DrawingControlButton
+                <ControlButton
                     mode={MODE_ADD_EDGE}
+                    name={BUTTON_NAMES[MODE_ADD_EDGE]}
                     handleButtonClick={this.setDrawingMode}
                     isActive={this.isButtonActive(MODE_ADD_EDGE)}
                 />
 
-                <DrawingControlButton
+                <ControlButton
                     mode={MODE_DEL_NODE}
+                    name={BUTTON_NAMES[MODE_DEL_NODE]}
                     handleButtonClick={this.setDrawingMode}
                     isActive={this.isButtonActive(MODE_DEL_NODE)}
                 />
 
-                <DrawingControlButton
+                <ControlButton
                     mode={MODE_DEL_EDGE}
+                    name={BUTTON_NAMES[MODE_DEL_EDGE]}
                     handleButtonClick={this.setDrawingMode}
                     isActive={this.isButtonActive(MODE_DEL_EDGE)}
                 />
 
                 <button
-                    className={"Drawing-area-header-button Drawing-area-refresh-button"}
+                    className={"Control-panel-button Drawing-area-refresh-button"}
                     onClick={this.props.graphReset}
                 >
                     <i className="fa fa-refresh"/>
