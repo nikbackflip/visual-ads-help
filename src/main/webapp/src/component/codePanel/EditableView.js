@@ -246,6 +246,7 @@ export class ListDisplay extends React.Component {
 }
 
 class EditableView extends React.Component {
+    buttons = React.createRef();
 
     constructor(props) {
         super(props);
@@ -267,10 +268,15 @@ class EditableView extends React.Component {
     }
 
     updateGraph = () => {
+        try {
+            this.props.updateGraph();
+        } catch (e) {
+            this.buttons.current.flash();
+            return;
+        }
         this.setState({
             editMode: false
         });
-        this.props.updateGraph();
     }
 
     renderTextarea = () => {
@@ -295,10 +301,12 @@ class EditableView extends React.Component {
         return (
             <div className="Code-panel-whole-height">
                 <ViewControlPanel
+                    ref={this.buttons}
                     header={this.props.label}
                     initEdit={this.switchToTextArea}
                     cancelEdit={this.cancelEdit}
                     updateGraph={this.updateGraph}
+                    editMode={this.state.editMode}
                 />
                 {view}
             </div>

@@ -5,6 +5,11 @@
     height: 100%;
     font-weight: bold;
     font-family: Verdana, monospace;
+    -webkit-transition: all 0.25s ease-in;
+}
+
+.Control-panel-button-error {
+    background-color: #873434;
 }
 
 .Control-panel-button:hover {

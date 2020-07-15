@@ -6,7 +6,7 @@ class ViewControlPanel extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            inEditMode: false
+            highlighted: false
         };
     }
 
@@ -14,14 +14,7 @@ class ViewControlPanel extends React.Component {
         return (
             <button
                 className={"Control-panel-button"}
-                onClick={
-                    () => {
-                        this.setState({
-                            inEditMode: true
-                        });
-                        this.props.initEdit();
-                    }
-                }
+                onClick={this.props.initEdit}
             >
                 <i className="fa fa-edit"/>
             </button>
@@ -31,15 +24,8 @@ class ViewControlPanel extends React.Component {
     okButton = () => {
         return (
             <button
-                className={"Control-panel-button"}
-                onClick={
-                    () => {
-                        this.setState({
-                            inEditMode: false
-                        });
-                        this.props.updateGraph();
-                    }
-                }
+                className={this.state.highlighted ? "Control-panel-button Control-panel-button-error" : "Control-panel-button" }
+                onClick={this.props.updateGraph}
             >
                 <i className="fa fa-check"/>
             </button>
@@ -50,23 +36,23 @@ class ViewControlPanel extends React.Component {
         return (
             <button
                 className={"Control-panel-button"}
-                onClick={
-                    () => {
-                        this.setState({
-                            inEditMode: false
-                        });
-                        this.props.cancelEdit();
-                    }
-                }
+                onClick={this.props.cancelEdit}
             >
                 <i className="fa fa-close"/>
             </button>
         )
     }
 
+    flash = () => {
+        this.setState({ highlighted: true });
+        setTimeout(() => {
+            this.setState({ highlighted: false });
+        }, 1000);
+    }
+
     render() {
         let buttons;
-        if (this.state.inEditMode) {
+        if (this.props.editMode) {
             buttons = [this.okButton(), this.cancelButton()]
         } else {
             buttons = [this.editButton()];
