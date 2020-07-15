@@ -32,6 +32,14 @@ class ViewControlPanel extends React.Component {
         return (
             <button
                 className={"Control-panel-button"}
+                onClick={
+                    () => {
+                        this.setState({
+                            inEditMode: false
+                        });
+                        this.props.updateGraph();
+                    }
+                }
             >
                 <i className="fa fa-check"/>
             </button>

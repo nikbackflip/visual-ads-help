@@ -74,6 +74,7 @@ class App extends React.Component {
                         />
                         <CodePanel
                             graph={this.state.graph}
+                            handleGraphUpdate={this.handleGraphUpdate}
                         />
                     </PropagatingResizablePanels>
                 </div>

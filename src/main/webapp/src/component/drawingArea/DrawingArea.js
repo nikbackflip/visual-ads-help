@@ -24,10 +24,6 @@ class DrawingArea extends React.Component {
     stageRef = null;
     drawingAreaMode = MODE_NONE;
 
-    shouldComponentUpdate(nextProps, nextState, nextContext) {
-        return true;
-    }
-
     constructor(props) {
         super(props);
         this.state = {tempEdge : {}};
@@ -266,8 +262,27 @@ class DrawingArea extends React.Component {
         }
     }
 
+    customizeIfExternallyGenerated = () => {
+        this.props.graph.nodes.forEach(n => {
+            if (n.selected === undefined) {
+                n.color = colors.sample();
+                n.name = n.id;
+                n.x = Math.floor(Math.random() * (this.props.stageWidth - circleRadius - circleRadius + 1) + circleRadius);
+                n.y = Math.floor(Math.random() * (this.props.stageHeight - circleRadius - circleRadius + 1) + circleRadius);
+                n.selected = false;
+            }
+        });
+        this.props.graph.edges.forEach(e => {
+            if (e.selected === undefined) {
+                e.selected = false;
+            }
+        });
+        this.nodeId = this.props.graph.nodes.length;
+    }
+
     render() {
         console.log("Rendering drawing area");
+        this.customizeIfExternallyGenerated();
 
         return (
             <div className="App-drawing-area">

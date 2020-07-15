@@ -21,6 +21,11 @@
     outline: 0;
 }
 
+.Info-panel-input::-webkit-outer-spin-button,
+.Info-panel-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
 .Info-panel-span {
     display: block;
     overflow: hidden;

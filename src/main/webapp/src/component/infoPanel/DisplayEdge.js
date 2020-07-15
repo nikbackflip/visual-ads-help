@@ -23,6 +23,9 @@ class DisplayEdge extends React.Component {
                     propertyName="weight"
                     value={edge.weight}
                     updateElementProperty={this.updateElement}
+                    inputIsValid={(input) => {
+                        return parseFloat(input) !== 0 && !isNaN(parseFloat(input));
+                    }}
                     inputFormat="number"
                 />
                 <DisplayDropdownGraphProperty

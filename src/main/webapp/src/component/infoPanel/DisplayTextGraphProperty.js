@@ -2,8 +2,27 @@ import React from "react";
 
 class DisplayTextGraphProperty extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: this.props.value
+        }
+    }
+
+    onInputEnd = (e) => {
+        if (this.props.inputIsValid(e.target.value)) {
+            this.props.updateElementProperty(this.props.propertyName, e.target.value)
+        } else {
+            this.setState({
+                value: this.props.value
+            })
+        }
+    }
+
     onChange = (e) => {
-        this.props.updateElementProperty(this.props.propertyName, e.target.value)
+        this.setState({
+            value: e.target.value
+        })
     }
 
     render() {
@@ -15,7 +34,8 @@ class DisplayTextGraphProperty extends React.Component {
                     <input
                         className="Info-panel-input"
                         type={this.props.inputFormat == null ? "text" : this.props.inputFormat}
-                        value={this.props.value}
+                        value={this.state.value}
+                        onBlur={this.onInputEnd}
                         onChange={this.onChange}
                         readOnly={this.props.readOnly == null ? false : this.props.readOnly}
                         maxLength={this.props.maxLength}

@@ -21,6 +21,9 @@ class DisplayNode extends React.Component {
                     propertyName="name"
                     value={node.name}
                     updateElementProperty={this.updateElement}
+                    inputIsValid={(input) => {
+                        return true;
+                    }}
                     maxLength={4}
                 />
                 <div className="App-line-split"/>
