@@ -13,6 +13,7 @@ class ViewControlPanel extends React.Component {
     editButton = () => {
         return (
             <button
+                key="edit"
                 className={"Control-panel-button"}
                 onClick={this.props.initEdit}
             >
@@ -24,6 +25,7 @@ class ViewControlPanel extends React.Component {
     okButton = () => {
         return (
             <button
+                key="ok"
                 className={this.state.highlighted ? "Control-panel-button Control-panel-button-error" : "Control-panel-button" }
                 onClick={this.props.updateGraph}
             >
@@ -35,6 +37,7 @@ class ViewControlPanel extends React.Component {
     cancelButton = () => {
         return (
             <button
+                key="cancel"
                 className={"Control-panel-button"}
                 onClick={this.props.cancelEdit}
             >

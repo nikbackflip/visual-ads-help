@@ -263,21 +263,22 @@ class DrawingArea extends React.Component {
     }
 
     customizeIfExternallyGenerated = () => {
-        this.props.graph.nodes.forEach(n => {
-            if (n.selected === undefined) {
+        if (this.props.graph.nodes.length === 0) {
+            return;
+        }
+        if (this.props.graph.nodes[0].selected === undefined) {
+            this.props.graph.nodes.forEach(n => {
                 n.color = colors.sample();
                 n.name = n.id;
                 n.x = Math.floor(Math.random() * (this.props.stageWidth - circleRadius - circleRadius + 1) + circleRadius);
                 n.y = Math.floor(Math.random() * (this.props.stageHeight - circleRadius - circleRadius + 1) + circleRadius);
                 n.selected = false;
-            }
-        });
-        this.props.graph.edges.forEach(e => {
-            if (e.selected === undefined) {
+            });
+            this.props.graph.edges.forEach(e => {
                 e.selected = false;
-            }
-        });
-        this.nodeId = this.props.graph.nodes.length;
+            });
+            this.nodeId = this.props.graph.nodes.length;
+        }
     }
 
     render() {
