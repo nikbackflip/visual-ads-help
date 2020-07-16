@@ -11,8 +11,6 @@ class DisplayNode extends React.Component {
     }
 
     render() {
-        console.log("Rendering Display Node");
-
         const node = this.props.element;
         return this.props.element == null ? <div/> : (
             <div>

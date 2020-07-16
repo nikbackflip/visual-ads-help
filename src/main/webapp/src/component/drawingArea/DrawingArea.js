@@ -281,7 +281,6 @@ class DrawingArea extends React.Component {
     }
 
     render() {
-        console.log("Rendering drawing area");
         this.customizeIfExternallyGenerated();
 
         return (

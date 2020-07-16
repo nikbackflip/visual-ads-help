@@ -20,7 +20,6 @@ class DisplayDropdownGraphProperty extends React.Component {
                     >
 
                          {Object.entries(this.props.options).map(d => {
-                             console.log(JSON.stringify(d));
                              return (
                                  <option
                                      key={d[0]}

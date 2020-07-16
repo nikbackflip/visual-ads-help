@@ -14,9 +14,6 @@ class KonvaNode extends React.Component {
     }
 
     render() {
-
-        console.log("Rendering node: " + this.props.id);
-
         const textLength = this.props.name.toString().length;
 
         return <Group>

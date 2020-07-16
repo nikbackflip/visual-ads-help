@@ -13,8 +13,6 @@ class DisplayEdge extends React.Component {
     }
 
     render() {
-        console.log("Rendering Display Edge");
-
         const edge = this.props.element;
         return this.props.element == null ? <div/> : (
             <div>

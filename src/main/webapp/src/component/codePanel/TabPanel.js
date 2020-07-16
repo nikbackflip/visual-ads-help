@@ -28,8 +28,6 @@ class TabPanel extends React.Component {
     }
 
     render() {
-        console.log("Rendering tab panel");
-
         return (
             <div className="Control-panel-header">
                 <ControlButton

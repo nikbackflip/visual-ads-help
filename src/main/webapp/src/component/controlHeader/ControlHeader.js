@@ -13,7 +13,6 @@ class ControlHeader extends React.Component {
     };
 
     getVersion = () => {
-        console.log("Version requested");
         fetch('/version', {
             method: 'GET'
         }).then(response => {

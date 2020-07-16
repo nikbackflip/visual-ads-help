@@ -24,8 +24,6 @@ class CodePanel extends React.Component {
     }
 
     render() {
-        console.log("Rendering code panel");
-
         let activeTabRender;
         switch (this.state.activeTab) {
             case JAVA_MODE:

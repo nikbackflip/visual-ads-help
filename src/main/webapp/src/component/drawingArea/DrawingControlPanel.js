@@ -35,9 +35,6 @@ class DrawingControlPanel extends React.Component {
     }
 
     render() {
-
-        console.log("Rendering control panel");
-
         return (
             <div className="Control-panel-header">
                 <ControlButton

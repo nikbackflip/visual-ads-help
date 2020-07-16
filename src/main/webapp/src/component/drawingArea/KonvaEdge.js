@@ -23,8 +23,6 @@ class KonvaEdge extends React.Component {
     }
 
     render() {
-        console.log("Rendering edge: " + this.props.id);
-
         const toX = this.props.to.x;
         const toY = this.props.to.y;
         const fromX = this.props.from.x;

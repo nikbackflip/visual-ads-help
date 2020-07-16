@@ -39,8 +39,6 @@ class InfoPanel extends React.Component {
     }
 
     render() {
-        console.log("Rendering info panel");
-
         const nodes = this.props.graph.nodes;
         const edges = this.props.graph.edges;
 

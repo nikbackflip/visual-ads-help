@@ -10,8 +10,6 @@ class KonvaTempEdge extends React.Component {
             return null;
         }
 
-        console.log("Rendering temp edge");
-
         const fromX = this.props.edge.from.x;
         const fromY = this.props.edge.from.y;
         const toX = this.props.edge.to.x;
