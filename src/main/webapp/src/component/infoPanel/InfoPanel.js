@@ -42,10 +42,10 @@ class InfoPanel extends React.Component {
         const nodes = this.props.graph.nodes;
         const edges = this.props.graph.edges;
 
-        const selectedNode = nodes.find(n => {
+        const selectedNodes = nodes.filter(n => {
             return n.selected === true;
         });
-        const selectedEdge = edges.find(e => {
+        const selectedEdges = edges.filter(e => {
             return e.selected === true;
         });
 
@@ -54,15 +54,21 @@ class InfoPanel extends React.Component {
                 <ElementsCounter entityName={"nodes"} count={nodes.length}/>
                 <ElementsCounter entityName={"edges"} count={edges.length}/>
                 <div className="App-line-split"/>
-                <DisplayNode
-                    element={selectedNode}
-                    updateElement={this.updateNode}
-                />
-                <DisplayEdge
-                    element={selectedEdge}
-                    getNodeName={this.getNodeName}
-                    updateElement={this.updateEdge}
-                />
+                {selectedNodes.map(n => {
+                    return <DisplayNode
+                        key={n.id}
+                        element={n}
+                        updateElement={this.updateNode}
+                    />
+                })}
+                {selectedEdges.map(e => {
+                    return <DisplayEdge
+                        key={e.id}
+                        element={e}
+                        getNodeName={this.getNodeName}
+                        updateElement={this.updateEdge}
+                    />
+                })}
             </div>
         );
     }
