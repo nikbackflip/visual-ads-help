@@ -10,6 +10,27 @@ import EditableView, {fixIds} from "./EditableView";
 
 export class MatrixDisplay extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            highlightRow: -1,
+            highlightColumn: -1,
+            selectedRow: -1,
+            selectedColumn: -1
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (JSON.stringify(this.props) !== JSON.stringify(prevProps)) {
+            this.setState({
+                highlightRow: -1,
+                highlightColumn: -1,
+                selectedRow: -1,
+                selectedColumn: -1
+            })
+        }
+    }
+
     graphToCode = () => {
         let graph = fixIds(this.props.graph);
         const n = graph.nodes.length;
@@ -129,12 +150,31 @@ export class MatrixDisplay extends React.Component {
                 return (
                     <tr>
                         <th className="Code-panel-theader" scope="row">{i}</th>
-                        {node.map(el => {
+                        {node.map((el, j) => {
                             let element = el;
                             if (el === null) {
                                 element = " ";
                             }
-                            return <td  className="Code-panel-tbody">{element}</td>
+                            let highlight = "";
+                            if (this.state.highlightRow === i || this.state.highlightColumn === j) highlight = "Code-panel-highlight-half";
+                            if (this.state.highlightRow === i && this.state.highlightColumn === j) highlight = "Code-panel-highlight-full";
+                            if (this.state.selectedRow === i && this.state.selectedColumn === j) highlight = "Code-panel-highlight-full";
+                            return <td
+                                className={"Code-panel-tbody " + highlight}
+                                onMouseEnter={() => {
+                                    this.setState({
+                                        highlightRow: i,
+                                        highlightColumn: j
+                                    })
+                                }}
+                                onClick={() => {
+                                    this.setState({
+                                        selectedRow: i,
+                                        selectedColumn: j
+                                    })
+                                }}>
+                                {element}
+                            </td>
                         })}
                     </tr>)
             })}
