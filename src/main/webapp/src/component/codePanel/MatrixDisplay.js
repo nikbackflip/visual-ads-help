@@ -6,6 +6,7 @@ import {
     REVERSE_DIRECTION
 } from "../drawingArea/DrawingModeConstants";
 import EditableView, {fixIds} from "./EditableView";
+import HighlighableTd from "./HighlighableTd";
 
 
 export class MatrixDisplay extends React.Component {
@@ -151,30 +152,15 @@ export class MatrixDisplay extends React.Component {
                     <tr>
                         <th className="Code-panel-theader" scope="row">{i}</th>
                         {node.map((el, j) => {
-                            let element = el;
-                            if (el === null) {
-                                element = " ";
-                            }
-                            let highlight = "";
-                            if (this.state.highlightRow === i || this.state.highlightColumn === j) highlight = "Code-panel-highlight-half";
-                            if (this.state.highlightRow === i && this.state.highlightColumn === j) highlight = "Code-panel-highlight-full";
-                            if (this.state.selectedRow === i && this.state.selectedColumn === j) highlight = "Code-panel-highlight-full";
-                            return <td
-                                className={"Code-panel-tbody " + highlight}
-                                onMouseEnter={() => {
-                                    this.setState({
-                                        highlightRow: i,
-                                        highlightColumn: j
-                                    })
-                                }}
-                                onClick={() => {
-                                    this.setState({
-                                        selectedRow: i,
-                                        selectedColumn: j
-                                    })
-                                }}>
-                                {element}
-                            </td>
+                            return <HighlighableTd
+                                value={el}
+                                halfHighlighted={this.state.highlightRow === i || this.state.highlightColumn === j}
+                                highlighted={this.state.highlightRow === i && this.state.highlightColumn === j}
+                                selected={this.state.selectedRow === i && this.state.selectedColumn === j}
+                                highlight={() => this.highlight(i,j)}
+                                unhighlight={() => this.highlight(-1,-1)}
+                                select={() => this.select(i,j)}
+                            />
                         })}
                     </tr>)
             })}
@@ -188,6 +174,20 @@ export class MatrixDisplay extends React.Component {
                 </table>
             </div>
         );
+    }
+
+    highlight = (i, j) => {
+        this.setState({
+            highlightRow: i,
+            highlightColumn: j
+        })
+    }
+
+    select = (i, j) => {
+        this.setState({
+            selectedRow: i,
+            selectedColumn: j
+        })
     }
 
     render() {
