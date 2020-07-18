@@ -160,7 +160,18 @@ class DrawingArea extends React.Component {
                 const toRemove = edges.filter(e => {
                     return e.fromId === clickedNode.id || e.toId === clickedNode.id;
                 });
-                edges = edges.filter(e => !toRemove.includes(e))
+                edges = edges.filter(e => !toRemove.includes(e));
+
+                //fix ids
+                nodes.slice(index).forEach(n => {
+                    n.id--;
+                    n.name = n.id;
+                });
+                edges.forEach(e => {
+                    if (e.fromId >= index) e.fromId--;
+                    if (e.toId >= index) e.toId--;
+                })
+                this.nodeId--;
 
                 this.publishAndUpdateGraph(nodes, edges);
                 break;

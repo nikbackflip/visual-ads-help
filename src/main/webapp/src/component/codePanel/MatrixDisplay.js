@@ -5,13 +5,11 @@ import {
     NO_DIRECTIONS,
     REVERSE_DIRECTION
 } from "../drawingArea/DrawingModeConstants";
-import EditableView, {fixIds, highlight, select, unhighlight} from "./EditableView";
+import EditableView, {highlight, select, unhighlight} from "./EditableView";
 import HighlighableTd from "./HighlighableTd";
 
 
 export class MatrixDisplay extends React.Component {
-
-    idMap = {}
 
     constructor(props) {
         super(props);
@@ -22,9 +20,7 @@ export class MatrixDisplay extends React.Component {
     }
 
     graphToCode = () => {
-        let graph = fixIds(this.props.graph);
-        this.idMap = graph.map;
-
+        let graph = this.props.graph;
         const n = graph.nodes.length;
 
         //create nxn matrix and fill with 0
@@ -147,11 +143,10 @@ export class MatrixDisplay extends React.Component {
                             return <HighlighableTd
                                 value={el}
                                 halfHighlighted={this.state.highlightRow === i || this.state.highlightColumn === j}
-                                highlighted={this.state.highlightRow === i && this.state.highlightColumn === j
-                                    /*|| selectedNodes.find(s => s === i + ":" + el) !== undefined*/}
+                                highlighted={this.state.highlightRow === i && this.state.highlightColumn === j}
                                 selected={selected.find(s => s === i + ":" + j) !== undefined}
                                 highlight={() => {
-                                    highlight(this.props.graph, this.idMap, i, j);
+                                    highlight(this.props.graph, i, j);
                                     this.highlight(i, j);
                                     this.props.handleGraphUpdate(this.props.graph);
                                 }}
@@ -161,7 +156,7 @@ export class MatrixDisplay extends React.Component {
                                     this.props.handleGraphUpdate(this.props.graph);
                                 }}
                                 select={() => {
-                                    select(this.props.graph, this.idMap, i, j)
+                                    select(this.props.graph, i, j)
                                     this.props.handleGraphUpdate(this.props.graph);
                                 }}
                             />

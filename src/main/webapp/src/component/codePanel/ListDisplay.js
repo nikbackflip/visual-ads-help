@@ -5,12 +5,10 @@ import {
     NO_DIRECTIONS,
     REVERSE_DIRECTION
 } from "../drawingArea/DrawingModeConstants";
-import EditableView, {fixIds, highlight, select, unhighlight} from "./EditableView";
+import EditableView, {highlight, select, unhighlight} from "./EditableView";
 import HighlighableTd from "./HighlighableTd";
 
 export class ListDisplay extends React.Component {
-
-    idMap = {}
 
     constructor(props) {
         super(props);
@@ -21,9 +19,7 @@ export class ListDisplay extends React.Component {
     }
 
     graphToCode = () => {
-        let graph = fixIds(this.props.graph);
-        this.idMap = graph.map;
-
+        let graph = this.props.graph;
         const n = graph.nodes.length;
 
         let code = [];
@@ -141,7 +137,7 @@ export class ListDisplay extends React.Component {
                                         highlighted={this.state.highlightRow === i && this.state.highlightColumn === j}
                                         selected={selectedEdges.find(s => s === i + ":" + el) !== undefined}
                                         highlight={() => {
-                                            highlight(this.props.graph, this.idMap, i, el);
+                                            highlight(this.props.graph, i, el);
                                             this.highlight(i, j);
                                             this.props.handleGraphUpdate(this.props.graph);
                                         }}
@@ -151,7 +147,7 @@ export class ListDisplay extends React.Component {
                                             this.props.handleGraphUpdate(this.props.graph);
                                         }}
                                         select={() => {
-                                            select(this.props.graph, this.idMap, i, el);
+                                            select(this.props.graph, i, el);
                                             this.props.handleGraphUpdate(this.props.graph);
                                         }}
                                     />

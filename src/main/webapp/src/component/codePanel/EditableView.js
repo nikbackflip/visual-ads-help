@@ -1,62 +1,17 @@
 import React from "react";
 import ViewControlPanel from "./ViewControlPanel";
 
-export function fixIds(graph) {
-    let nodes = [];
-    let edges = [];
-    let idMap = {};
 
-    graph.nodes.forEach(n => {
-        nodes.push({
-            id: n.id,
-            name: n.name
-        })
-    });
-
-    graph.edges.forEach(e => {
-        edges.push({
-            id: e.id,
-            fromId: e.fromId,
-            toId: e.toId,
-            weight: e.weight,
-            direction: e.direction
-        })
-    });
-
-    nodes.sort(function(a, b) {
-        if (a.id > b.id) return 1;
-        if (a.id < b.id) return -1;
-        return 0;
-    });
-
-    let n = nodes.length;
-    for (let i = 0; i < n; i++) {
-        let node = nodes[i];
-        let oldId = node.id;
-        edges.forEach(e => {
-            if (e.fromId === oldId) e.fromId = i;
-            if (e.toId === oldId) e.toId = i;
-        })
-        node.id = i;
-        idMap[i] = oldId;
-    }
-    return {
-        nodes: nodes,
-        edges: edges,
-        map: idMap
-    }
-}
-
-export function highlight (graph, idMap, from, to) {
+export function highlight (graph, from, to) {
     graph.nodes.forEach(n => n.highlighted = false);
     graph.edges.forEach(n => n.highlighted = false);
 
     graph.nodes.filter(n => {
-        return n.id === idMap[to] || n.id === idMap[from]
+        return n.id === to || n.id === from
     }).forEach(n => n.highlighted=true);
     graph.edges.filter(e => {
-        return e.fromId === idMap[from] && e.toId === idMap[to]
-            || e.fromId === idMap[to] && e.toId === idMap[from]
+        return e.fromId === from && e.toId === to
+            || e.fromId === to && e.toId === from
     }).forEach(e => e.highlighted=true);
 }
 
@@ -65,17 +20,17 @@ export function unhighlight (graph) {
     graph.edges.forEach(n => n.highlighted = false);
 }
 
-export function select (graph, idMap, from, to) {
+export function select (graph, from, to) {
     graph.nodes.forEach(n => n.selected = false);
     graph.edges.forEach(n => n.selected = false);
 
     graph.nodes.filter(n => {
-        return n.id === idMap[to] || n.id === idMap[from]
+        return n.id === to || n.id ===from
     }).forEach((n) => n.selected=true);
 
     graph.edges.filter(e => {
-        return e.fromId === idMap[from] && e.toId === idMap[to]
-            || e.fromId === idMap[to] && e.toId === idMap[from]
+        return e.fromId === from && e.toId === to
+            || e.fromId === to && e.toId === from
     }).forEach((n) => n.selected=true);
 }
 
