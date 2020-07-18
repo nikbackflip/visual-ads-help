@@ -1,5 +1,5 @@
 import React from "react";
-import {Group, Arrow, Text} from "react-konva";
+import {Group, Arrow, Text, Circle} from "react-konva";
 import {
     BOTH_DIRECTIONS,
     circleRadius,
@@ -63,6 +63,8 @@ class KonvaEdge extends React.Component {
                 onClick={this.props.handleEdgeClick}
                 pointerAtBeginning={this.props.direction === BOTH_DIRECTIONS}
                 pointerWidth={this.props.direction === NO_DIRECTIONS ? 0 : 10}
+                onMouseEnter={this.props.onMouseEnter}
+                onMouseLeave={this.props.onMouseLeave}
             />
             <Text
                 x={middle.x}

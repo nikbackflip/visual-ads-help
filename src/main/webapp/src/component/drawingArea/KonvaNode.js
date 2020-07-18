@@ -32,6 +32,8 @@ class KonvaNode extends React.Component {
                 strokeWidth={3}
                 stroke={"black"}
                 onClick={this.props.handleCircleClick}
+                onMouseEnter={this.props.onMouseEnter}
+                onMouseLeave={this.props.onMouseLeave}
             />
             <Text
                 id={this.props.id}
@@ -44,6 +46,8 @@ class KonvaNode extends React.Component {
                 draggable={true}
                 onDragMove={this.props.onDragMove}
                 onDragEnd={this.props.onDragEnd}
+                onMouseEnter={this.props.onMouseEnter}
+                onMouseLeave={this.props.onMouseLeave}
             />
         </Group>
     }

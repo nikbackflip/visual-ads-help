@@ -133,6 +133,36 @@ class DrawingArea extends React.Component {
         this.publishAndUpdateGraph(nodes, this.props.graph.edges.slice());
     }
 
+    onMouseOverNode = e => {
+        this.clearHighlight();
+
+        this.props.graph.nodes.find(n => {
+            return n.id === e.target.attrs.id;
+        }).highlighted = true;
+
+        this.publishAndUpdateGraph(this.props.graph.nodes, this.props.graph.edges);
+    }
+
+    onMouseOverEdge = ev => {
+        this.clearHighlight();
+
+        this.props.graph.edges.find(e => {
+            return e.id === ev.target.attrs.id;
+        }).highlighted = true;
+
+        this.publishAndUpdateGraph(this.props.graph.nodes, this.props.graph.edges);
+    }
+
+    onMouseLeave = () => {
+        this.clearHighlight();
+        this.publishAndUpdateGraph(this.props.graph.nodes, this.props.graph.edges);
+    }
+
+    clearHighlight = () => {
+        this.props.graph.nodes.forEach(n => n.highlighted = false);
+        this.props.graph.edges.forEach(n => n.highlighted = false);
+    }
+
     handleCircleClick = e => {
         const nodes = this.props.graph.nodes.slice();
         const clickedNode = nodes.find(n => {
@@ -341,6 +371,9 @@ class DrawingArea extends React.Component {
                                 weight={edge.weight}
                                 handleEdgeClick={this.handleEdgeClick}
                                 direction={edge.direction}
+                                onMouseEnter={this.onMouseOverEdge}
+                                onMouseLeave={this.onMouseLeave}
+
                             />
                         })}
                         {this.props.graph.nodes.map(node => {
@@ -356,6 +389,8 @@ class DrawingArea extends React.Component {
                                 onDragMove={this.onDragMove}
                                 onDragEnd={this.onDragEnd}
                                 handleCircleClick={this.handleCircleClick}
+                                onMouseEnter={this.onMouseOverNode}
+                                onMouseLeave={this.onMouseLeave}
                             />
                         })}
                     </Layer>
