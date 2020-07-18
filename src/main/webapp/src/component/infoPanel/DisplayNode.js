@@ -16,13 +16,8 @@ class DisplayNode extends React.Component {
             <div>
                 <DisplayTextGraphProperty
                     label="Name"
-                    propertyName="name"
                     value={node.name}
-                    updateElementProperty={this.updateElement}
-                    inputIsValid={(input) => {
-                        return true;
-                    }}
-                    maxLength={4}
+                    readOnly={true}
                 />
                 <div className="App-line-split"/>
             </div>
