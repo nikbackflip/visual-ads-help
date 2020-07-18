@@ -5,9 +5,8 @@ class HighlighableTd extends React.Component {
 
     render() {
         let highlight = "";
-        if (this.props.halfHighlighted) highlight = "Code-panel-highlight-half";
-        if (this.props.highlighted) highlight = "Code-panel-highlight-full";
-        if (this.props.selected) highlight = "Code-panel-highlight-full";
+        if (this.props.halfFocused) highlight = "Code-panel-highlight-half";
+        if (this.props.focused) highlight = "Code-panel-highlight-full";
         return (
             <td
                 className={"Code-panel-tbody " + highlight}

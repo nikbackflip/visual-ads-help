@@ -114,7 +114,10 @@ export class MatrixDisplay extends React.Component {
 
     renderTable = () => {
         let code = this.graphToCode();
-        let selected = this.getSelectedElements();
+        let selectedEdges = this.getSelectedEdge();
+        let selectedNodes = this.getSelectedNodes();
+        let highlightedEdges = this.getHighlightedEdge();
+        let highlightedNodes = this.getHighlightedNodes();
 
         let header = null;
         let body = null;
@@ -142,9 +145,12 @@ export class MatrixDisplay extends React.Component {
                         {node.map((el, j) => {
                             return <HighlighableTd
                                 value={el}
-                                halfHighlighted={this.state.highlightRow === i || this.state.highlightColumn === j}
-                                highlighted={this.state.highlightRow === i && this.state.highlightColumn === j}
-                                selected={selected.find(s => s === i + ":" + j) !== undefined}
+                                focused={this.state.highlightRow === i && this.state.highlightColumn === j
+                                    || selectedEdges.find(s => s === i + ":" + j) !== undefined
+                                    || highlightedEdges.find(s => s === i + ":" + j) !== undefined}
+                                halfFocused={selectedNodes.find(s => s === i || s === j) !== undefined
+                                    || highlightedNodes.find(s => s === i || s === j) !== undefined}
+
                                 highlight={() => {
                                     highlight(this.props.graph, i, j);
                                     this.highlight(i, j);
@@ -175,10 +181,50 @@ export class MatrixDisplay extends React.Component {
         );
     }
 
-    getSelectedElements = () => {
+    getSelectedNodes = () => {
+        let selected = [];
+        this.props.graph.nodes.filter(n => n.selected)
+            .forEach(n => {
+                selected.push(n.id);
+            });
+        return selected;
+    }
+
+    getSelectedEdge = () => {
         let selected = [];
         this.props.graph.edges.forEach(e => {
             if (e.selected) {
+                switch (e.direction) {
+                    case NO_DIRECTIONS:
+                    case BOTH_DIRECTIONS:
+                        selected.push(e.fromId + ":" + e.toId);
+                        selected.push(e.toId + ":" + e.fromId);
+                        break;
+                    case FORWARD_DIRECTION:
+                        selected.push(e.fromId + ":" + e.toId);
+                        break;
+                    case REVERSE_DIRECTION:
+                        selected.push(e.toId + ":" + e.fromId);
+                        break;
+                }
+            }
+        })
+        return selected;
+    }
+
+    getHighlightedNodes = () => {
+        let selected = [];
+        this.props.graph.nodes.filter(n => n.highlighted)
+            .forEach(n => {
+                selected.push(n.id);
+            });
+        return selected;
+    }
+
+    getHighlightedEdge = () => {
+        let selected = [];
+        this.props.graph.edges.forEach(e => {
+            if (e.highlighted) {
                 switch (e.direction) {
                     case NO_DIRECTIONS:
                     case BOTH_DIRECTIONS:
