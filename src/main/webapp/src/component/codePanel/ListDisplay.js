@@ -5,7 +5,7 @@ import {
     NO_DIRECTIONS,
     REVERSE_DIRECTION
 } from "../drawingArea/DrawingModeConstants";
-import EditableView, {fixIds} from "./EditableView";
+import EditableView, {fixIds, highlight, select, unhighlight} from "./EditableView";
 import HighlighableTd from "./HighlighableTd";
 
 export class ListDisplay extends React.Component {
@@ -16,20 +16,7 @@ export class ListDisplay extends React.Component {
         super(props);
         this.state = {
             highlightRow: -1,
-            highlightColumn: -1,
-            selectedRow: -1,
-            selectedColumn: -1
-        }
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (JSON.stringify(this.props) !== JSON.stringify(prevProps)) {
-            this.setState({
-                highlightRow: -1,
-                highlightColumn: -1,
-                selectedRow: -1,
-                selectedColumn: -1
-            })
+            highlightColumn: -1
         }
     }
 
@@ -138,6 +125,7 @@ export class ListDisplay extends React.Component {
 
     renderTable = () => {
         let code = this.graphToCode();
+        let selectedEdges = this.getSelectedElements();
         return (
             <div className="Code-panel-table">
                 <table>
@@ -151,10 +139,21 @@ export class ListDisplay extends React.Component {
                                         value={el}
                                         halfHighlighted={false}
                                         highlighted={this.state.highlightRow === i && this.state.highlightColumn === j}
-                                        selected={this.state.selectedRow === i && this.state.selectedColumn === j}
-                                        highlight={() => {this.highlight(i,j); this.select(i,el)}}
-                                        unhighlight={() => {this.highlight(-1,-1); this.disselect()}}
-                                        select={() => this.select(i,el)}
+                                        selected={selectedEdges.find(s => s === i + ":" + el) !== undefined}
+                                        highlight={() => {
+                                            highlight(this.props.graph, this.idMap, i, el);
+                                            this.highlight(i, j);
+                                            this.props.handleGraphUpdate(this.props.graph);
+                                        }}
+                                        unhighlight={() => {
+                                            unhighlight(this.props.graph);
+                                            this.highlight(-1, -1);
+                                            this.props.handleGraphUpdate(this.props.graph);
+                                        }}
+                                        select={() => {
+                                            select(this.props.graph, this.idMap, i, el);
+                                            this.props.handleGraphUpdate(this.props.graph);
+                                        }}
                                     />
                                 })}
                             </tr>)
@@ -165,33 +164,33 @@ export class ListDisplay extends React.Component {
         )
     }
 
+    getSelectedElements = () => {
+        let selected = [];
+        this.props.graph.edges.forEach(e => {
+            if (e.selected) {
+                switch (e.direction) {
+                    case NO_DIRECTIONS:
+                    case BOTH_DIRECTIONS:
+                        selected.push(e.fromId + ":" + e.toId);
+                        selected.push(e.toId + ":" + e.fromId);
+                        break;
+                    case FORWARD_DIRECTION:
+                        selected.push(e.fromId + ":" + e.toId);
+                        break;
+                    case REVERSE_DIRECTION:
+                        selected.push(e.toId + ":" + e.fromId);
+                        break;
+                }
+            }
+        })
+        return selected;
+    }
+
     highlight = (i, j) => {
         this.setState({
             highlightRow: i,
             highlightColumn: j
         })
-    }
-
-    disselect = () => {
-        this.props.graph.nodes.forEach(n => n.selected = false);
-        this.props.graph.edges.forEach(n => n.selected = false);
-        this.props.handleGraphUpdate(this.props.graph);
-    }
-
-    select = (from, to) => {
-        this.props.graph.nodes.forEach(n => n.selected = false);
-        this.props.graph.edges.forEach(n => n.selected = false);
-
-        this.props.graph.nodes.filter(n => {
-            return n.id === this.idMap[to] || n.id === this.idMap[from]
-        }).forEach((n) => n.selected=true);
-
-        this.props.graph.edges.filter(e => {
-            return e.fromId === this.idMap[from] && e.toId === this.idMap[to]
-                || e.fromId === this.idMap[to] && e.toId === this.idMap[from]
-        }).forEach((n) => n.selected=true);
-
-        this.props.handleGraphUpdate(this.props.graph);
     }
 
     render() {

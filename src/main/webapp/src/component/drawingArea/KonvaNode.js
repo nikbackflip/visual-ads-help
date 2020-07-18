@@ -9,7 +9,8 @@ class KonvaNode extends React.Component {
         return !(this.props.x === nextProps.x &&
             this.props.y === nextProps.y &&
             this.props.name === nextProps.name &&
-            this.props.selected === nextProps.selected
+            this.props.selected === nextProps.selected &&
+            this.props.highlighted === nextProps.highlighted
         );
     }
 
@@ -22,12 +23,12 @@ class KonvaNode extends React.Component {
                 x={this.props.x}
                 y={this.props.y}
                 radius={circleRadius}
-                fill={this.props.selected ? "#1d9797" : this.props.color}
+                fill={this.props.selected || this.props.highlighted ? "#1d9797" : this.props.color}
                 opacity={0.9}
                 draggable={true}
                 onDragMove={this.props.onDragMove}
                 onDragEnd={this.props.onDragEnd}
-                strokeEnabled={this.props.selected}
+                strokeEnabled={this.props.selected || this.props.highlighted}
                 strokeWidth={3}
                 stroke={"black"}
                 onClick={this.props.handleCircleClick}

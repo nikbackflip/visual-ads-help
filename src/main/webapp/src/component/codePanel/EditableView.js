@@ -47,6 +47,38 @@ export function fixIds(graph) {
     }
 }
 
+export function highlight (graph, idMap, from, to) {
+    graph.nodes.forEach(n => n.highlighted = false);
+    graph.edges.forEach(n => n.highlighted = false);
+
+    graph.nodes.filter(n => {
+        return n.id === idMap[to] || n.id === idMap[from]
+    }).forEach(n => n.highlighted=true);
+    graph.edges.filter(e => {
+        return e.fromId === idMap[from] && e.toId === idMap[to]
+            || e.fromId === idMap[to] && e.toId === idMap[from]
+    }).forEach(e => e.highlighted=true);
+}
+
+export function unhighlight (graph) {
+    graph.nodes.forEach(n => n.highlighted = false);
+    graph.edges.forEach(n => n.highlighted = false);
+}
+
+export function select (graph, idMap, from, to) {
+    graph.nodes.forEach(n => n.selected = false);
+    graph.edges.forEach(n => n.selected = false);
+
+    graph.nodes.filter(n => {
+        return n.id === idMap[to] || n.id === idMap[from]
+    }).forEach((n) => n.selected=true);
+
+    graph.edges.filter(e => {
+        return e.fromId === idMap[from] && e.toId === idMap[to]
+            || e.fromId === idMap[to] && e.toId === idMap[from]
+    }).forEach((n) => n.selected=true);
+}
+
 class EditableView extends React.Component {
     buttons = React.createRef();
 

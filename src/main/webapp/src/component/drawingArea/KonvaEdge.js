@@ -17,6 +17,7 @@ class KonvaEdge extends React.Component {
             this.props.to.x === nextProps.to.x &&
             this.props.to.y === nextProps.to.y &&
             this.props.selected === nextProps.selected &&
+            this.props.highlighted === nextProps.highlighted &&
             this.props.weight === nextProps.weight &&
             this.props.direction === nextProps.direction
         );
@@ -56,8 +57,8 @@ class KonvaEdge extends React.Component {
             <Arrow
                 id={this.props.id}
                 points={points}
-                stroke={this.props.selected ? "#1d9797" : "black"}
-                fill={this.props.selected ? "#1d9797" : "black"}
+                stroke={this.props.selected || this.props.highlighted ? "#1d9797" : "black"}
+                fill={this.props.selected || this.props.highlighted ? "#1d9797" : "black"}
                 strokeWidth={3}
                 onClick={this.props.handleEdgeClick}
                 pointerAtBeginning={this.props.direction === BOTH_DIRECTIONS}

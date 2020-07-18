@@ -50,6 +50,7 @@ class DrawingArea extends React.Component {
             y: y,
             color: colors.sample(),
             selected: false,
+            highlighted: false,
             name: nextNodeId
         });
         this.publishAndUpdateGraph(nodes, this.props.graph.edges.slice());
@@ -67,6 +68,7 @@ class DrawingArea extends React.Component {
             toId: to.id,
             weight: 1,
             selected: false,
+            highlighted: false,
             direction: BOTH_DIRECTIONS
         });
         this.resetTempEdge();
@@ -273,9 +275,11 @@ class DrawingArea extends React.Component {
                 n.x = Math.floor(Math.random() * (this.props.stageWidth - circleRadius - circleRadius + 1) + circleRadius);
                 n.y = Math.floor(Math.random() * (this.props.stageHeight - circleRadius - circleRadius + 1) + circleRadius);
                 n.selected = false;
+                n.highlighted = false;
             });
             this.props.graph.edges.forEach(e => {
                 e.selected = false;
+                e.highlighted = false;
             });
             this.nodeId = this.props.graph.nodes.length;
         }
@@ -322,6 +326,7 @@ class DrawingArea extends React.Component {
                                 from={{x: fromNode.x, y: fromNode.y}}
                                 to={{x: toNode.x, y: toNode.y}}
                                 selected={edge.selected}
+                                highlighted={edge.highlighted}
                                 weight={edge.weight}
                                 handleEdgeClick={this.handleEdgeClick}
                                 direction={edge.direction}
@@ -335,6 +340,7 @@ class DrawingArea extends React.Component {
                                 y={node.y}
                                 color={node.color}
                                 selected={node.selected}
+                                highlighted={node.highlighted}
                                 name={node.name}
                                 onDragMove={this.onDragMove}
                                 onDragEnd={this.onDragEnd}
