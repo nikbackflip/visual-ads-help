@@ -4,6 +4,7 @@ import ViewControlPanel from "./ViewControlPanel";
 export function fixIds(graph) {
     let nodes = [];
     let edges = [];
+    let idMap = {};
 
     graph.nodes.forEach(n => {
         nodes.push({
@@ -37,10 +38,12 @@ export function fixIds(graph) {
             if (e.toId === oldId) e.toId = i;
         })
         node.id = i;
+        idMap[i] = oldId;
     }
     return {
         nodes: nodes,
-        edges: edges
+        edges: edges,
+        map: idMap
     }
 }
 

@@ -11,6 +11,8 @@ import HighlighableTd from "./HighlighableTd";
 
 export class MatrixDisplay extends React.Component {
 
+    idMap = {}
+
     constructor(props) {
         super(props);
         this.state = {
@@ -34,6 +36,8 @@ export class MatrixDisplay extends React.Component {
 
     graphToCode = () => {
         let graph = fixIds(this.props.graph);
+        this.idMap = graph.map;
+
         const n = graph.nodes.length;
 
         //create nxn matrix and fill with 0
@@ -157,8 +161,8 @@ export class MatrixDisplay extends React.Component {
                                 halfHighlighted={this.state.highlightRow === i || this.state.highlightColumn === j}
                                 highlighted={this.state.highlightRow === i && this.state.highlightColumn === j}
                                 selected={this.state.selectedRow === i && this.state.selectedColumn === j}
-                                highlight={() => this.highlight(i,j)}
-                                unhighlight={() => this.highlight(-1,-1)}
+                                highlight={() => {this.highlight(i,j); this.select(i,j)}}
+                                unhighlight={() => {this.highlight(-1,-1); this.disselect()}}
                                 select={() => this.select(i,j)}
                             />
                         })}
@@ -183,11 +187,26 @@ export class MatrixDisplay extends React.Component {
         })
     }
 
-    select = (i, j) => {
-        this.setState({
-            selectedRow: i,
-            selectedColumn: j
-        })
+    disselect = () => {
+        this.props.graph.nodes.forEach(n => n.selected = false);
+        this.props.graph.edges.forEach(n => n.selected = false);
+        this.props.handleGraphUpdate(this.props.graph);
+    }
+
+    select = (from, to) => {
+        this.props.graph.nodes.forEach(n => n.selected = false);
+        this.props.graph.edges.forEach(n => n.selected = false);
+
+        this.props.graph.nodes.filter(n => {
+            return n.id === this.idMap[to] || n.id === this.idMap[from]
+        }).forEach((n) => n.selected=true);
+
+        this.props.graph.edges.filter(e => {
+            return e.fromId === this.idMap[from] && e.toId === this.idMap[to]
+                || e.fromId === this.idMap[to] && e.toId === this.idMap[from]
+        }).forEach((n) => n.selected=true);
+
+        this.props.handleGraphUpdate(this.props.graph);
     }
 
     render() {

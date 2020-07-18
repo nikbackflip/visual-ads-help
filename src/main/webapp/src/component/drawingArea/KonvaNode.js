@@ -22,7 +22,7 @@ class KonvaNode extends React.Component {
                 x={this.props.x}
                 y={this.props.y}
                 radius={circleRadius}
-                fill={this.props.color}
+                fill={this.props.selected ? "#1d9797" : this.props.color}
                 opacity={0.9}
                 draggable={true}
                 onDragMove={this.props.onDragMove}
