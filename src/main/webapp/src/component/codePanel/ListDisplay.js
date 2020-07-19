@@ -5,7 +5,14 @@ import {
     NO_DIRECTIONS,
     REVERSE_DIRECTION
 } from "../drawingArea/DrawingModeConstants";
-import EditableView, {highlight, select, unhighlight} from "./EditableView";
+import EditableView, {
+    getHighlightedEdge, getHighlightedNodes,
+    getSelectedEdge,
+    getSelectedNodes,
+    highlight,
+    select,
+    unhighlight
+} from "./EditableView";
 import HighlighableTd from "./HighlighableTd";
 
 export class ListDisplay extends React.Component {
@@ -121,10 +128,11 @@ export class ListDisplay extends React.Component {
 
     renderTable = () => {
         let code = this.graphToCode();
-        let selectedEdges = this.getSelectedEdge();
-        let selectedNodes = this.getSelectedNodes();
-        let highlightedEdges = this.getHighlightedEdge();
-        let highlightedNodes = this.getHighlightedNodes();
+        let selectedEdges = getSelectedEdge(this.props.graph);
+        let selectedNodes = getSelectedNodes(this.props.graph);
+        let highlightedEdges = getHighlightedEdge(this.props.graph);
+        let highlightedNodes = getHighlightedNodes(this.props.graph);
+
         return (
             <div className="Code-panel-table">
                 <table>
@@ -144,12 +152,10 @@ export class ListDisplay extends React.Component {
 
                                         highlight={() => {
                                             highlight(this.props.graph, i, el);
-                                            this.highlight(i, j);
                                             this.props.handleGraphUpdate(this.props.graph);
                                         }}
                                         unhighlight={() => {
                                             unhighlight(this.props.graph);
-                                            this.highlight(-1, -1);
                                             this.props.handleGraphUpdate(this.props.graph);
                                         }}
                                         select={() => {
@@ -164,75 +170,6 @@ export class ListDisplay extends React.Component {
                 </table>
             </div>
         )
-    }
-
-    getSelectedNodes = () => {
-        let selected = [];
-        this.props.graph.nodes.filter(n => n.selected)
-            .forEach(n => {
-                selected.push(n.id);
-            });
-        return selected;
-    }
-
-    getSelectedEdge = () => {
-        let selected = [];
-        this.props.graph.edges.forEach(e => {
-            if (e.selected) {
-                switch (e.direction) {
-                    case NO_DIRECTIONS:
-                    case BOTH_DIRECTIONS:
-                        selected.push(e.fromId + ":" + e.toId);
-                        selected.push(e.toId + ":" + e.fromId);
-                        break;
-                    case FORWARD_DIRECTION:
-                        selected.push(e.fromId + ":" + e.toId);
-                        break;
-                    case REVERSE_DIRECTION:
-                        selected.push(e.toId + ":" + e.fromId);
-                        break;
-                }
-            }
-        })
-        return selected;
-    }
-
-    getHighlightedNodes = () => {
-        let selected = [];
-        this.props.graph.nodes.filter(n => n.highlighted)
-            .forEach(n => {
-                selected.push(n.id);
-            });
-        return selected;
-    }
-
-    getHighlightedEdge = () => {
-        let selected = [];
-        this.props.graph.edges.forEach(e => {
-            if (e.highlighted) {
-                switch (e.direction) {
-                    case NO_DIRECTIONS:
-                    case BOTH_DIRECTIONS:
-                        selected.push(e.fromId + ":" + e.toId);
-                        selected.push(e.toId + ":" + e.fromId);
-                        break;
-                    case FORWARD_DIRECTION:
-                        selected.push(e.fromId + ":" + e.toId);
-                        break;
-                    case REVERSE_DIRECTION:
-                        selected.push(e.toId + ":" + e.fromId);
-                        break;
-                }
-            }
-        })
-        return selected;
-    }
-
-    highlight = (i, j) => {
-        this.setState({
-            highlightRow: i,
-            highlightColumn: j
-        })
     }
 
     render() {

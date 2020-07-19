@@ -1,5 +1,11 @@
 import React from "react";
 import ViewControlPanel from "./ViewControlPanel";
+import {
+    BOTH_DIRECTIONS,
+    FORWARD_DIRECTION,
+    NO_DIRECTIONS,
+    REVERSE_DIRECTION
+} from "../drawingArea/DrawingModeConstants";
 
 
 export function highlight (graph, from, to) {
@@ -32,6 +38,68 @@ export function select (graph, from, to) {
         return e.fromId === from && e.toId === to
             || e.fromId === to && e.toId === from
     }).forEach((n) => n.selected=true);
+}
+
+export function getSelectedNodes(graph) {
+    let selected = [];
+    graph.nodes.filter(n => n.selected)
+        .forEach(n => {
+            selected.push(n.id);
+        });
+    return selected;
+}
+
+export function getSelectedEdge(graph) {
+    let selected = [];
+    graph.edges.forEach(e => {
+        if (e.selected) {
+            switch (e.direction) {
+                case NO_DIRECTIONS:
+                case BOTH_DIRECTIONS:
+                    selected.push(e.fromId + ":" + e.toId);
+                    selected.push(e.toId + ":" + e.fromId);
+                    break;
+                case FORWARD_DIRECTION:
+                    selected.push(e.fromId + ":" + e.toId);
+                    break;
+                case REVERSE_DIRECTION:
+                    selected.push(e.toId + ":" + e.fromId);
+                    break;
+            }
+        }
+    })
+    return selected;
+}
+
+export function getHighlightedNodes(graph) {
+    let selected = [];
+    graph.nodes.filter(n => n.highlighted)
+        .forEach(n => {
+            selected.push(n.id);
+        });
+    return selected;
+}
+
+export function getHighlightedEdge(graph) {
+    let selected = [];
+    graph.edges.forEach(e => {
+        if (e.highlighted) {
+            switch (e.direction) {
+                case NO_DIRECTIONS:
+                case BOTH_DIRECTIONS:
+                    selected.push(e.fromId + ":" + e.toId);
+                    selected.push(e.toId + ":" + e.fromId);
+                    break;
+                case FORWARD_DIRECTION:
+                    selected.push(e.fromId + ":" + e.toId);
+                    break;
+                case REVERSE_DIRECTION:
+                    selected.push(e.toId + ":" + e.fromId);
+                    break;
+            }
+        }
+    })
+    return selected;
 }
 
 class EditableView extends React.Component {
