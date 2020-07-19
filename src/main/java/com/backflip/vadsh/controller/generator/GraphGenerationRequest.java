@@ -43,5 +43,7 @@ enum Direction {
     @JsonProperty("forwardDirection")
     FORWARD_DIRECTION,
     @JsonProperty("reverseDirection")
-    REVERSE_DIRECTION;
+    REVERSE_DIRECTION,
+    @JsonProperty("selfDirection")
+    SELF_DIRECTION;
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import DisplayTextGraphProperty from "./DisplayTextGraphProperty";
 import DisplayDropdownGraphProperty from "./DisplayDropdownGraphProperty";
-import {EDGE_DIRECTION_NAMES} from "../drawingArea/DrawingModeConstants";
+import {EDGE_DIRECTION_NAMES, SELF_DIRECTION} from "../drawingArea/DrawingModeConstants";
 
 
 class DisplayEdge extends React.Component {
@@ -26,13 +26,20 @@ class DisplayEdge extends React.Component {
                     }}
                     inputFormat="number"
                 />
-                <DisplayDropdownGraphProperty
-                    label="Direction"
-                    propertyName="direction"
-                    value={edge.direction}
-                    updateElementProperty={this.updateElement}
-                    options={EDGE_DIRECTION_NAMES}
-                />
+                {edge.direction === SELF_DIRECTION ?
+                    <DisplayTextGraphProperty
+                        label="Direction"
+                        value={"Self"}
+                        readOnly={true}
+                    /> :
+                    <DisplayDropdownGraphProperty
+                        label="Direction"
+                        propertyName="direction"
+                        value={edge.direction}
+                        updateElementProperty={this.updateElement}
+                        options={EDGE_DIRECTION_NAMES}
+                    />
+                }
                 <DisplayTextGraphProperty
                     label="From"
                     value={this.props.getNodeName(edge.fromId).name}

@@ -3,7 +3,8 @@ import {
     BOTH_DIRECTIONS,
     FORWARD_DIRECTION,
     NO_DIRECTIONS,
-    REVERSE_DIRECTION
+    REVERSE_DIRECTION,
+    SELF_DIRECTION
 } from "../drawingArea/DrawingModeConstants";
 import EditableView, {
     getHighlightedEdge, getHighlightedNodes,
@@ -42,6 +43,7 @@ export class MatrixDisplay extends React.Component {
                     code[e.toId][e.fromId] = e.weight;
                     break;
                 case FORWARD_DIRECTION:
+                case SELF_DIRECTION:
                     code[e.fromId][e.toId] = e.weight;
                     break;
                 case REVERSE_DIRECTION:
@@ -83,13 +85,13 @@ export class MatrixDisplay extends React.Component {
 
         //create edges
         for (let k = 0; k < n; k++) {
-            if (matrix[k][k] !== 0) throw "Self edges can only be zero"
             for (let l = 0; l < n; l++) {
                 const weight = matrix[k][l];
                 if (weight !== 0) {
                     let direction = FORWARD_DIRECTION;
                     if (matrix[l][k] !== 0 && matrix[l][k] !== weight) throw "Different weights on different directions not allowed";
                     if (matrix[l][k] === weight) direction = BOTH_DIRECTIONS;
+                    if (l === k) direction = SELF_DIRECTION;
                     edges.push({
                         id: nextEdgeId++,
                         fromId: k,

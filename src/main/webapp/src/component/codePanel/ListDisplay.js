@@ -3,7 +3,8 @@ import {
     BOTH_DIRECTIONS,
     FORWARD_DIRECTION,
     NO_DIRECTIONS,
-    REVERSE_DIRECTION
+    REVERSE_DIRECTION,
+    SELF_DIRECTION
 } from "../drawingArea/DrawingModeConstants";
 import EditableView, {
     getHighlightedEdge, getHighlightedNodes,
@@ -42,6 +43,7 @@ export class ListDisplay extends React.Component {
                     code[e.toId].push(e.fromId);
                     break;
                 case FORWARD_DIRECTION:
+                case SELF_DIRECTION:
                     code[e.fromId].push(e.toId);
                     break;
                 case REVERSE_DIRECTION:
@@ -87,7 +89,6 @@ export class ListDisplay extends React.Component {
             for (let j = 0; j < elements.length; j++) {
                 elements[j] = parseInt(elements[j]);
                 if (isNaN(elements[j])) throw "To node is not a number";
-                if (elements[j] === fromNode)  throw "Self nodes not allowed";
                 list[i] = elements;
             }
         }
@@ -98,6 +99,7 @@ export class ListDisplay extends React.Component {
                 let toNode = list[k][l];
                 let direction = FORWARD_DIRECTION;
                 if (list[toNode].includes(k)) direction = BOTH_DIRECTIONS;
+                if (toNode === k) direction = SELF_DIRECTION;
                 edges.push({
                     id: nextEdgeId++,
                     fromId: k,

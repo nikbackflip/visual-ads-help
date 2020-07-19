@@ -10,11 +10,12 @@ import {
     MODE_DEL_EDGE,
     colors,
     circleRadius,
-    BOTH_DIRECTIONS
+    BOTH_DIRECTIONS, SELF_DIRECTION
 } from './DrawingModeConstants';
 import KonvaNode from "./KonvaNode";
 import KonvaEdge from "./KonvaEdge";
 import TempKonvaEdge from "./TempKonvaEdge";
+import SelfKonvaEdge from "./SelfKonvaEdge";
 
 class DrawingArea extends React.Component {
 
@@ -57,12 +58,11 @@ class DrawingArea extends React.Component {
     }
 
     addNewEdgeFromTo = (from, to) => {
-        if (this.isDuplicateEdge(from, to) || this.isSelfEdge(from, to)) {
+        if (this.isDuplicateEdge(from, to)) {
             return;
         }
 
-        const edges = this.props.graph.edges.slice();
-        edges.push({
+        let newEdge = {
             id: this.edgeId++,
             fromId: from.id,
             toId: to.id,
@@ -70,7 +70,13 @@ class DrawingArea extends React.Component {
             selected: false,
             highlighted: false,
             direction: BOTH_DIRECTIONS
-        });
+        };
+        if (this.isSelfEdge(from, to)) {
+            newEdge.direction = SELF_DIRECTION;
+        }
+
+        const edges = this.props.graph.edges.slice();
+        edges.push(newEdge);
         this.resetTempEdge();
         this.publishAndUpdateGraph(this.props.graph.nodes.slice(), edges);
     }
@@ -360,6 +366,21 @@ class DrawingArea extends React.Component {
                             const toNode = this.props.graph.nodes.find(n => {
                                 return n.id === edge.toId;
                             });
+
+                            if (edge.direction === SELF_DIRECTION) {
+                                return <SelfKonvaEdge
+                                    key={edge.id}
+                                    id={edge.id}
+                                    x={fromNode.x}
+                                    y={fromNode.y}
+                                    selected={edge.selected}
+                                    highlighted={edge.highlighted}
+                                    weight={edge.weight}
+                                    handleEdgeClick={this.handleEdgeClick}
+                                    onMouseEnter={this.onMouseOverEdge}
+                                    onMouseLeave={this.onMouseLeave}
+                                />
+                            }
 
                             return <KonvaEdge
                                 key={edge.id}

@@ -46,6 +46,7 @@ public class GeneratorController {
                     builder.withEdge(e.getToId(), e.getFromId(), e.getWeight());
                     break;
                 case FORWARD_DIRECTION:
+                case SELF_DIRECTION:
                     builder.withEdge(e.getFromId(), e.getToId(), e.getWeight());
                     break;
                 case REVERSE_DIRECTION:

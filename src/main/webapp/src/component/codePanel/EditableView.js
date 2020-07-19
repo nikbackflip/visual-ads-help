@@ -4,7 +4,8 @@ import {
     BOTH_DIRECTIONS,
     FORWARD_DIRECTION,
     NO_DIRECTIONS,
-    REVERSE_DIRECTION
+    REVERSE_DIRECTION,
+    SELF_DIRECTION
 } from "../drawingArea/DrawingModeConstants";
 
 
@@ -60,6 +61,7 @@ export function getSelectedEdge(graph) {
                     selected.push(e.toId + ":" + e.fromId);
                     break;
                 case FORWARD_DIRECTION:
+                case SELF_DIRECTION:
                     selected.push(e.fromId + ":" + e.toId);
                     break;
                 case REVERSE_DIRECTION:
@@ -91,6 +93,7 @@ export function getHighlightedEdge(graph) {
                     selected.push(e.toId + ":" + e.fromId);
                     break;
                 case FORWARD_DIRECTION:
+                case SELF_DIRECTION:
                     selected.push(e.fromId + ":" + e.toId);
                     break;
                 case REVERSE_DIRECTION:
