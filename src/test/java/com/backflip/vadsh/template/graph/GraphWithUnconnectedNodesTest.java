@@ -21,10 +21,7 @@ public class GraphWithUnconnectedNodesTest extends AbstractGraphTest {
                 .withEdge(0, 2, 1)
                 .withEdge(2, 0, 1)
 
-                .withNode(0, "0")
-                .withNode(1, "1")
-                .withNode(2, "2")
-                .withNode(3, "3")
+                .ofSize(4)
 
                 .build();
 

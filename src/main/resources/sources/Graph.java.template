@@ -32,19 +32,13 @@ public class Graph {
         }
     }
 
-    private final Map<Integer, String> nodeIdToNameMap = new HashMap<>() {{
-{nodeIdToNameMap}
-    }};
 
     private final List<Edge> edgesList = new ArrayList<>() {{
 {edgesList}
     }};
 
-    private final int n = nodeIdToNameMap.size();
+    private final int n = {nodesCount};
 
-    public String getNodeName(Integer id) {
-        return nodeIdToNameMap.get(id);
-    }
 
     public int nodesCount() {
         return n;

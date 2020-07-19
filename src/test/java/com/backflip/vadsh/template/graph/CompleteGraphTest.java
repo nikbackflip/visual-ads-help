@@ -34,10 +34,7 @@ public class CompleteGraphTest extends AbstractGraphTest {
                 .withEdge(3, 1, 1)
                 .withEdge(3, 2, 1)
 
-                .withNode(0, "0")
-                .withNode(1, "1")
-                .withNode(2, "2")
-                .withNode(3, "3")
+                .ofSize(4)
 
                 .build();
 

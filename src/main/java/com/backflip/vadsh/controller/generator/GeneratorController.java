@@ -28,9 +28,8 @@ public class GeneratorController {
     public GraphGeneratorResponse generateGraph(
             @RequestBody GraphGenerationRequest graphRequest) {
 
-        GraphArgs.Builder graphModel = GraphArgs.builder();
+        GraphArgs.Builder graphModel = GraphArgs.builder().ofSize(graphRequest.getNodes().size());
         withEdges(graphModel, graphRequest.getEdges());
-        withNodes(graphModel, graphRequest.getNodes());
 
         String content = template.construct(graphModel.build());
 
@@ -53,12 +52,6 @@ public class GeneratorController {
                     builder.withEdge(e.getToId(), e.getFromId(), e.getWeight());
                     break;
             }
-        });
-    }
-
-    private void withNodes(GraphArgs.Builder builder, List<NodeModel> list) {
-        list.forEach(n -> {
-            builder.withNode(n.getId(), n.getName());
         });
     }
 

@@ -16,10 +16,7 @@ public class NoEdgesGraphTest extends AbstractGraphTest {
     @BeforeAll
     static void init() throws IOException {
         GraphArgs args = builder()
-                .withNode(0, "0")
-                .withNode(1, "1")
-                .withNode(2, "2")
-                .withNode(3, "3")
+                .ofSize(4)
 
                 .build();
 

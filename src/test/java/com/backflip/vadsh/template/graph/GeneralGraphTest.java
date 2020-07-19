@@ -14,25 +14,11 @@ public class GeneralGraphTest extends AbstractGraphTest {
     @BeforeAll
     static void init() throws IOException {
         GraphArgs args = builder()
-                .withNode(0, "node0")
-                .withNode(1, "node1")
-                .withNode(2, "node2")
-                .withNode(3, "node3")
+                .ofSize(4)
 
                 .build();
 
         init(args);
-    }
-
-    @Test
-    public void getNameByNodeId() {
-        //given
-
-        //when
-        String nodeName = graphReflect.getNodeName(1);
-
-        //then
-        assertEquals("node1", nodeName);
     }
 
     @Test

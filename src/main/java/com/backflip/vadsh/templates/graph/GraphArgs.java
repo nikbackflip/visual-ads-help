@@ -10,18 +10,18 @@ import static java.util.Collections.unmodifiableMap;
 
 public class GraphArgs implements TemplateArgs {
 
-    private GraphArgs(String nodeIdToNameMap, String edgesList) {
-        this.nodeIdToNameMap = nodeIdToNameMap;
+    private GraphArgs(String edgesList, String n) {
         this.edgesList = edgesList;
+        this.n = n;
     }
 
-    private String nodeIdToNameMap;
-    private String edgesList;
+    private final String edgesList;
+    private final String n;
 
     @Override
     public Map<String, String> getArgs() {
         return unmodifiableMap(of(
-                "nodeIdToNameMap", nodeIdToNameMap,
+                "nodesCount", n,
                 "edgesList", edgesList
         ));
     }
@@ -32,21 +32,21 @@ public class GraphArgs implements TemplateArgs {
 
     public static class Builder {
 
-        private StringBuilder edges = new StringBuilder();
-        private StringBuilder nodes = new StringBuilder();
+        private final StringBuilder edges = new StringBuilder();
+        private String n = "0";
 
         public Builder withEdge(int from, int to, double weight) {
             edges.append(format("        add(new Edge(%s, %s, %s));\n", from, to, weight));
             return this;
         }
 
-        public Builder withNode(int id, String name) {
-            nodes.append(format("        put(%s, \"%s\");\n", id, name));
+        public Builder ofSize(Integer n) {
+            this.n = n.toString();
             return this;
         }
 
         public GraphArgs build() {
-            return new GraphArgs(nodes.toString(), edges.toString());
+            return new GraphArgs(edges.toString(), n);
         }
 
     }

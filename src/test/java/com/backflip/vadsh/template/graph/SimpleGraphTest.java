@@ -23,10 +23,7 @@ public class SimpleGraphTest extends AbstractGraphTest {
                 .withEdge(1, 3, 10)
                 .withEdge(3, 0, 11)
 
-                .withNode(0, "0")
-                .withNode(1, "1")
-                .withNode(2, "2")
-                .withNode(3, "3")
+                .ofSize(4)
 
                 .build();
 
