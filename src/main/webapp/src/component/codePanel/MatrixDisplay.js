@@ -1,11 +1,4 @@
 import React from "react";
-import {
-    BOTH_DIRECTIONS,
-    FORWARD_DIRECTION,
-    NO_DIRECTIONS,
-    REVERSE_DIRECTION,
-    SELF_DIRECTION
-} from "../drawingArea/DrawingModeConstants";
 import EditableView, {
     getHighlightedEdge, getHighlightedNodes,
     getSelectedEdge,
@@ -15,6 +8,12 @@ import EditableView, {
     unhighlight
 } from "./EditableView";
 import HighlighableTd from "./HighlighableTd";
+import {
+    ABSENT_DIRECTION,
+    BOTH_DIRECTIONS,
+    FORWARD_DIRECTION,
+    SELF_DIRECTION
+} from "../drawingArea/DrawingModeConstants";
 
 
 export class MatrixDisplay extends React.Component {
@@ -34,24 +33,13 @@ export class MatrixDisplay extends React.Component {
         //create nxn matrix and fill with 0
         let code = Array.from(Array(n), _ => Array(n).fill(0.0));
 
-        //set weights
-        graph.edges.forEach(e => {
-            switch (e.direction) {
-                case NO_DIRECTIONS:
-                case BOTH_DIRECTIONS:
-                    code[e.fromId][e.toId] = e.weight;
-                    code[e.toId][e.fromId] = e.weight;
-                    break;
-                case FORWARD_DIRECTION:
-                case SELF_DIRECTION:
-                    code[e.fromId][e.toId] = e.weight;
-                    break;
-                case REVERSE_DIRECTION:
-                    code[e.toId][e.fromId] = e.weight;
-                    break;
-            }
-        })
+        //filer placeholder absent edges
+        let edges = graph.edges.slice().filter(e => e.direction !== ABSENT_DIRECTION);
 
+        //set weights
+        edges.forEach(e => {
+            code[e.fromId][e.toId] = e.weight;
+        })
         return code;
     }
 
@@ -88,36 +76,51 @@ export class MatrixDisplay extends React.Component {
             for (let l = 0; l < n; l++) {
                 const weight = matrix[k][l];
                 if (weight !== 0) {
-                    let direction = FORWARD_DIRECTION;
                     if (matrix[l][k] !== 0 && matrix[l][k] !== weight) throw "Different weights on different directions not allowed";
-                    if (matrix[l][k] === weight) direction = BOTH_DIRECTIONS;
-                    if (l === k) direction = SELF_DIRECTION;
                     edges.push({
                         id: nextEdgeId++,
                         fromId: k,
                         toId: l,
-                        weight: weight,
-                        direction: direction
+                        weight: weight
                     });
                 }
             }
         }
 
-        //remove duplicate double edges
-        for (let e = 0; e < edges.length; e++) {
-            if (edges[e].direction === BOTH_DIRECTIONS) {
-                const from = edges[e].fromId;
-                const to = edges[e].toId;
-                let index = edges.findIndex(ed => {
-                    return (ed.direction === BOTH_DIRECTIONS) && (ed.fromId === to) && (ed.toId === from);
-                });
-                edges.splice(index, 1);
+        let pairs = [];
+        edges.forEach(e => {
+            if (e.pairId === undefined) {
+                if (e.fromId === e.toId) {
+                    e.pairId = e.id;
+                    e.direction = SELF_DIRECTION;
+                    return;
+                }
+                let pair = edges.find(ee => ee.fromId === e.toId && ee.toId === e.fromId);
+                if (pair === undefined) {
+                    pair = {
+                        id: nextEdgeId++,
+                        pairId: e.id,
+                        fromId: e.toId,
+                        toId: e.fromId,
+                        weight: 0,
+                        direction: ABSENT_DIRECTION
+                    }
+                    pairs.push(pair);
+                    e.pairId = pair.id;
+                    e.direction = FORWARD_DIRECTION;
+                } else {
+                    e.direction = BOTH_DIRECTIONS;
+                    pair.direction = BOTH_DIRECTIONS;
+                    e.pairId = pair.id;
+                    pair.pairId = e.id;
+                }
             }
-        }
+        })
+        edges.push(...pairs);
 
         this.props.handleGraphUpdate({
-            nodes:nodes,
-            edges:edges
+            nodes: nodes,
+            edges: edges
         });
     }
 

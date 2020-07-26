@@ -10,7 +10,9 @@ import {
     MODE_DEL_EDGE,
     colors,
     circleRadius,
-    BOTH_DIRECTIONS, SELF_DIRECTION
+    SELF_DIRECTION,
+    FORWARD_DIRECTION,
+    ABSENT_DIRECTION
 } from './DrawingModeConstants';
 import KonvaNode from "./KonvaNode";
 import KonvaEdge from "./KonvaEdge";
@@ -62,21 +64,38 @@ class DrawingArea extends React.Component {
             return;
         }
 
-        let newEdge = {
+        const newEdge = {
             id: this.edgeId++,
             fromId: from.id,
             toId: to.id,
             weight: 1,
             selected: false,
             highlighted: false,
-            direction: BOTH_DIRECTIONS
+            direction: FORWARD_DIRECTION,
         };
-        if (this.isSelfEdge(from, to)) {
-            newEdge.direction = SELF_DIRECTION;
-        }
+        const pairEdge = {
+            id: this.edgeId++,
+            fromId: to.id,
+            toId: from.id,
+            weight: 0,
+            selected: false,
+            highlighted: false,
+            direction: ABSENT_DIRECTION
+        };
+
+        newEdge.pairId = pairEdge.id;
+        pairEdge.pairId = newEdge.id;
 
         const edges = this.props.graph.edges.slice();
-        edges.push(newEdge);
+
+        if (this.isSelfEdge(from, to)) {
+            newEdge.pairId = newEdge.id;
+            newEdge.direction = SELF_DIRECTION;
+            edges.push(newEdge);
+        } else {
+            edges.push(newEdge);
+            edges.push(pairEdge);
+        }
         this.resetTempEdge();
         this.publishAndUpdateGraph(this.props.graph.nodes.slice(), edges);
     }
@@ -152,10 +171,14 @@ class DrawingArea extends React.Component {
     onMouseOverEdge = ev => {
         this.clearHighlight();
 
-        this.props.graph.edges.find(e => {
+        const hovered = this.props.graph.edges.find(e => {
             return e.id === ev.target.attrs.id;
-        }).highlighted = true;
-
+        })
+        const hoveredPair = this.props.graph.edges.find(e => {
+            return e.id === hovered.pairId;
+        })
+        hovered.highlighted = true;
+        hoveredPair.highlighted = true;
         this.publishAndUpdateGraph(this.props.graph.nodes, this.props.graph.edges);
     }
 
@@ -252,7 +275,11 @@ class DrawingArea extends React.Component {
                 const clicked = edges.find(n => {
                     return n.id === e.target.attrs.id;
                 });
+                const clickedPair = edges.find(n => {
+                    return n.id === clicked.pairId;
+                });
                 clicked.selected = true;
+                clickedPair.selected = true;
 
                 this.publishAndUpdateGraph(nodes, edges);
                 break;
@@ -316,6 +343,8 @@ class DrawingArea extends React.Component {
             return;
         }
         if (this.props.graph.nodes[0].selected === undefined) {
+            this.nodeId = this.props.graph.nodes.length;
+            this.edgeId = this.props.graph.edges.length;
             this.props.graph.nodes.forEach(n => {
                 n.color = colors.sample();
                 n.name = n.id;
@@ -328,12 +357,12 @@ class DrawingArea extends React.Component {
                 e.selected = false;
                 e.highlighted = false;
             });
-            this.nodeId = this.props.graph.nodes.length;
         }
     }
 
     render() {
         this.customizeIfExternallyGenerated();
+        let excludedEdges = [];
 
         return (
             <div className="App-drawing-area">
@@ -360,6 +389,9 @@ class DrawingArea extends React.Component {
                         />
                         {this.props.graph.edges.map(edge => {
 
+                            if (edge.direction === ABSENT_DIRECTION || excludedEdges.find(e => e === edge.id)) return null;
+                            excludedEdges.push(edge.pairId);
+
                             const fromNode = this.props.graph.nodes.find(n => {
                                 return n.id === edge.fromId;
                             });
@@ -380,22 +412,21 @@ class DrawingArea extends React.Component {
                                     onMouseEnter={this.onMouseOverEdge}
                                     onMouseLeave={this.onMouseLeave}
                                 />
+                            } else {
+                                return <KonvaEdge
+                                    key={edge.id}
+                                    id={edge.id}
+                                    from={{x: fromNode.x, y: fromNode.y}}
+                                    to={{x: toNode.x, y: toNode.y}}
+                                    selected={edge.selected}
+                                    highlighted={edge.highlighted}
+                                    weight={edge.weight}
+                                    handleEdgeClick={this.handleEdgeClick}
+                                    direction={edge.direction}
+                                    onMouseEnter={this.onMouseOverEdge}
+                                    onMouseLeave={this.onMouseLeave}
+                                />
                             }
-
-                            return <KonvaEdge
-                                key={edge.id}
-                                id={edge.id}
-                                from={{x: fromNode.x, y: fromNode.y}}
-                                to={{x: toNode.x, y: toNode.y}}
-                                selected={edge.selected}
-                                highlighted={edge.highlighted}
-                                weight={edge.weight}
-                                handleEdgeClick={this.handleEdgeClick}
-                                direction={edge.direction}
-                                onMouseEnter={this.onMouseOverEdge}
-                                onMouseLeave={this.onMouseLeave}
-
-                            />
                         })}
                         {this.props.graph.nodes.map(node => {
                             return <KonvaNode

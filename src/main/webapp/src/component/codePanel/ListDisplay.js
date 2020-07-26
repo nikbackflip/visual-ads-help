@@ -1,11 +1,4 @@
 import React from "react";
-import {
-    BOTH_DIRECTIONS,
-    FORWARD_DIRECTION,
-    NO_DIRECTIONS,
-    REVERSE_DIRECTION,
-    SELF_DIRECTION
-} from "../drawingArea/DrawingModeConstants";
 import EditableView, {
     getHighlightedEdge, getHighlightedNodes,
     getSelectedEdge,
@@ -15,6 +8,12 @@ import EditableView, {
     unhighlight
 } from "./EditableView";
 import HighlighableTd from "./HighlighableTd";
+import {
+    ABSENT_DIRECTION,
+    BOTH_DIRECTIONS,
+    FORWARD_DIRECTION,
+    SELF_DIRECTION
+} from "../drawingArea/DrawingModeConstants";
 
 export class ListDisplay extends React.Component {
 
@@ -35,21 +34,11 @@ export class ListDisplay extends React.Component {
             code.push([]);
         });
 
-        graph.edges.forEach(e => {
-            switch (e.direction) {
-                case NO_DIRECTIONS:
-                case BOTH_DIRECTIONS:
-                    code[e.fromId].push(e.toId);
-                    code[e.toId].push(e.fromId);
-                    break;
-                case FORWARD_DIRECTION:
-                case SELF_DIRECTION:
-                    code[e.fromId].push(e.toId);
-                    break;
-                case REVERSE_DIRECTION:
-                    code[e.toId].push(e.fromId);
-                    break;
-            }
+        //filer placeholder absent edges
+        let edges = graph.edges.slice().filter(e => e.direction !== ABSENT_DIRECTION);
+
+        edges.forEach(e => {
+            code[e.fromId].push(e.toId);
         });
         return code;
     }
@@ -97,34 +86,49 @@ export class ListDisplay extends React.Component {
         for (let k = 0; k < n; k++) {
             for (let l = 0; l < list[k].length; l++) {
                 let toNode = list[k][l];
-                let direction = FORWARD_DIRECTION;
-                if (list[toNode].includes(k)) direction = BOTH_DIRECTIONS;
-                if (toNode === k) direction = SELF_DIRECTION;
                 edges.push({
                     id: nextEdgeId++,
                     fromId: k,
                     toId: toNode,
-                    direction: direction,
                     weight: 1
                 });
             }
         }
 
-        //remove duplicate double edges
-        for (let e = 0; e < edges.length; e++) {
-            if (edges[e].direction === BOTH_DIRECTIONS) {
-                const from = edges[e].fromId;
-                const to = edges[e].toId;
-                let index = edges.findIndex(ed => {
-                    return (ed.direction === BOTH_DIRECTIONS) && (ed.fromId === to) && (ed.toId === from);
-                });
-                edges.splice(index, 1);
+        let pairs = [];
+        edges.forEach(e => {
+            if (e.pairId === undefined) {
+                if (e.fromId === e.toId) {
+                    e.pairId = e.id;
+                    e.direction = SELF_DIRECTION;
+                    return;
+                }
+                let pair = edges.find(ee => ee.fromId === e.toId && ee.toId === e.fromId);
+                if (pair === undefined) {
+                    pair = {
+                        id: nextEdgeId++,
+                        pairId: e.id,
+                        fromId: e.toId,
+                        toId: e.fromId,
+                        weight: 0,
+                        direction: ABSENT_DIRECTION
+                    }
+                    pairs.push(pair);
+                    e.pairId = pair.id;
+                    e.direction = FORWARD_DIRECTION;
+                } else {
+                    e.direction = BOTH_DIRECTIONS;
+                    pair.direction = BOTH_DIRECTIONS;
+                    e.pairId = pair.id;
+                    pair.pairId = e.id;
+                }
             }
-        }
+        })
+        edges.push(...pairs);
 
         this.props.handleGraphUpdate({
-            nodes:nodes,
-            edges:edges
+            nodes: nodes,
+            edges: edges
         });
     }
 

@@ -1,6 +1,5 @@
 package com.backflip.vadsh.controller.generator;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,7 +23,6 @@ class EdgeModel {
     private int fromId;
     private int toId;
     private double weight;
-    private Direction direction;
 }
 
 @Getter
@@ -33,17 +31,4 @@ class EdgeModel {
 class NodeModel {
     private int id;
     private String name;
-}
-
-enum Direction {
-    @JsonProperty("noDirections")
-    NO_DIRECTIONS,
-    @JsonProperty("bothDirections")
-    BOTH_DIRECTIONS,
-    @JsonProperty("forwardDirection")
-    FORWARD_DIRECTION,
-    @JsonProperty("reverseDirection")
-    REVERSE_DIRECTION,
-    @JsonProperty("selfDirection")
-    SELF_DIRECTION;
 }

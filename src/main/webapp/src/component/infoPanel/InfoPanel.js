@@ -3,6 +3,7 @@ import "../css/InfoPanel.css"
 import ElementsCounter from "./ElementsCounter";
 import DisplayNode from "./DisplayNode";
 import DisplayEdge from "./DisplayEdge";
+import {ABSENT_DIRECTION, SELF_DIRECTION} from "../drawingArea/DrawingModeConstants";
 
 class InfoPanel extends React.Component {
 
@@ -32,6 +33,24 @@ class InfoPanel extends React.Component {
         });
     }
 
+    updateTwoEdges = (firstEdge, secondEdge) => {
+        let edges = this.props.graph.edges.slice();
+        const indexEdge = edges.findIndex(n => {
+            return n.id === firstEdge.id
+        });
+        edges[indexEdge] = firstEdge;
+
+        const indexPair = edges.findIndex(n => {
+            return n.id === secondEdge.id
+        });
+        edges[indexPair] = secondEdge;
+
+        this.props.handleGraphUpdate({
+            nodes: this.props.graph.nodes.slice(),
+            edges: edges
+        });
+    }
+
     getNodeName = (id) => {
         return this.props.graph.nodes.find(n => {
             return n.id === id
@@ -49,10 +68,13 @@ class InfoPanel extends React.Component {
             return e.selected === true;
         });
 
+        let excludedEdges = [];
+
         return (
             <div className="App-info-panel">
                 <ElementsCounter entityName={"nodes"} count={nodes.length}/>
-                <ElementsCounter entityName={"edges"} count={edges.length}/>
+                <ElementsCounter entityName={"edges"}
+                                 count={edges.slice().filter(e => e.direction !== ABSENT_DIRECTION).length}/>
                 <div className="App-line-split"/>
                 {selectedNodes.map(n => {
                     return <DisplayNode
@@ -62,12 +84,17 @@ class InfoPanel extends React.Component {
                     />
                 })}
                 {selectedEdges.map(e => {
-                    return <DisplayEdge
-                        key={e.id}
-                        element={e}
-                        getNodeName={this.getNodeName}
-                        updateElement={this.updateEdge}
-                    />
+                    if (e.direction === ABSENT_DIRECTION) return null;
+                    if (e.direction !== SELF_DIRECTION) excludedEdges.push(e.pairId);
+                    return excludedEdges.find(ex => ex === e.id) ? null :
+                        <DisplayEdge
+                            key={e.id}
+                            element={e}
+                            pair={edges.find(p => p.id === e.pairId)}
+                            getNodeName={this.getNodeName}
+                            updateElement={this.updateEdge}
+                            updateBoth={this.updateTwoEdges}
+                        />
                 })}
             </div>
         );

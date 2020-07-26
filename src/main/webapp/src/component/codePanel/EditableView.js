@@ -1,12 +1,5 @@
 import React from "react";
 import ViewControlPanel from "./ViewControlPanel";
-import {
-    BOTH_DIRECTIONS,
-    FORWARD_DIRECTION,
-    NO_DIRECTIONS,
-    REVERSE_DIRECTION,
-    SELF_DIRECTION
-} from "../drawingArea/DrawingModeConstants";
 
 
 export function highlight (graph, from, to) {
@@ -54,20 +47,7 @@ export function getSelectedEdge(graph) {
     let selected = [];
     graph.edges.forEach(e => {
         if (e.selected) {
-            switch (e.direction) {
-                case NO_DIRECTIONS:
-                case BOTH_DIRECTIONS:
-                    selected.push(e.fromId + ":" + e.toId);
-                    selected.push(e.toId + ":" + e.fromId);
-                    break;
-                case FORWARD_DIRECTION:
-                case SELF_DIRECTION:
-                    selected.push(e.fromId + ":" + e.toId);
-                    break;
-                case REVERSE_DIRECTION:
-                    selected.push(e.toId + ":" + e.fromId);
-                    break;
-            }
+            selected.push(e.fromId + ":" + e.toId);
         }
     })
     return selected;
@@ -86,20 +66,7 @@ export function getHighlightedEdge(graph) {
     let selected = [];
     graph.edges.forEach(e => {
         if (e.highlighted) {
-            switch (e.direction) {
-                case NO_DIRECTIONS:
-                case BOTH_DIRECTIONS:
-                    selected.push(e.fromId + ":" + e.toId);
-                    selected.push(e.toId + ":" + e.fromId);
-                    break;
-                case FORWARD_DIRECTION:
-                case SELF_DIRECTION:
-                    selected.push(e.fromId + ":" + e.toId);
-                    break;
-                case REVERSE_DIRECTION:
-                    selected.push(e.toId + ":" + e.fromId);
-                    break;
-            }
+            selected.push(e.fromId + ":" + e.toId);
         }
     })
     return selected;

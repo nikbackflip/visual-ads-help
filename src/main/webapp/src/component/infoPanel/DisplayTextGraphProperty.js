@@ -9,6 +9,12 @@ class DisplayTextGraphProperty extends React.Component {
         }
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.value !== this.props.value) {
+            this.setState({value: this.props.value})
+        }
+    }
+
     onInputEnd = (e) => {
         if (this.props.inputIsValid(e.target.value)) {
             this.props.updateElementProperty(this.props.propertyName, e.target.value)

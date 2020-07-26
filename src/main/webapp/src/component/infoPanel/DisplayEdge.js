@@ -1,45 +1,110 @@
 import React from "react";
 import DisplayTextGraphProperty from "./DisplayTextGraphProperty";
 import DisplayDropdownGraphProperty from "./DisplayDropdownGraphProperty";
-import {EDGE_DIRECTION_NAMES, SELF_DIRECTION} from "../drawingArea/DrawingModeConstants";
+import {
+    ABSENT_DIRECTION, BOTH_DIRECTIONS,
+    EDGE_DIRECTION_NAMES, EDGE_DIRECTION_SELF,
+    FORWARD_DIRECTION, NO_DIRECTIONS,
+    SELF_DIRECTION,
+    // SPLIT_DIRECTION
+} from "../drawingArea/DrawingModeConstants";
 
 
 class DisplayEdge extends React.Component {
 
-    updateElement = (name, value) => {
+    updateDirection = (direction) => {
         let updatedEdge = Object.assign({}, this.props.element);
-        updatedEdge[name] = value;
-        this.props.updateElement(updatedEdge);
+        let updatedPair = Object.assign({}, this.props.pair);
+        updatedEdge.direction = direction;
+        updatedPair.direction = direction === FORWARD_DIRECTION ? ABSENT_DIRECTION : direction;
+
+        // if (updatedPair.direction !== SPLIT_DIRECTION) {
+        updatedPair.weight = updatedEdge.weight;
+        // }
+
+        this.props.updateBoth(updatedEdge, updatedPair);
+    }
+
+    updateWeight = (newForward, newReverse) => {
+        console.log("updateWeight");
+        let updatedEdge = Object.assign({}, this.props.element);
+        let updatedPair = Object.assign({}, this.props.pair);
+
+        switch (updatedEdge.direction) {
+            case NO_DIRECTIONS:
+            case BOTH_DIRECTIONS:
+                const newWeight = updatedEdge.weight === newForward ? newReverse : newForward;
+                updatedEdge.weight = newWeight;
+                updatedPair.weight = newWeight;
+                this.props.updateBoth(updatedEdge, updatedPair);
+                break;
+            case FORWARD_DIRECTION:
+                if (newForward !== updatedEdge.weight) {
+                    updatedEdge.weight = newForward;
+                }
+                this.props.updateBoth(updatedEdge, updatedPair);
+                break;
+            case SELF_DIRECTION:
+                updatedEdge.weight = newForward;
+                this.props.updateElement(updatedEdge);
+                break;
+        }
+    }
+
+    toggleFromTo = () => {
+        let updatedEdge = Object.assign({}, this.props.element);
+        let updatedPair = Object.assign({}, this.props.pair);
+
+        updatedEdge.direction = ABSENT_DIRECTION;
+        updatedPair.direction = FORWARD_DIRECTION;
+        updatedPair.weight = updatedEdge.weight;
+        updatedPair.selected = updatedEdge.selected;
+        updatedPair.highlighted = updatedEdge.highlighted;
+
+        this.props.updateBoth(updatedEdge, updatedPair);
     }
 
     render() {
         const edge = this.props.element;
+        const pair = this.props.pair;
         return this.props.element == null ? <div/> : (
             <div>
                 <DisplayTextGraphProperty
-                    label="Weight"
+                    label="Forward cost"
                     propertyName="weight"
                     value={edge.weight}
-                    updateElementProperty={this.updateElement}
+                    updateElementProperty={(name, value) => {
+                        this.updateWeight(value);
+                    }}
                     inputIsValid={(input) => {
                         return parseFloat(input) !== 0 && !isNaN(parseFloat(input));
                     }}
                     inputFormat="number"
                 />
-                {edge.direction === SELF_DIRECTION ?
-                    <DisplayTextGraphProperty
-                        label="Direction"
-                        value={"Self"}
-                        readOnly={true}
-                    /> :
-                    <DisplayDropdownGraphProperty
-                        label="Direction"
-                        propertyName="direction"
-                        value={edge.direction}
-                        updateElementProperty={this.updateElement}
-                        options={EDGE_DIRECTION_NAMES}
-                    />
+                {
+                    edge.direction === FORWARD_DIRECTION || pair.direction === ABSENT_DIRECTION || edge.direction === SELF_DIRECTION ? null :
+                        <DisplayTextGraphProperty
+                            label="Reverse cost"
+                            propertyName="weight"
+                            value={pair.weight}
+                            updateElementProperty={(name, value) => {
+                                this.updateWeight(value);
+                            }}
+                            inputIsValid={(input) => {
+                                return parseFloat(input) !== 0 && !isNaN(parseFloat(input));
+                            }}
+                            inputFormat="number"
+                        />
                 }
+                <DisplayDropdownGraphProperty
+                    label="Direction"
+                    propertyName="direction"
+                    value={edge.direction}
+                    updateElementProperty={(name, value) => {
+                        this.updateDirection(value);
+                    }}
+                    options={edge.direction === SELF_DIRECTION ? EDGE_DIRECTION_SELF : EDGE_DIRECTION_NAMES}
+                />
                 <DisplayTextGraphProperty
                     label="From"
                     value={this.props.getNodeName(edge.fromId).name}
@@ -50,6 +115,16 @@ class DisplayEdge extends React.Component {
                     value={this.props.getNodeName(edge.toId).name}
                     readOnly={true}
                 />
+                {
+                    (edge.direction === FORWARD_DIRECTION /*|| edge.direction === SPLIT_DIRECTION*/) ?
+                        <button
+                            className={"Control-panel-button Info-panel-button"}
+                            onClick={this.toggleFromTo}
+                        >
+                            <i className="fa fa-exchange fa-lg"/>
+                        </button>
+                        : null
+                }
 
                 <div className="App-line-split"/>
             </div>

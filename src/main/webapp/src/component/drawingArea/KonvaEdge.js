@@ -1,10 +1,10 @@
 import React from "react";
-import {Group, Arrow, Text, Circle} from "react-konva";
+import {Group, Arrow, Text} from "react-konva";
 import {
+    ABSENT_DIRECTION,
     BOTH_DIRECTIONS,
     circleRadius,
-    NO_DIRECTIONS,
-    REVERSE_DIRECTION
+    NO_DIRECTIONS
 } from "./DrawingModeConstants";
 
 
@@ -24,6 +24,9 @@ class KonvaEdge extends React.Component {
     }
 
     render() {
+
+        if (this.props.direction === ABSENT_DIRECTION) return null;
+
         const toX = this.props.to.x;
         const toY = this.props.to.y;
         const fromX = this.props.from.x;
@@ -48,10 +51,7 @@ class KonvaEdge extends React.Component {
         const fromXdash = ((halfLengthDash * (fromX - middle.x)) / halfLength) + middle.x;
         const fromYdash = ((halfLengthDash * (fromY - middle.y)) / halfLength) + middle.y;
 
-
-        let points = this.props.direction === REVERSE_DIRECTION ?
-            [toXdash, toYdash, fromXdash, fromYdash] :
-            [fromXdash, fromYdash, toXdash, toYdash];
+        let points = [fromXdash, fromYdash, toXdash, toYdash];
 
         return <Group>
             <Arrow

@@ -1,5 +1,6 @@
 import React from 'react';
 import {UnControlled} from "react-codemirror2";
+import {ABSENT_DIRECTION} from "../drawingArea/DrawingModeConstants";
 
 
 class JavaTab extends React.Component {
@@ -20,13 +21,17 @@ class JavaTab extends React.Component {
     }
 
     fetchGraphCode = () => {
+        let graph = {
+            edges: this.props.graph.edges.slice().filter(e => e.direction !== ABSENT_DIRECTION),
+            nodes: this.props.graph.nodes
+        }
         let self = this;
         fetch('/generator/graph', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(this.props.graph)
+            body: JSON.stringify(graph)
         }).then((response) => {
             return response.json();
         }).then((data) => {
