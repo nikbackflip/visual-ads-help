@@ -12,7 +12,8 @@ import {
     ABSENT_DIRECTION,
     BOTH_DIRECTIONS,
     FORWARD_DIRECTION,
-    SELF_DIRECTION
+    SELF_DIRECTION,
+    SPLIT_DIRECTION
 } from "../drawingArea/DrawingModeConstants";
 
 
@@ -76,7 +77,6 @@ export class MatrixDisplay extends React.Component {
             for (let l = 0; l < n; l++) {
                 const weight = matrix[k][l];
                 if (weight !== 0) {
-                    if (matrix[l][k] !== 0 && matrix[l][k] !== weight) throw "Different weights on different directions not allowed";
                     edges.push({
                         id: nextEdgeId++,
                         fromId: k,
@@ -109,8 +109,13 @@ export class MatrixDisplay extends React.Component {
                     e.pairId = pair.id;
                     e.direction = FORWARD_DIRECTION;
                 } else {
-                    e.direction = BOTH_DIRECTIONS;
-                    pair.direction = BOTH_DIRECTIONS;
+                    if (e.weight !== pair.weight) {
+                        e.direction = SPLIT_DIRECTION;
+                        pair.direction = SPLIT_DIRECTION;
+                    } else {
+                        e.direction = BOTH_DIRECTIONS;
+                        pair.direction = BOTH_DIRECTIONS;
+                    }
                     e.pairId = pair.id;
                     pair.pairId = e.id;
                 }

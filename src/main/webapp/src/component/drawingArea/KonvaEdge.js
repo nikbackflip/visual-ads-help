@@ -4,7 +4,8 @@ import {
     ABSENT_DIRECTION,
     BOTH_DIRECTIONS,
     circleRadius,
-    NO_DIRECTIONS
+    NO_DIRECTIONS,
+    SPLIT_DIRECTION
 } from "./DrawingModeConstants";
 
 
@@ -52,6 +53,44 @@ class KonvaEdge extends React.Component {
         const fromYdash = ((halfLengthDash * (fromY - middle.y)) / halfLength) + middle.y;
 
         let points = [fromXdash, fromYdash, toXdash, toYdash];
+        let textCoords = {
+            x: middle.x,
+            y: middle.y
+        }
+
+        if (this.props.direction === SPLIT_DIRECTION) {
+            // let h = l * 0.15;
+            let h = 25;
+
+            let alpha;
+            if (toY < fromY) {
+                alpha = Math.acos((toX - fromX) / l);
+                h = -h;
+            } else {
+                alpha = Math.acos((fromX - toX) / l);
+            }
+            const arc = {
+                x: middle.x + Math.sin(alpha) * h,
+                y: middle.y + Math.cos(alpha) * h
+            }
+
+
+            let beta = Math.atan(h / halfLength);
+            beta = beta > 0 ? 0.5 : -0.5;
+
+            if (h > 0) beta = -beta;
+
+            const fromXdashArc = (fromXdash - fromX) * Math.cos(beta) - (fromYdash - fromY) * Math.sin(beta);
+            const fromYdashArc = (fromXdash - fromX) * Math.sin(beta) + (fromYdash - fromY) * Math.cos(beta);
+            const toXdashArc = (toXdash - toX) * Math.cos(-beta) - (toYdash - toY) * Math.sin(-beta);
+            const toYdashArc = (toXdash - toX) * Math.sin(-beta) + (toYdash - toY) * Math.cos(-beta);
+
+            points = [fromXdashArc + fromX, fromYdashArc + fromY, arc.x, arc.y, toXdashArc + toX, toYdashArc + toY];
+            textCoords = {
+                x: arc.x,
+                y: arc.y
+            }
+        }
 
         return <Group>
             <Arrow
@@ -61,14 +100,15 @@ class KonvaEdge extends React.Component {
                 fill={this.props.selected || this.props.highlighted ? "#1d9797" : "black"}
                 strokeWidth={3}
                 onClick={this.props.handleEdgeClick}
+                tension={0.4}
                 pointerAtBeginning={this.props.direction === BOTH_DIRECTIONS}
                 pointerWidth={this.props.direction === NO_DIRECTIONS ? 0 : 10}
                 onMouseEnter={this.props.onMouseEnter}
                 onMouseLeave={this.props.onMouseLeave}
             />
             <Text
-                x={middle.x}
-                y={middle.y}
+                x={textCoords.x}
+                y={textCoords.y}
                 text={this.props.weight}
                 strokeWidth={1}
                 fontSize={18}

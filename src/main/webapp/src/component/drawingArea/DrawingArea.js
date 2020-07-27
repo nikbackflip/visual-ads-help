@@ -12,7 +12,8 @@ import {
     circleRadius,
     SELF_DIRECTION,
     FORWARD_DIRECTION,
-    ABSENT_DIRECTION
+    ABSENT_DIRECTION,
+    SPLIT_DIRECTION
 } from './DrawingModeConstants';
 import KonvaNode from "./KonvaNode";
 import KonvaEdge from "./KonvaEdge";
@@ -60,7 +61,25 @@ class DrawingArea extends React.Component {
     }
 
     addNewEdgeFromTo = (from, to) => {
+        const edges = this.props.graph.edges.slice();
+
         if (this.isDuplicateEdge(from, to)) {
+            let requestedEdge = edges.find(e => {
+                return (e.fromId === from.id && e.toId === to.id)
+            });
+            if (requestedEdge.direction === ABSENT_DIRECTION) {
+                let pairEdgeIndex = edges.findIndex(e => {
+                    return (e.id === requestedEdge.pairId)
+                });
+                let pairEdge = Object.assign({}, edges[pairEdgeIndex]);
+
+                requestedEdge.direction = SPLIT_DIRECTION;
+                pairEdge.direction = SPLIT_DIRECTION;
+                requestedEdge.weight = 1;
+                edges[pairEdgeIndex] = pairEdge;
+                this.resetTempEdge();
+                this.publishAndUpdateGraph(this.props.graph.nodes.slice(), edges);
+            }
             return;
         }
 
@@ -85,8 +104,6 @@ class DrawingArea extends React.Component {
 
         newEdge.pairId = pairEdge.id;
         pairEdge.pairId = newEdge.id;
-
-        const edges = this.props.graph.edges.slice();
 
         if (this.isSelfEdge(from, to)) {
             newEdge.pairId = newEdge.id;
@@ -262,7 +279,27 @@ class DrawingArea extends React.Component {
         switch (this.drawingAreaMode) {
             case MODE_DEL_EDGE: {
                 const edges = this.props.graph.edges.slice();
-                edges.splice(index, 1);
+                let edge = edges.find(n => {
+                    return n.id === e.target.attrs.id;
+                });
+
+                if (edge.direction !== SPLIT_DIRECTION) {
+                    edges.splice(index, 1);
+                    if (edge.direction !== SELF_DIRECTION) {
+                        let pair = edges.findIndex(n => {
+                            return n.id === edge.pairId;
+                        });
+                        edges.splice(pair, 1);
+                    }
+                } else {
+                    let pair = edges.find(n => {
+                        return n.id === edge.pairId;
+                    });
+                    edge.direction = ABSENT_DIRECTION;
+                    pair.direction = FORWARD_DIRECTION;
+                    pair.highlighted = false;
+                    pair.selected = false;
+                }
                 this.publishAndUpdateGraph(this.props.graph.nodes.slice(), edges);
                 break;
             }
@@ -390,7 +427,7 @@ class DrawingArea extends React.Component {
                         {this.props.graph.edges.map(edge => {
 
                             if (edge.direction === ABSENT_DIRECTION || excludedEdges.find(e => e === edge.id)) return null;
-                            excludedEdges.push(edge.pairId);
+                            if (edge.direction !== SPLIT_DIRECTION) excludedEdges.push(edge.pairId);
 
                             const fromNode = this.props.graph.nodes.find(n => {
                                 return n.id === edge.fromId;

@@ -24,14 +24,14 @@ export const NO_DIRECTIONS = "noDirections";
 export const BOTH_DIRECTIONS = "bothDirections";
 export const FORWARD_DIRECTION = "forwardDirection";
 export const SELF_DIRECTION = "selfDirection";
-// export const SPLIT_DIRECTION = "splitDirection";
+export const SPLIT_DIRECTION = "splitDirection";
 export const ABSENT_DIRECTION = "absentDirection";
 
 export const EDGE_DIRECTION_NAMES = Object.freeze({
     "noDirections": "No",
     "forwardDirection": "Forward",
     "bothDirections": "Both",
-    // "splitDirection": "Split"
+    "splitDirection": "Split"
 })
 
 export const EDGE_DIRECTION_SELF = Object.freeze({

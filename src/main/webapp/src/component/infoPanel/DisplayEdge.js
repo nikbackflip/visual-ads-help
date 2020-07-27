@@ -6,27 +6,24 @@ import {
     EDGE_DIRECTION_NAMES, EDGE_DIRECTION_SELF,
     FORWARD_DIRECTION, NO_DIRECTIONS,
     SELF_DIRECTION,
-    // SPLIT_DIRECTION
+    SPLIT_DIRECTION
 } from "../drawingArea/DrawingModeConstants";
 
 
 class DisplayEdge extends React.Component {
 
     updateDirection = (direction) => {
+        console.log("updating direction");
         let updatedEdge = Object.assign({}, this.props.element);
         let updatedPair = Object.assign({}, this.props.pair);
         updatedEdge.direction = direction;
         updatedPair.direction = direction === FORWARD_DIRECTION ? ABSENT_DIRECTION : direction;
-
-        // if (updatedPair.direction !== SPLIT_DIRECTION) {
         updatedPair.weight = updatedEdge.weight;
-        // }
 
         this.props.updateBoth(updatedEdge, updatedPair);
     }
 
     updateWeight = (newForward, newReverse) => {
-        console.log("updateWeight");
         let updatedEdge = Object.assign({}, this.props.element);
         let updatedPair = Object.assign({}, this.props.pair);
 
@@ -44,6 +41,11 @@ class DisplayEdge extends React.Component {
                 }
                 this.props.updateBoth(updatedEdge, updatedPair);
                 break;
+            case SPLIT_DIRECTION:
+                updatedEdge.weight = newForward;
+                updatedPair.weight = newReverse;
+                this.props.updateBoth(updatedEdge, updatedPair);
+                break;
             case SELF_DIRECTION:
                 updatedEdge.weight = newForward;
                 this.props.updateElement(updatedEdge);
@@ -55,11 +57,19 @@ class DisplayEdge extends React.Component {
         let updatedEdge = Object.assign({}, this.props.element);
         let updatedPair = Object.assign({}, this.props.pair);
 
-        updatedEdge.direction = ABSENT_DIRECTION;
-        updatedPair.direction = FORWARD_DIRECTION;
-        updatedPair.weight = updatedEdge.weight;
-        updatedPair.selected = updatedEdge.selected;
-        updatedPair.highlighted = updatedEdge.highlighted;
+        switch (updatedEdge.direction) {
+            case FORWARD_DIRECTION:
+                updatedEdge.direction = ABSENT_DIRECTION;
+                updatedPair.direction = FORWARD_DIRECTION;
+                updatedPair.weight = updatedEdge.weight;
+                updatedPair.selected = updatedEdge.selected;
+                updatedPair.highlighted = updatedEdge.highlighted;
+                break;
+            case SPLIT_DIRECTION:
+                updatedEdge.weight = this.props.pair.weight;
+                updatedPair.weight = this.props.element.weight;
+                break;
+        }
 
         this.props.updateBoth(updatedEdge, updatedPair);
     }
@@ -74,7 +84,7 @@ class DisplayEdge extends React.Component {
                     propertyName="weight"
                     value={edge.weight}
                     updateElementProperty={(name, value) => {
-                        this.updateWeight(value);
+                        this.updateWeight(value, pair.weight);
                     }}
                     inputIsValid={(input) => {
                         return parseFloat(input) !== 0 && !isNaN(parseFloat(input));
@@ -88,7 +98,7 @@ class DisplayEdge extends React.Component {
                             propertyName="weight"
                             value={pair.weight}
                             updateElementProperty={(name, value) => {
-                                this.updateWeight(value);
+                                this.updateWeight(edge.weight, value);
                             }}
                             inputIsValid={(input) => {
                                 return parseFloat(input) !== 0 && !isNaN(parseFloat(input));
@@ -116,7 +126,7 @@ class DisplayEdge extends React.Component {
                     readOnly={true}
                 />
                 {
-                    (edge.direction === FORWARD_DIRECTION /*|| edge.direction === SPLIT_DIRECTION*/) ?
+                    (edge.direction === FORWARD_DIRECTION || edge.direction === SPLIT_DIRECTION) ?
                         <button
                             className={"Control-panel-button Info-panel-button"}
                             onClick={this.toggleFromTo}
