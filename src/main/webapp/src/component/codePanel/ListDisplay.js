@@ -30,7 +30,7 @@ export class ListDisplay extends React.Component {
         const n = graph.nodes.length;
 
         let code = [];
-        [...Array(n).keys()].forEach(i => {
+        [...Array(n).keys()].forEach(() => {
             code.push([]);
         });
 
@@ -48,53 +48,55 @@ export class ListDisplay extends React.Component {
         let edges = [];
         let nextEdgeId = 0;
 
-        let code = document.getElementById("textarea_list").value;
-        code = code.trim();
+        //read text area
+        let textInput = document.getElementById("textarea_list").value.trim();
 
-        //calculate graph size
-        let list = code.split("\n");
-        const n = list.length;
+        //parse text input to list
+        const textLines = textInput.split("\n");
+        const n = textLines.length;
+        let list = {};
+        for (let i = 0; i < n; i++) {
+            const line = textLines[i].trim().split(":");
+
+            //validate from node
+            const fromNode = parseInt(line[0]);
+            if (isNaN(fromNode) || fromNode !== i) throw "From node is not valid";
+
+            //validate to list
+            const validatedToNodes = [];
+            if (line[1].trim() !== "" ) {
+                const toList = line[1].trim().split(",");
+                if (toList.length > n) throw "Too many edges from node " + i; //TODO maybe obsolete check
+                if (new Set(toList).size !== toList.length) throw "Duplicate to nodes not allowed";
+                toList.forEach(elem => {
+                    const toNode = parseInt(elem.trim());
+                    if (isNaN(toNode) || toNode < 0 || toNode >= n) throw "To node is not a number or out of range";
+                    validatedToNodes.push(toNode);
+                });
+            }
+
+            //line is valid
+            list[fromNode] = validatedToNodes;
+        }
 
         //create nodes
         [...Array(n).keys()].forEach(i => {
             nodes.push({id: i});
         });
 
-        //parse a list
-        for (let i = 0; i < n; i++) {
-            let line = list[i].trim().split(":");
-
-            //validate from node
-            const fromNode = parseInt(line[0]);
-            if (isNaN(fromNode) || fromNode !== i) throw "From node is not valid";
-
-            //validate edges
-            if (line[1].trim() === "") {
-                list[i] = []; continue;
-            }
-            let elements = line[1].trim().split(",");
-            if (elements.length >= n) throw "Too many edges from node " + i;
-            if (new Set(elements).size !== elements.length) throw "Duplicate to nodes not allowed";
-            for (let j = 0; j < elements.length; j++) {
-                elements[j] = parseInt(elements[j]);
-                if (isNaN(elements[j])) throw "To node is not a number";
-                list[i] = elements;
-            }
-        }
-
         //create edges
-        for (let k = 0; k < n; k++) {
-            for (let l = 0; l < list[k].length; l++) {
-                let toNode = list[k][l];
+        for (let i = 0; i < n; i++) {
+            list[i].forEach(toNode => {
                 edges.push({
                     id: nextEdgeId++,
-                    fromId: k,
+                    fromId: i,
                     toId: toNode,
                     weight: 1
                 });
-            }
+            })
         }
 
+        //set edge directions and create placeholder absent edges
         let pairs = [];
         edges.forEach(e => {
             if (e.pairId === undefined) {
@@ -103,7 +105,7 @@ export class ListDisplay extends React.Component {
                     e.direction = SELF_DIRECTION;
                     return;
                 }
-                let pair = edges.find(ee => ee.fromId === e.toId && ee.toId === e.fromId);
+                let pair = edges.find(p => p.fromId === e.toId && p.toId === e.fromId);
                 if (pair === undefined) {
                     pair = {
                         id: nextEdgeId++,
@@ -126,6 +128,7 @@ export class ListDisplay extends React.Component {
         })
         edges.push(...pairs);
 
+        //submit graph
         this.props.handleGraphUpdate({
             nodes: nodes,
             edges: edges

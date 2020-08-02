@@ -49,44 +49,45 @@ export class MatrixDisplay extends React.Component {
         let edges = [];
         let nextEdgeId = 0;
 
-        let code = document.getElementById("textarea_matrix").value;
-        code = code.trim();
+        //read text area
+        let textInput = document.getElementById("textarea_matrix").value.trim();
 
-        //calculate graph size
-        let matrix = code.split("\n");
-        const n = matrix.length;
+        //parse text input to matrix
+        const textLines = textInput.split("\n");
+        const n = textLines.length;
+        let matrix = {};
+        for (let i = 0; i < n; i++) {
+            const validatedToNodes = [];
+            let elements = textLines[i].split(",");
+            if (elements.length !== n) throw "Matrix is not a square";
+            for (let j = 0; j < n; j++) {
+                const value = parseFloat(elements[j]);
+                if (isNaN(value)) throw "Matrix values not valid";
+                validatedToNodes.push(value);
+            }
+            matrix[i] = validatedToNodes;
+        }
 
         //create nodes
         [...Array(n).keys()].forEach(i => {
             nodes.push({id: i});
         });
 
-        //parse a matrix
-        for (let i = 0; i < n; i++) {
-            let elements = matrix[i].split(",");
-            if (elements.length !== n) throw "Matrix is not a square";
-            for (let j = 0; j < n; j++) {
-                elements[j] = parseFloat(elements[j]);
-                if (isNaN(elements[j])) throw "Matrix values not valid";
-            }
-            matrix[i] = elements;
-        }
-
         //create edges
-        for (let k = 0; k < n; k++) {
-            for (let l = 0; l < n; l++) {
-                const weight = matrix[k][l];
+        for (let i = 0; i < n; i++) {
+            matrix[i].forEach((weight, j) => {
                 if (weight !== 0) {
                     edges.push({
                         id: nextEdgeId++,
-                        fromId: k,
-                        toId: l,
+                        fromId: i,
+                        toId: j,
                         weight: weight
                     });
                 }
-            }
+            })
         }
 
+        //set edge directions and create placeholder absent edges
         let pairs = [];
         edges.forEach(e => {
             if (e.pairId === undefined) {
@@ -95,7 +96,7 @@ export class MatrixDisplay extends React.Component {
                     e.direction = SELF_DIRECTION;
                     return;
                 }
-                let pair = edges.find(ee => ee.fromId === e.toId && ee.toId === e.fromId);
+                let pair = edges.find(p => p.fromId === e.toId && p.toId === e.fromId);
                 if (pair === undefined) {
                     pair = {
                         id: nextEdgeId++,
@@ -123,6 +124,7 @@ export class MatrixDisplay extends React.Component {
         })
         edges.push(...pairs);
 
+        //submit graph
         this.props.handleGraphUpdate({
             nodes: nodes,
             edges: edges
