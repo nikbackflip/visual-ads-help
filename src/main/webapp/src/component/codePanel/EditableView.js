@@ -82,6 +82,10 @@ class EditableView extends React.Component {
         }
     }
 
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        return !this.state.editMode || !nextState.editMode;
+    }
+
     switchToTextArea = () => {
         this.setState({
             editMode: true
