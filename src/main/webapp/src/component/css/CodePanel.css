@@ -102,3 +102,13 @@
     border-radius: 10px;
     background-color: transparent;
 }
+
+.Code-panel-help {
+    height: 100%;
+    width: calc(100% - 230px);
+    font-family: Verdana, monospace;
+    font-size: 10px;
+    display: inline-block;
+    float: right;
+    white-space: normal;
+}

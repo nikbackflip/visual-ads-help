@@ -207,6 +207,7 @@ export class MatrixDisplay extends React.Component {
             code={code}
             updateGraph={this.codeToGraph}
             textareaId="textarea_matrix"
+            help="Input is a square matrix, values coma-separated, each value is a corresponding cost, float values allowed."
         />
     }
 

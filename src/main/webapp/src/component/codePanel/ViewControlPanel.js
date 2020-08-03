@@ -6,7 +6,8 @@ class ViewControlPanel extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            highlighted: false
+            highlighted: false,
+            hovering: false
         };
     }
 
@@ -46,6 +47,29 @@ class ViewControlPanel extends React.Component {
         )
     }
 
+    infoButton = () => {
+        return (
+            <button
+                key="info"
+                className="Control-panel-button"
+                onMouseEnter={() => this.setState({hovering: true})}
+                onMouseLeave={() => this.setState({hovering: false})}
+            >
+                <i className="fa fa-question" aria-hidden="true"/>
+            </button>
+        )
+    }
+
+    infoText = () => {
+        return (
+            this.state.hovering ?
+                <div className="Code-panel-help">
+                    {this.props.help}
+                </div>
+            : null
+        )
+    }
+
     flash = () => {
         this.setState({ highlighted: true });
         setTimeout(() => {
@@ -56,7 +80,7 @@ class ViewControlPanel extends React.Component {
     render() {
         let buttons;
         if (this.props.editMode) {
-            buttons = [this.okButton(), this.cancelButton()]
+            buttons = [this.okButton(), this.cancelButton(), this.infoButton()]
         } else {
             buttons = [this.editButton()];
         }
@@ -64,6 +88,7 @@ class ViewControlPanel extends React.Component {
             <div className="Control-panel-header Code-panel-text">
                 {this.props.header}
                 {buttons}
+                {this.infoText()}
             </div>
         )
     }

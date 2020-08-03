@@ -198,6 +198,7 @@ export class ListDisplay extends React.Component {
             code={newCode}
             updateGraph={this.codeToGraph}
             textareaId="textarea_list"
+            help="Input is a n-sized list, each line starts with a from node id, followed by colon and a coma-separated list of connected nodes. Costs ignored, duplicates forbidden. "
         />
     }
 

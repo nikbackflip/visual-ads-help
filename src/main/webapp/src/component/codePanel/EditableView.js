@@ -134,6 +134,7 @@ class EditableView extends React.Component {
                     cancelEdit={this.cancelEdit}
                     updateGraph={this.updateGraph}
                     editMode={this.state.editMode}
+                    help={this.props.help}
                 />
                 {view}
             </div>
