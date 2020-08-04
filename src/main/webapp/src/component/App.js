@@ -17,6 +17,11 @@ class App extends React.Component {
             graph: {
                 nodes: [],
                 edges: []
+            },
+            config: {
+                graphDirectional: true,
+                graphWeighted: true,
+                selfEdgesAllowed: true
             }
         };
     }
@@ -27,6 +32,16 @@ class App extends React.Component {
                 nodes: graph.nodes,
                 edges: graph.edges
             }
+        });
+    }
+
+    handleConfigUpdate = (config) => {
+        this.setState({
+            graph: {
+                nodes: [],
+                edges: []
+            },
+            config: config
         });
     }
 
@@ -66,7 +81,9 @@ class App extends React.Component {
                         />
                         <DrawingArea
                             graph={this.state.graph}
+                            config={this.state.config}
                             handleGraphUpdate={this.handleGraphUpdate}
+                            handleConfigUpdate={this.handleConfigUpdate}
                             stageHeight={this.state.stageHeight}
                             stageWidth={this.state.stageWidth}
                         />

@@ -407,6 +407,8 @@ class DrawingArea extends React.Component {
                 <DrawingControlPanel
                     modeChange={this.handleModeChange}
                     graphReset={this.resetGraph}
+                    config={this.props.config}
+                    handleConfigUpdate = {this.props.handleConfigUpdate}
                 />
                 <div className="App-line-split"/>
 

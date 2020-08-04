@@ -13,7 +13,6 @@ import {
 class DisplayEdge extends React.Component {
 
     updateDirection = (direction) => {
-        console.log("updating direction");
         let updatedEdge = Object.assign({}, this.props.element);
         let updatedPair = Object.assign({}, this.props.pair);
         updatedEdge.direction = direction;
