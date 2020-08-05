@@ -457,7 +457,7 @@ class DrawingArea extends React.Component {
                                     y={fromNode.y}
                                     selected={edge.selected}
                                     highlighted={edge.highlighted}
-                                    weight={edge.weight}
+                                    weight={this.props.config.graphWeighted ? edge.weight : ""}
                                     handleEdgeClick={this.handleEdgeClick}
                                     onMouseEnter={this.onMouseOverEdge}
                                     onMouseLeave={this.onMouseLeave}
@@ -470,7 +470,7 @@ class DrawingArea extends React.Component {
                                     to={{x: toNode.x, y: toNode.y}}
                                     selected={edge.selected}
                                     highlighted={edge.highlighted}
-                                    weight={edge.weight}
+                                    weight={this.props.config.graphWeighted ? edge.weight : ""}
                                     handleEdgeClick={this.handleEdgeClick}
                                     direction={edge.direction}
                                     onMouseEnter={this.onMouseOverEdge}

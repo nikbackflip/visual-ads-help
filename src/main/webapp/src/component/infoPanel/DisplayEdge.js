@@ -91,6 +91,7 @@ class DisplayEdge extends React.Component {
                         return parseFloat(input) !== 0 && !isNaN(parseFloat(input));
                     }}
                     inputFormat="number"
+                    readOnly={!this.props.config.graphWeighted}
                 />
                 {
                     edge.direction === FORWARD_DIRECTION || pair.direction === ABSENT_DIRECTION || edge.direction === SELF_DIRECTION ? null :
@@ -105,6 +106,7 @@ class DisplayEdge extends React.Component {
                                 return parseFloat(input) !== 0 && !isNaN(parseFloat(input));
                             }}
                             inputFormat="number"
+                            readOnly={!this.props.config.graphWeighted}
                         />
                 }
                 <DisplayDropdownGraphProperty
