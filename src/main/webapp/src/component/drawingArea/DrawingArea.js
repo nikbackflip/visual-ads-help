@@ -13,7 +13,8 @@ import {
     SELF_DIRECTION,
     FORWARD_DIRECTION,
     ABSENT_DIRECTION,
-    SPLIT_DIRECTION
+    SPLIT_DIRECTION,
+    NO_DIRECTIONS
 } from './DrawingModeConstants';
 import KonvaNode from "./KonvaNode";
 import KonvaEdge from "./KonvaEdge";
@@ -93,16 +94,16 @@ class DrawingArea extends React.Component {
             weight: 1,
             selected: false,
             highlighted: false,
-            direction: FORWARD_DIRECTION,
+            direction: this.props.config.graphDirectional ? FORWARD_DIRECTION : NO_DIRECTIONS
         };
         const pairEdge = {
             id: this.edgeId++,
             fromId: to.id,
             toId: from.id,
-            weight: 0,
+            weight: this.props.config.graphDirectional ? 0 : 1,
             selected: false,
             highlighted: false,
-            direction: ABSENT_DIRECTION
+            direction: this.props.config.graphDirectional ? ABSENT_DIRECTION : NO_DIRECTIONS
         };
 
         newEdge.pairId = pairEdge.id;
@@ -346,7 +347,9 @@ class DrawingArea extends React.Component {
     };
 
     edgeIsAllowed = (from, to) => {
-        return this.props.config.selfEdgesAllowed || from.id !== to.id;
+        const selfEdgeConfigRespected = this.props.config.selfEdgesAllowed || from.id !== to.id;
+        const directionalGraphConfigRespected = this.props.config.graphDirectional || !(this.isDuplicateEdge(from, to));
+        return selfEdgeConfigRespected && directionalGraphConfigRespected;
     }
 
     isDuplicateEdge = (from, to) => {

@@ -3,10 +3,12 @@ import DisplayTextGraphProperty from "./DisplayTextGraphProperty";
 import DisplayDropdownGraphProperty from "./DisplayDropdownGraphProperty";
 import {
     ABSENT_DIRECTION, BOTH_DIRECTIONS,
-    EDGE_DIRECTION_NAMES, EDGE_DIRECTION_SELF,
-    FORWARD_DIRECTION, NO_DIRECTIONS,
+    EDGE_DIRECTION_SELF,
+    FORWARD_DIRECTION,
+    NO_DIRECTIONS,
     SELF_DIRECTION,
-    SPLIT_DIRECTION
+    SPLIT_DIRECTION,
+    getDirectionOptions
 } from "../drawingArea/DrawingModeConstants";
 
 
@@ -112,7 +114,7 @@ class DisplayEdge extends React.Component {
                     updateElementProperty={(name, value) => {
                         this.updateDirection(value);
                     }}
-                    options={edge.direction === SELF_DIRECTION ? EDGE_DIRECTION_SELF : EDGE_DIRECTION_NAMES}
+                    options={edge.direction === SELF_DIRECTION ? EDGE_DIRECTION_SELF : getDirectionOptions(this.props.config)}
                 />
                 <DisplayTextGraphProperty
                     label="From"

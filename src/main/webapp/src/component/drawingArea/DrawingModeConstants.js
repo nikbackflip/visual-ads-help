@@ -27,12 +27,19 @@ export const SELF_DIRECTION = "selfDirection";
 export const SPLIT_DIRECTION = "splitDirection";
 export const ABSENT_DIRECTION = "absentDirection";
 
-export const EDGE_DIRECTION_NAMES = Object.freeze({
-    "noDirections": "No",
-    "forwardDirection": "Forward",
-    "bothDirections": "Both",
-    "splitDirection": "Split"
-})
+export function getDirectionOptions(config) {
+    return config.graphDirectional ?
+
+        Object.freeze({
+            "forwardDirection": "Forward",
+            "bothDirections": "Both",
+            "splitDirection": "Split"
+        }) :
+
+        Object.freeze({
+            "noDirections": "No"
+        });
+}
 
 export const EDGE_DIRECTION_SELF = Object.freeze({
     "selfDirection": "Self"

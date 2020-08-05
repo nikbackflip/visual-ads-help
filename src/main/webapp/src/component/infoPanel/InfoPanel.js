@@ -90,6 +90,7 @@ class InfoPanel extends React.Component {
                         <DisplayEdge
                             key={e.id}
                             element={e}
+                            config={this.props.config}
                             pair={edges.find(p => p.id === e.pairId)}
                             getNodeName={this.getNodeName}
                             updateElement={this.updateEdge}

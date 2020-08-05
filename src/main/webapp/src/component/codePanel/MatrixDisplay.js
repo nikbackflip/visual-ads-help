@@ -12,6 +12,7 @@ import {
     ABSENT_DIRECTION,
     BOTH_DIRECTIONS,
     FORWARD_DIRECTION,
+    NO_DIRECTIONS,
     SELF_DIRECTION,
     SPLIT_DIRECTION
 } from "../drawingArea/DrawingModeConstants";
@@ -68,6 +69,13 @@ export class MatrixDisplay extends React.Component {
             }
             matrix[i] = validatedToNodes;
         }
+        if (!this.props.config.graphDirectional) {
+            for (let i = 0; i < n; i++) {
+                for (let j = 0; j < n; j++) {
+                    if (matrix[i][j] !== matrix[j][i]) throw "Graph is configured to be undirectional";
+                }
+            }
+        }
 
         //create nodes
         [...Array(n).keys()].forEach(i => {
@@ -115,8 +123,8 @@ export class MatrixDisplay extends React.Component {
                         e.direction = SPLIT_DIRECTION;
                         pair.direction = SPLIT_DIRECTION;
                     } else {
-                        e.direction = BOTH_DIRECTIONS;
-                        pair.direction = BOTH_DIRECTIONS;
+                        e.direction = this.props.config.graphDirectional ? BOTH_DIRECTIONS : NO_DIRECTIONS;
+                        pair.direction = this.props.config.graphDirectional ? BOTH_DIRECTIONS : NO_DIRECTIONS;
                     }
                     e.pairId = pair.id;
                     pair.pairId = e.id;

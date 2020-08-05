@@ -77,6 +77,7 @@ class App extends React.Component {
                     >
                         <InfoPanel
                             graph={this.state.graph}
+                            config={this.state.config}
                             handleGraphUpdate={this.handleGraphUpdate}
                         />
                         <DrawingArea

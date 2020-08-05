@@ -12,6 +12,7 @@ import {
     ABSENT_DIRECTION,
     BOTH_DIRECTIONS,
     FORWARD_DIRECTION,
+    NO_DIRECTIONS,
     SELF_DIRECTION
 } from "../drawingArea/DrawingModeConstants";
 
@@ -79,6 +80,15 @@ export class ListDisplay extends React.Component {
             //line is valid
             list[fromNode] = validatedToNodes;
         }
+        if (!this.props.config.graphDirectional) {
+            console.log(list);
+            for (let i = 0; i < n; i++) {
+                list[i].forEach(j => {
+                    console.log("for each in " + i + " : " + list[i]);
+                    if (list[j].find(e => e === i) === undefined) throw "Graph is configured to be undirectional";
+                })
+            }
+        }
 
         //create nodes
         [...Array(n).keys()].forEach(i => {
@@ -120,8 +130,8 @@ export class ListDisplay extends React.Component {
                     e.pairId = pair.id;
                     e.direction = FORWARD_DIRECTION;
                 } else {
-                    e.direction = BOTH_DIRECTIONS;
-                    pair.direction = BOTH_DIRECTIONS;
+                    e.direction = this.props.config.graphDirectional ? BOTH_DIRECTIONS : NO_DIRECTIONS;
+                    pair.direction = this.props.config.graphDirectional ? BOTH_DIRECTIONS : NO_DIRECTIONS;
                     e.pairId = pair.id;
                     pair.pairId = e.id;
                 }
