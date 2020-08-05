@@ -34,6 +34,7 @@ class CodePanel extends React.Component {
             case MATRIX_EDGE_MODE: {
                 activeTabRender = <MatrixListTab className="Code-panel-whole-height"
                     graph={this.props.graph}
+                    config={this.props.config}
                     handleGraphUpdate={this.props.handleGraphUpdate}
                 />
                 break;

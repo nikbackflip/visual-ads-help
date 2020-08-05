@@ -61,6 +61,9 @@ class DrawingArea extends React.Component {
     }
 
     addNewEdgeFromTo = (from, to) => {
+        if (!this.edgeIsAllowed(from, to)) {
+            return;
+        }
         const edges = this.props.graph.edges.slice();
 
         if (this.isDuplicateEdge(from, to)) {
@@ -342,11 +345,16 @@ class DrawingArea extends React.Component {
         this.stageRef.clickEndShape = null;
     };
 
+    edgeIsAllowed = (from, to) => {
+        return this.props.config.selfEdgesAllowed || from.id !== to.id;
+    }
+
     isDuplicateEdge = (from, to) => {
         return this.props.graph.edges.filter(e => {
             return (e.fromId === from.id && e.toId === to.id) ||
                    (e.fromId === to.id && e.toId === from.id)}).length !== 0;
     }
+
     isSelfEdge = (from, to) => {
         return from.id === to.id;
     }

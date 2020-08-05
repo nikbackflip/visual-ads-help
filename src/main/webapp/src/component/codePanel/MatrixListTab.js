@@ -11,6 +11,7 @@ class MatrixListTab extends React.Component {
                 <div className="Code-panel-half-height">
                     <MatrixDisplay
                         graph={this.props.graph}
+                        config={this.props.config}
                         handleGraphUpdate={this.props.handleGraphUpdate}
                     />
                 </div>
@@ -19,6 +20,7 @@ class MatrixListTab extends React.Component {
                 <div className="Code-panel-half-height">
                     <ListDisplay
                         graph={this.props.graph}
+                        config={this.props.config}
                         handleGraphUpdate={this.props.handleGraphUpdate}
                     />
                 </div>

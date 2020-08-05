@@ -62,6 +62,7 @@ export class MatrixDisplay extends React.Component {
             if (elements.length !== n) throw "Matrix is not a square";
             for (let j = 0; j < n; j++) {
                 const value = parseFloat(elements[j]);
+                if (!this.props.config.selfEdgesAllowed &&  i === j && value !== 0) throw "Graph is configured to forbid self edges";
                 if (isNaN(value)) throw "Matrix values not valid";
                 validatedToNodes.push(value);
             }
