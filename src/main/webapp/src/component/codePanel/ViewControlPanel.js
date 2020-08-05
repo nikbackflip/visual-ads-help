@@ -62,11 +62,9 @@ class ViewControlPanel extends React.Component {
 
     infoText = () => {
         return (
-            this.state.hovering ?
-                <div className="Code-panel-help">
-                    {this.props.help}
-                </div>
-            : null
+            <div className="Code-panel-help">
+                {this.state.hovering ? this.props.help : this.props.errorMessage}
+            </div>
         )
     }
 

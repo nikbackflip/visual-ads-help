@@ -78,36 +78,39 @@ class EditableView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            editMode: false
+            editMode: false,
+            errorMessage: ""
         }
-    }
-
-    shouldComponentUpdate(nextProps, nextState, nextContext) {
-        return !this.state.editMode || !nextState.editMode;
     }
 
     switchToTextArea = () => {
         this.setState({
-            editMode: true
+            editMode: true,
+            errorMessage: ""
         })
     }
 
     cancelEdit = () => {
         this.setState({
-            editMode: false
+            editMode: false,
+            errorMessage: ""
         })
     }
 
     updateGraph = () => {
         try {
             this.props.updateGraph();
+            this.setState({
+                editMode: false,
+                errorMessage: ""
+            });
         } catch (e) {
             this.buttons.current.flash();
-            return;
+            this.setState({
+                editMode: true,
+                errorMessage: e
+            });
         }
-        this.setState({
-            editMode: false
-        });
     }
 
     renderTextarea = () => {
@@ -139,6 +142,7 @@ class EditableView extends React.Component {
                     updateGraph={this.updateGraph}
                     editMode={this.state.editMode}
                     help={this.props.help}
+                    errorMessage={this.state.errorMessage}
                 />
                 {view}
             </div>

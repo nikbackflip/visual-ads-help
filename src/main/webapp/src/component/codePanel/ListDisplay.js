@@ -61,18 +61,18 @@ export class ListDisplay extends React.Component {
 
             //validate from node
             const fromNode = parseInt(line[0]);
-            if (isNaN(fromNode) || fromNode !== i) throw "From node is not valid";
+            if (isNaN(fromNode) || fromNode !== i) throw "From node is not valid.";
 
             //validate to list
             const validatedToNodes = [];
             if (line[1].trim() !== "" ) {
                 const toList = line[1].trim().split(",");
-                if (toList.length > n) throw "Too many edges from node " + i; //TODO maybe obsolete check
-                if (new Set(toList).size !== toList.length) throw "Duplicate to nodes not allowed";
+                if (toList.length > n) throw "Too many edges from node " + i + "."; //TODO maybe obsolete check
+                if (new Set(toList).size !== toList.length) throw "Duplicate to nodes are not allowed.";
                 toList.forEach(elem => {
                     const toNode = parseInt(elem.trim());
-                    if (isNaN(toNode) || toNode < 0 || toNode >= n) throw "To node is not a number or out of range";
-                    if (!this.props.config.selfEdgesAllowed && i === toNode) throw "Graph is configured to forbid self edges";
+                    if (isNaN(toNode) || toNode < 0 || toNode >= n) throw "To node is not a number or out of range.";
+                    if (!this.props.config.selfEdgesAllowed && i === toNode) throw "Graph is configured to forbid self edges.";
                     validatedToNodes.push(toNode);
                 });
             }
@@ -85,7 +85,7 @@ export class ListDisplay extends React.Component {
             for (let i = 0; i < n; i++) {
                 list[i].forEach(j => {
                     console.log("for each in " + i + " : " + list[i]);
-                    if (list[j].find(e => e === i) === undefined) throw "Graph is configured to be undirectional";
+                    if (list[j].find(e => e === i) === undefined) throw "Graph is configured to be undirectional.";
                 })
             }
         }

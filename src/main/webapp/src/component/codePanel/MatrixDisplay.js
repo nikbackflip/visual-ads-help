@@ -60,13 +60,13 @@ export class MatrixDisplay extends React.Component {
         for (let i = 0; i < n; i++) {
             const validatedToNodes = [];
             let elements = textLines[i].split(",");
-            if (elements.length !== n) throw "Matrix is not a square";
+            if (elements.length !== n) throw "Matrix is not a square.";
             for (let j = 0; j < n; j++) {
                 const value = parseFloat(elements[j]);
-                if (!this.props.config.selfEdgesAllowed &&  i === j && value !== 0) throw "Graph is configured to forbid self edges";
-                if (isNaN(value)) throw "Matrix values not valid";
+                if (!this.props.config.selfEdgesAllowed &&  i === j && value !== 0) throw "Graph is configured to forbid self edges.";
+                if (isNaN(value)) throw "Matrix values are not valid.";
                 console.log(this.props.config);
-                if (!(this.props.config.graphWeighted || (value === 0 || value === 1))) throw "Graph is configured to be unweighted";
+                if (!(this.props.config.graphWeighted || (value === 0 || value === 1))) throw "Graph is configured to be unweighted.";
                 validatedToNodes.push(value);
             }
             matrix[i] = validatedToNodes;
@@ -74,7 +74,7 @@ export class MatrixDisplay extends React.Component {
         if (!this.props.config.graphDirectional) {
             for (let i = 0; i < n; i++) {
                 for (let j = 0; j < n; j++) {
-                    if (matrix[i][j] !== matrix[j][i]) throw "Graph is configured to be undirectional";
+                    if (matrix[i][j] !== matrix[j][i]) throw "Graph is configured to be undirectional.";
                 }
             }
         }
