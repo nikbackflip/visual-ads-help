@@ -1,8 +1,17 @@
 import React from "react";
 
+class DirectionalAnalytic extends React.Component {
+
+    render() {
+        return <Analytic
+            label="directional"
+            checked={this.props.config.graphDirectional}
+        />
+    }
+}
+
+
 class Analytic extends React.Component {
-
-
     render() {
         return (
             <div className="Info-panel-analytic">
@@ -15,9 +24,7 @@ class Analytic extends React.Component {
             </div>
         )
     }
-
 }
-
 
 class GraphAnalytics extends React.Component {
 
@@ -30,9 +37,8 @@ class GraphAnalytics extends React.Component {
         return (
             <div>
                 <div className="Info-panel-label">Graph is:</div>
-                <Analytic
-                    label="directed"
-                    checked={true}
+                <DirectionalAnalytic
+                    config={this.props.config}
                 />
                 <Analytic
                     label="weighted"
