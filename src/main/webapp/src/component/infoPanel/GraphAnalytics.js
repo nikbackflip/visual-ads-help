@@ -10,6 +10,15 @@ class DirectionalAnalytic extends React.Component {
     }
 }
 
+class WeightedAnalytic extends React.Component {
+
+    render() {
+        return <Analytic
+            label="weighted"
+            checked={this.props.config.graphWeighted}
+        />
+    }
+}
 
 class Analytic extends React.Component {
     render() {
@@ -40,9 +49,8 @@ class GraphAnalytics extends React.Component {
                 <DirectionalAnalytic
                     config={this.props.config}
                 />
-                <Analytic
-                    label="weighted"
-                    checked={false}
+                <WeightedAnalytic
+                    config={this.props.config}
                 />
                 <Analytic
                     label="complete"
