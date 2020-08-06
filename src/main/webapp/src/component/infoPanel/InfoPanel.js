@@ -4,6 +4,7 @@ import ElementsCounter from "./ElementsCounter";
 import DisplayNode from "./DisplayNode";
 import DisplayEdge from "./DisplayEdge";
 import {ABSENT_DIRECTION, SELF_DIRECTION} from "../drawingArea/DrawingModeConstants";
+import GraphAnalytics from "./GraphAnalytics";
 
 class InfoPanel extends React.Component {
 
@@ -76,13 +77,10 @@ class InfoPanel extends React.Component {
                 <ElementsCounter entityName={"edges"}
                                  count={edges.slice().filter(e => e.direction !== ABSENT_DIRECTION).length}/>
                 <div className="App-line-split"/>
-                {selectedNodes.map(n => {
-                    return <DisplayNode
-                        key={n.id}
-                        element={n}
-                        updateElement={this.updateNode}
-                    />
-                })}
+                <GraphAnalytics
+                    config={this.props.config}
+                    graph={this.props.graph}
+                />
                 {selectedEdges.map(e => {
                     if (e.direction === ABSENT_DIRECTION) return null;
                     if (e.direction !== SELF_DIRECTION) excludedEdges.push(e.pairId);
@@ -96,6 +94,13 @@ class InfoPanel extends React.Component {
                             updateElement={this.updateEdge}
                             updateBoth={this.updateTwoEdges}
                         />
+                })}
+                {selectedNodes.map(n => {
+                    return <DisplayNode
+                        key={n.id}
+                        element={n}
+                        updateElement={this.updateNode}
+                    />
                 })}
             </div>
         );

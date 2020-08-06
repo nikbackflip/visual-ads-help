@@ -1,19 +1,36 @@
 .Info-panel-label {
     font-family: Verdana, monospace;
     font-weight: bold;
-    color: #8b8a8a;
+    margin-top: 3px;
+    margin-bottom: 10px;
 }
 
 .Info-panel-text {
     word-break: break-all;
     font-family: Verdana, monospace;
-    color: #8b8a8a;
+    font-weight: bold;
     float: left;
+}
+
+.Info-panel-analytic {
+    margin-left: 30px;
+    margin-top: 3px;
+    font-weight: bold;
+    word-break: break-all;
+    font-family: Verdana, monospace;
+}
+
+.Info-panel-analytic-green {
+    color: #1d9797;
+}
+
+.Info-panel-analytic-red {
+    color: #873434;
 }
 
 .Info-panel-input {
     font-family: Verdana, monospace;
-    color: #8b8a8a;
+    font-weight: bold;
     background-color: #3C3F41;
     width: 100%;
     border: 0;
