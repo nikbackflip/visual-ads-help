@@ -1,4 +1,4 @@
-package com.backflip.vadsh.templates;
+package com.backflip.vadsh.template;
 
 import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;

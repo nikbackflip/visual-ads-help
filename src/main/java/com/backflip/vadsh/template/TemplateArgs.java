@@ -1,4 +1,4 @@
-package com.backflip.vadsh.templates;
+package com.backflip.vadsh.template;
 
 import java.util.Map;
 

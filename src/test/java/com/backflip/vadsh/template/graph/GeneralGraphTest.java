@@ -1,12 +1,11 @@
 package com.backflip.vadsh.template.graph;
 
-import com.backflip.vadsh.templates.graph.GraphArgs;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static com.backflip.vadsh.templates.graph.GraphArgs.builder;
+import static com.backflip.vadsh.template.graph.GraphArgs.builder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GeneralGraphTest extends AbstractGraphTest {

@@ -1,7 +1,9 @@
 package com.backflip.vadsh.controller.generator;
 
-import com.backflip.vadsh.templates.graph.GraphArgs;
-import com.backflip.vadsh.templates.graph.GraphTemplate;
+import com.backflip.vadsh.controller.dto.GraphRequest;
+import com.backflip.vadsh.controller.dto.ResponseDto;
+import com.backflip.vadsh.template.graph.GraphArgs;
+import com.backflip.vadsh.template.graph.GraphTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +27,7 @@ public class GeneratorController {
 
     @ResponseBody
     @PostMapping(path = "/graph", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public GraphGeneratorResponse generateGraph(
-            @RequestBody GraphGenerationRequest graphRequest) {
+    public ResponseDto generateGraph(@RequestBody GraphRequest graphRequest) {
 
         GraphArgs.Builder graphModel = GraphArgs.builder().ofSize(graphRequest.getNodes().size());
         withEdges(graphModel, graphRequest.getEdges());
@@ -37,7 +38,7 @@ public class GeneratorController {
         return new GraphGeneratorResponse(content);
     }
 
-    private void withEdges(GraphArgs.Builder builder, List<EdgeModel> list) {
+    private void withEdges(GraphArgs.Builder builder, List<GraphRequest.EdgeModel> list) {
         list.forEach(e -> builder.withEdge(e.getFromId(), e.getToId(), e.getWeight()));
     }
 

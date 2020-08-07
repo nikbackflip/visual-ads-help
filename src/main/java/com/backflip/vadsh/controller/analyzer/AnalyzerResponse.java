@@ -1,4 +1,4 @@
-package com.backflip.vadsh.controller.version;
+package com.backflip.vadsh.controller.analyzer;
 
 import com.backflip.vadsh.controller.dto.ResponseDto;
 import lombok.*;
@@ -8,6 +8,8 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class VersionResponse extends ResponseDto {
-    private String version;
+public class AnalyzerResponse extends ResponseDto {
+
+    private boolean checked;
+
 }

@@ -1,7 +1,6 @@
 package com.backflip.vadsh.template.graph;
 
 import com.backflip.vadsh.template.graph.proxy.IEdge;
-import com.backflip.vadsh.templates.graph.GraphArgs;
 import org.joor.Reflect;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -10,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import static com.backflip.vadsh.templates.graph.GraphArgs.builder;
+import static com.backflip.vadsh.template.graph.GraphArgs.builder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CompleteGraphTest extends AbstractGraphTest {

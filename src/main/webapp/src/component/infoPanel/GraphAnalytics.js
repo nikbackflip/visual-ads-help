@@ -1,4 +1,5 @@
 import React from "react";
+import {ABSENT_DIRECTION} from "../drawingArea/DrawingModeConstants";
 
 class DirectionalAnalytic extends React.Component {
 
@@ -16,6 +17,60 @@ class WeightedAnalytic extends React.Component {
         return <Analytic
             label="weighted"
             checked={this.props.config.graphWeighted}
+        />
+    }
+}
+
+class CompleteAnalytic extends React.Component {
+
+    render() {
+        return <FetchingAnalytic
+            label="complete"
+            analyticApi={"/complete?selfLoops=" + this.props.config.selfEdgesAllowed}
+            graph={this.props.graph}
+        />
+    }
+}
+
+
+class FetchingAnalytic extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {};
+    }
+
+    componentDidMount() {
+        this.getAnalytic();
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (JSON.stringify(prevProps) !== JSON.stringify(this.props)) {
+            this.getAnalytic();
+        }
+    }
+
+    getAnalytic = () => {
+        const graph = {
+            edges: this.props.graph.edges.slice().filter(e => e.direction !== ABSENT_DIRECTION),
+            nodes: this.props.graph.nodes
+        }
+        let self = this;
+        fetch("/analyzer" + this.props.analyticApi, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(graph)
+        }).then((response) => {
+            return response.json();
+        }).then((data) => {
+            self.setState({checked: data.checked});
+        });
+    }
+
+    render() {
+        return <Analytic
+            label={this.props.label}
+            checked={this.state.checked}
         />
     }
 }
@@ -52,18 +107,18 @@ class GraphAnalytics extends React.Component {
                 <WeightedAnalytic
                     config={this.props.config}
                 />
-                <Analytic
-                    label="complete"
-                    checked={true}
+                <CompleteAnalytic
+                    config={this.props.config}
+                    graph={this.props.graph}
                 />
-                <Analytic
-                    label="tree"
-                    checked={true}
-                />
-                <Analytic
-                    label="DAG"
-                    checked={false}
-                />
+                {/*<Analytic*/}
+                {/*    label="tree"*/}
+                {/*    checked={true}*/}
+                {/*/>*/}
+                {/*<Analytic*/}
+                {/*    label="DAG"*/}
+                {/*    checked={false}*/}
+                {/*/>*/}
 
                 <div className="App-line-split"/>
             </div>

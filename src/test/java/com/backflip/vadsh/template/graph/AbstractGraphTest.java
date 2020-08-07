@@ -1,8 +1,6 @@
 package com.backflip.vadsh.template.graph;
 
 import com.backflip.vadsh.template.graph.proxy.IGraph;
-import com.backflip.vadsh.templates.graph.GraphArgs;
-import com.backflip.vadsh.templates.graph.GraphTemplate;
 import org.joor.Reflect;
 
 

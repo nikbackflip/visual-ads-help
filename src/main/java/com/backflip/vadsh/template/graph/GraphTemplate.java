@@ -1,6 +1,6 @@
-package com.backflip.vadsh.templates.graph;
+package com.backflip.vadsh.template.graph;
 
-import com.backflip.vadsh.templates.Template;
+import com.backflip.vadsh.template.Template;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

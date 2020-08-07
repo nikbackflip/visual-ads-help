@@ -1,6 +1,6 @@
-package com.backflip.vadsh.templates.graph;
+package com.backflip.vadsh.template.graph;
 
-import com.backflip.vadsh.templates.TemplateArgs;
+import com.backflip.vadsh.template.TemplateArgs;
 
 import java.util.Map;
 

@@ -1,6 +1,7 @@
 package com.backflip.vadsh.controller.version;
 
 
+import com.backflip.vadsh.controller.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +16,7 @@ public class VersionController {
     private String appVersion;
 
     @GetMapping("/version")
-    public VersionResponse getAppVersion() {
+    public ResponseDto getAppVersion() {
         return VersionResponse.builder().version(appVersion).build();
     }
 
