@@ -16,10 +16,8 @@ public class GraphAnalyzer {
         int n = graphObject.n();
         List<List<Integer>> graph = graphObject.adjacencyList();
 
-
         for (int i = 0; i < n; i++) {
             boolean[] visited = new boolean[n];
-
 
             boolean noCycles = graphDirectional ? dfs(i, graph, visited) : dfs(i, null, graph, visited);
             boolean connected = true;
@@ -31,12 +29,10 @@ public class GraphAnalyzer {
             }
             if (noCycles && connected) return true;
         }
-
         return false;
     }
 
     private static boolean dfs(Integer root, List<List<Integer>> graph, boolean[] visited) {
-
         visited[root] = true;
 
         List<Integer> children = graph.get(root);
@@ -48,7 +44,6 @@ public class GraphAnalyzer {
     }
 
     private static boolean dfs(Integer root, Integer parent, List<List<Integer>> graph, boolean[] visited) {
-
         visited[root] = true;
 
         List<Integer> children = graph.get(root);
@@ -60,5 +55,30 @@ public class GraphAnalyzer {
         return true;
     }
 
+    public static boolean dag(Graph graphObject, boolean graphDirectional) {
+        if (!graphDirectional) return false;
+
+        int n = graphObject.n();
+        List<List<Integer>> graph = graphObject.adjacencyList();
+
+        for (int i = 0; i < n; i++) {
+            boolean[] visited = new boolean[n];
+            if (!dfs_dag(i, graph, visited)) return false;
+        }
+
+        return true;
+    }
+
+    private static boolean dfs_dag(Integer root, List<List<Integer>> graph, boolean[] visited) {
+        visited[root] = true;
+
+        List<Integer> children = graph.get(root);
+        for (Integer child : children) {
+            if (visited[child] || !dfs_dag(child, graph, visited)) return false;
+        }
+
+        visited[root] = false;
+        return true;
+    }
 
 }

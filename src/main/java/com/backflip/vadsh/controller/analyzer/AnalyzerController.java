@@ -50,4 +50,18 @@ public class AnalyzerController {
                 .build();
     }
 
+    @ResponseBody
+    @PostMapping(path = "/dag", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseDto graphIsDag(@RequestBody GraphRequest graphRequest) {
+
+        int n = graphRequest.getNodes().size();
+        List<Edge> edges = graphRequest.getEdges().stream()
+                .map(em -> new Edge(em.getFromId(), em.getToId(), em.getWeight()))
+                .collect(toList());
+
+        return AnalyzerResponse.builder()
+                .checked(GraphAnalyzer.dag(new Graph(edges, n), graphRequest.getConfig().isGraphDirectional()))
+                .build();
+    }
+
 }

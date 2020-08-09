@@ -45,6 +45,17 @@ class TreeAnalytic extends React.Component {
     }
 }
 
+class DagAnalytic extends React.Component {
+
+    render() {
+        return <FetchingAnalytic
+            label="DAG"
+            analyticApi={"/dag"}
+            graph={this.props.graph}
+            config={this.props.config}
+        />
+    }
+}
 
 class FetchingAnalytic extends React.Component {
 
@@ -132,11 +143,10 @@ class GraphAnalytics extends React.Component {
                     config={this.props.config}
                     graph={this.props.graph}
                 />
-                {/*<Analytic*/}
-                {/*    label="DAG"*/}
-                {/*    checked={false}*/}
-                {/*/>*/}
-
+                <DagAnalytic
+                    config={this.props.config}
+                    graph={this.props.graph}
+                />
                 <div className="App-line-split"/>
             </div>
         );
