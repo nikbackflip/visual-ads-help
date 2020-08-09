@@ -72,7 +72,7 @@ export class ListDisplay extends React.Component {
                 toList.forEach(elem => {
                     const toNode = parseInt(elem.trim());
                     if (isNaN(toNode) || toNode < 0 || toNode >= n) throw "To node is not a number or out of range.";
-                    if (!this.props.config.selfEdgesAllowed && i === toNode) throw "Graph is configured to forbid self edges.";
+                    if (!this.props.config.selfLoopsAllowed && i === toNode) throw "Graph is configured to forbid self loops.";
                     validatedToNodes.push(toNode);
                 });
             }

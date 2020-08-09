@@ -32,7 +32,7 @@ public class AnalyzerController {
                 .collect(toList());
 
         return AnalyzerResponse.builder()
-                .checked(GraphAnalyzer.complete(new Graph(edges, n), graphRequest.getConfig().isSelfEdgesAllowed()))
+                .checked(GraphAnalyzer.complete(new Graph(edges, n), graphRequest.getConfig().isSelfLoopsAllowed()))
                 .build();
     }
 

@@ -24,7 +24,7 @@ class GlobalGraphConfig extends React.Component {
         this.state = {
             graphDirectional: false,
             graphWeighted: false,
-            selfEdgesAllowed: false
+            selfLoopsAllowed: false
         };
     }
 
@@ -32,7 +32,7 @@ class GlobalGraphConfig extends React.Component {
        this.setState({
            graphDirectional: this.props.config.graphDirectional,
            graphWeighted: this.props.config.graphWeighted,
-           selfEdgesAllowed: this.props.config.selfEdgesAllowed
+           selfLoopsAllowed: this.props.config.selfLoopsAllowed
        });
     }
 
@@ -45,7 +45,7 @@ class GlobalGraphConfig extends React.Component {
     configsUpdated = () => {
         return this.state.graphDirectional !== this.props.config.graphDirectional ||
         this.state.graphWeighted !== this.props.config.graphWeighted ||
-        this.state.selfEdgesAllowed !== this.props.config.selfEdgesAllowed;
+        this.state.selfLoopsAllowed !== this.props.config.selfLoopsAllowed;
     }
 
     render() {
@@ -82,13 +82,13 @@ class GlobalGraphConfig extends React.Component {
                     />
                 </div>
                 <div className="Drawing-area-config-item">
-                    <label>Self Edges</label>
+                    <label>Self Loops</label>
                     <ColoredSwitch
                         className="Drawing-area-config-toggle"
-                        checked={this.state.selfEdgesAllowed}
+                        checked={this.state.selfLoopsAllowed}
                         onChange={e => {
                             e.persist();
-                            this.edit("selfEdgesAllowed", e.target.checked)
+                            this.edit("selfLoopsAllowed", e.target.checked)
                         }}
                         size="small"
                         color="primary"
@@ -112,7 +112,7 @@ class GlobalGraphConfig extends React.Component {
                                 this.props.applyConfig(
                                     this.state.graphDirectional,
                                     this.state.graphWeighted,
-                                    this.state.selfEdgesAllowed
+                                    this.state.selfLoopsAllowed
                                 )
                             else this.props.cancelConfig()
                         }}

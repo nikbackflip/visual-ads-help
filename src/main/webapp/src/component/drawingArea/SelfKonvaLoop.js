@@ -2,7 +2,7 @@ import {Group, Line, Text} from "react-konva";
 import React from "react";
 
 
-class SelfKonvaEdge extends React.Component {
+class SelfKonvaLoop extends React.Component {
 
     shouldComponentUpdate(nextProps, nextState, nextContext) {
         return !(
@@ -43,5 +43,5 @@ class SelfKonvaEdge extends React.Component {
 
 }
 
-export default SelfKonvaEdge;
+export default SelfKonvaLoop;
 

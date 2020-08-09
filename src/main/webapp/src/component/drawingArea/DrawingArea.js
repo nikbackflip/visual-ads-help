@@ -19,7 +19,7 @@ import {
 import KonvaNode from "./KonvaNode";
 import KonvaEdge from "./KonvaEdge";
 import TempKonvaEdge from "./TempKonvaEdge";
-import SelfKonvaEdge from "./SelfKonvaEdge";
+import SelfKonvaLoop from "./SelfKonvaLoop";
 
 class DrawingArea extends React.Component {
 
@@ -109,7 +109,7 @@ class DrawingArea extends React.Component {
         newEdge.pairId = pairEdge.id;
         pairEdge.pairId = newEdge.id;
 
-        if (this.isSelfEdge(from, to)) {
+        if (this.isSelfLoop(from, to)) {
             newEdge.pairId = newEdge.id;
             newEdge.direction = SELF_DIRECTION;
             edges.push(newEdge);
@@ -347,9 +347,9 @@ class DrawingArea extends React.Component {
     };
 
     edgeIsAllowed = (from, to) => {
-        const selfEdgeConfigRespected = this.props.config.selfEdgesAllowed || from.id !== to.id;
+        const selfLoopConfigRespected = this.props.config.selfLoopsAllowed || from.id !== to.id;
         const directionalGraphConfigRespected = this.props.config.graphDirectional || !(this.isDuplicateEdge(from, to));
-        return selfEdgeConfigRespected && directionalGraphConfigRespected;
+        return selfLoopConfigRespected && directionalGraphConfigRespected;
     }
 
     isDuplicateEdge = (from, to) => {
@@ -358,7 +358,7 @@ class DrawingArea extends React.Component {
                    (e.fromId === to.id && e.toId === from.id)}).length !== 0;
     }
 
-    isSelfEdge = (from, to) => {
+    isSelfLoop = (from, to) => {
         return from.id === to.id;
     }
 
@@ -450,7 +450,7 @@ class DrawingArea extends React.Component {
                             });
 
                             if (edge.direction === SELF_DIRECTION) {
-                                return <SelfKonvaEdge
+                                return <SelfKonvaLoop
                                     key={edge.id}
                                     id={edge.id}
                                     x={fromNode.x}

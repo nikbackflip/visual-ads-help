@@ -21,7 +21,7 @@ class App extends React.Component {
             config: {
                 graphDirectional: true,
                 graphWeighted: true,
-                selfEdgesAllowed: true
+                selfLoopsAllowed: true
             }
         };
     }

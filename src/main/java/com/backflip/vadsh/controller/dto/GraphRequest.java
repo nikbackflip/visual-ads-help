@@ -37,7 +37,7 @@ public class GraphRequest {
     public static class Config {
         private boolean graphDirectional;
         private boolean graphWeighted;
-        private boolean selfEdgesAllowed;
+        private boolean selfLoopsAllowed;
     }
 
 

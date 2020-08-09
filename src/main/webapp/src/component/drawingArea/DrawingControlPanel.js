@@ -101,7 +101,7 @@ class DrawingControlPanel extends React.Component {
                                     configDisplay: false
                                 })}
                             }
-                            applyConfig={(graphDirectional, graphWeighted, selfEdgesAllowed) => {
+                            applyConfig={(graphDirectional, graphWeighted, selfLoopsAllowed) => {
                                 this.setState({
                                     configDisplay: false
                                 })
@@ -109,7 +109,7 @@ class DrawingControlPanel extends React.Component {
                                 this.props.handleConfigUpdate({
                                     graphDirectional: graphDirectional,
                                     graphWeighted: graphWeighted,
-                                    selfEdgesAllowed: selfEdgesAllowed
+                                    selfLoopsAllowed: selfLoopsAllowed
                                 });
                             }}
                         />
