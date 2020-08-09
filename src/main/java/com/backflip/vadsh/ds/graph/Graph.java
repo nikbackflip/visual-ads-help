@@ -6,24 +6,36 @@ import java.util.stream.IntStream;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.*;
 
-public class GraphTransformer {
+public class Graph {
 
-    public static double[][] adjacencyMatrix(List<Edge> edgesList, int n) {
+    public Graph(List<Edge> edges, int n) {
+        this.edgeList = edges;
+        this.n = n;
+    }
+
+    private final List<Edge> edgeList;
+    private final int n;
+
+    public int n() {
+        return n;
+    }
+
+    public double[][] adjacencyMatrix() {
         double[][] graph = new double[n][n];
-        edgesList.forEach(e -> graph[e.from()][e.to()] = e.weight());
+        edgeList.forEach(e -> graph[e.from()][e.to()] = e.weight());
         return graph;
     }
 
-    public static List<Edge> edgeList(List<Edge> edgesList) {
-        return new ArrayList<>(edgesList);
+    public List<Edge> edgeList() {
+        return new ArrayList<>(edgeList);
     }
 
-    public static Edge[] edgeArray(List<Edge> edgesList) {
-        return edgesList.toArray(new Edge[0]);
+    public Edge[] edgeArray() {
+        return edgeList.toArray(new Edge[0]);
     }
 
-    public static List<List<Integer>> adjacencyList(List<Edge> edgesList, int n) {
-        Map<Integer, List<Edge>> groupedEdges = edgesList.stream()
+    public List<List<Integer>> adjacencyList() {
+        Map<Integer, List<Edge>> groupedEdges = edgeList.stream()
                 .collect(groupingBy(Edge::from));
 
         return IntStream.range(0, n)
@@ -34,8 +46,8 @@ public class GraphTransformer {
                 .collect(toList());
     }
 
-    public static Map<Integer, List<Edge>> adjacencyListAsMap(List<Edge> edgesList,  int n) {
-        Map<Integer, List<Edge>> groupedEdges = edgesList.stream()
+    public Map<Integer, List<Edge>> adjacencyListAsMap() {
+        Map<Integer, List<Edge>> groupedEdges = edgeList.stream()
                 .collect(groupingBy(Edge::from));
 
         Map<Integer, List<Edge>> result = new HashMap<>();
@@ -48,8 +60,8 @@ public class GraphTransformer {
         return result;
     }
 
-    public static List<List<Edge>> adjacencyListOfEdges(List<Edge> edgesList,  int n) {
-        Map<Integer, List<Edge>> groupedEdges = edgesList.stream()
+    public List<List<Edge>> adjacencyListOfEdges() {
+        Map<Integer, List<Edge>> groupedEdges = edgeList.stream()
                 .collect(groupingBy(Edge::from));
 
         return IntStream.range(0, n)

@@ -12,6 +12,7 @@ import java.util.List;
 public class GraphRequest {
     private List<EdgeModel> edges;
     private List<NodeModel> nodes;
+    private Config config;
 
     @Getter
     @Setter
@@ -28,6 +29,15 @@ public class GraphRequest {
     public static class NodeModel {
         private int id;
         private String name;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    public static class Config {
+        private boolean graphDirectional;
+        private boolean graphWeighted;
+        private boolean selfEdgesAllowed;
     }
 
 

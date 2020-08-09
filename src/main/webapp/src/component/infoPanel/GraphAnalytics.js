@@ -26,8 +26,21 @@ class CompleteAnalytic extends React.Component {
     render() {
         return <FetchingAnalytic
             label="complete"
-            analyticApi={"/complete?selfLoops=" + this.props.config.selfEdgesAllowed}
+            analyticApi={"/complete"}
             graph={this.props.graph}
+            config={this.props.config}
+        />
+    }
+}
+
+class TreeAnalytic extends React.Component {
+
+    render() {
+        return <FetchingAnalytic
+            label="tree"
+            analyticApi={"/tree"}
+            graph={this.props.graph}
+            config={this.props.config}
         />
     }
 }
@@ -59,7 +72,11 @@ class FetchingAnalytic extends React.Component {
         fetch("/analyzer" + this.props.analyticApi, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(graph)
+            body: JSON.stringify({
+                nodes: graph.nodes,
+                edges: graph.edges,
+                config: this.props.config
+            })
         }).then((response) => {
             return response.json();
         }).then((data) => {
@@ -111,10 +128,10 @@ class GraphAnalytics extends React.Component {
                     config={this.props.config}
                     graph={this.props.graph}
                 />
-                {/*<Analytic*/}
-                {/*    label="tree"*/}
-                {/*    checked={true}*/}
-                {/*/>*/}
+                <TreeAnalytic
+                    config={this.props.config}
+                    graph={this.props.graph}
+                />
                 {/*<Analytic*/}
                 {/*    label="DAG"*/}
                 {/*    checked={false}*/}
