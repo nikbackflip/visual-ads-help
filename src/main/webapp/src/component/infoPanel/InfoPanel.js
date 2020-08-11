@@ -71,11 +71,17 @@ class InfoPanel extends React.Component {
 
         let excludedEdges = [];
 
+        let totalEdges = edges.slice().filter(e => e.direction !== ABSENT_DIRECTION).length;
+        if (!this.props.config.graphDirectional) {
+            const selfEdges = edges.slice().filter(e => e.direction === SELF_DIRECTION).length
+            totalEdges = (totalEdges - selfEdges) / 2 + selfEdges;
+        }
+
         return (
             <div className="App-info-panel">
                 <ElementsCounter entityName={"nodes"} count={nodes.length}/>
                 <ElementsCounter entityName={"edges"}
-                                 count={edges.slice().filter(e => e.direction !== ABSENT_DIRECTION).length}/>
+                                 count={totalEdges}/>
                 <div className="App-line-split"/>
                 <GraphAnalytics
                     config={this.props.config}
