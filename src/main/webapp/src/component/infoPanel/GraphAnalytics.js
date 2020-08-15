@@ -1,67 +1,13 @@
 import React from "react";
 import {ABSENT_DIRECTION} from "../drawingArea/DrawingModeConstants";
 
-class DirectionalAnalytic extends React.Component {
-
-    render() {
-        return <Analytic
-            label="directional"
-            checked={this.props.config.graphDirectional}
-        />
-    }
-}
-
-class WeightedAnalytic extends React.Component {
-
-    render() {
-        return <Analytic
-            label="weighted"
-            checked={this.props.config.graphWeighted}
-        />
-    }
-}
-
-class CompleteAnalytic extends React.Component {
-
-    render() {
-        return <FetchingAnalytic
-            label="complete"
-            analyticApi={"/complete"}
-            graph={this.props.graph}
-            config={this.props.config}
-        />
-    }
-}
-
-class TreeAnalytic extends React.Component {
-
-    render() {
-        return <FetchingAnalytic
-            label="tree"
-            analyticApi={"/tree"}
-            graph={this.props.graph}
-            config={this.props.config}
-        />
-    }
-}
-
-class DagAnalytic extends React.Component {
-
-    render() {
-        return <FetchingAnalytic
-            label="DAG"
-            analyticApi={"/dag"}
-            graph={this.props.graph}
-            config={this.props.config}
-        />
-    }
-}
-
 class FetchingAnalytic extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            analytics: []
+        };
     }
 
     componentDidMount() {
@@ -80,7 +26,7 @@ class FetchingAnalytic extends React.Component {
             nodes: this.props.graph.nodes
         }
         let self = this;
-        fetch("/analyzer" + this.props.analyticApi, {
+        fetch("/analytics", {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -91,15 +37,24 @@ class FetchingAnalytic extends React.Component {
         }).then((response) => {
             return response.json();
         }).then((data) => {
-            self.setState({checked: data.checked});
+            self.setState({analytics: data.analytics});
         });
     }
 
     render() {
-        return <Analytic
-            label={this.props.label}
-            checked={this.state.checked}
-        />
+        return (
+            <div>
+                {
+                    this.state.analytics.map((analytic) => {
+                        return <Analytic
+                            key={analytic.name}
+                            label={analytic.name}
+                            checked={analytic.result}
+                        />
+                    })
+                }
+            </div>
+            )
     }
 }
 
@@ -129,21 +84,7 @@ class GraphAnalytics extends React.Component {
         return (
             <div>
                 <div className="Info-panel-label">Graph is:</div>
-                <DirectionalAnalytic
-                    config={this.props.config}
-                />
-                <WeightedAnalytic
-                    config={this.props.config}
-                />
-                <CompleteAnalytic
-                    config={this.props.config}
-                    graph={this.props.graph}
-                />
-                <TreeAnalytic
-                    config={this.props.config}
-                    graph={this.props.graph}
-                />
-                <DagAnalytic
+                <FetchingAnalytic
                     config={this.props.config}
                     graph={this.props.graph}
                 />
