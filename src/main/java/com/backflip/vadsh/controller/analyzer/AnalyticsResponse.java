@@ -5,7 +5,6 @@ import lombok.*;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 @Getter
 @Setter
@@ -15,8 +14,8 @@ public class AnalyticsResponse extends ResponseDto {
 
     private List<AnalyticResult> analytics;
 
-    public static AnalyticsResponseBuilder builder() {
-        return new AnalyticsResponseBuilder();
+    public static Builder builder() {
+        return new Builder();
     }
 
     @Getter
@@ -28,11 +27,11 @@ public class AnalyticsResponse extends ResponseDto {
         private Boolean result;
     }
 
-    public static class AnalyticsResponseBuilder {
+    public static class Builder {
 
         private final List<AnalyticResult> analytics = new LinkedList<>();
 
-        public AnalyticsResponseBuilder withAnalytic(String name, Boolean result) {
+        public Builder withAnalytic(String name, Boolean result) {
             analytics.add(new AnalyticResult(name, result));
             return this;
         }
