@@ -1,7 +1,9 @@
 package com.backflip.vadsh.ds.graph;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode
 @AllArgsConstructor
 public final class Edge {
 

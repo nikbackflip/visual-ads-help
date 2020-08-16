@@ -16,8 +16,8 @@ public enum Analytic {
         this.analyzer = analyzer;
     }
 
-    private String label;
-    private Analyzer analyzer;
+    private final String label;
+    private final Analyzer analyzer;
 
     public String label() {
         return label;

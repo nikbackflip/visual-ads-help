@@ -109,5 +109,10 @@
       "weight": 1,
       "direction": "noDirections"
     }
-  ]
+  ],
+  "config": {
+    "graphDirectional": true,
+    "graphWeighted": true,
+    "selfLoopsAllowed": true
+  }
 }

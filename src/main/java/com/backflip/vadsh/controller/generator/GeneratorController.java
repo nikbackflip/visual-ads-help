@@ -34,7 +34,6 @@ public class GeneratorController {
 
         String content = template.construct(graphModel.build());
 
-        log.debug("Graph generated");
         return new GraphGeneratorResponse(content);
     }
 

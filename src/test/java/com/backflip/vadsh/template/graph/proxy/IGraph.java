@@ -5,8 +5,6 @@ import java.util.Map;
 
 public interface IGraph {
 
-    String getNodeName(Integer id);
-
     int nodesCount();
 
     double[][] adjacencyMatrix();

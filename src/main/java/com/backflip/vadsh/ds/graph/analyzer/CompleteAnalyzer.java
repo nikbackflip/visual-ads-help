@@ -12,7 +12,6 @@ public class CompleteAnalyzer implements Analyzer {
         } else {
             return graph.edgeList().size() == graph.n() * (graph.n() - 1);
         }
-
     }
 
 }

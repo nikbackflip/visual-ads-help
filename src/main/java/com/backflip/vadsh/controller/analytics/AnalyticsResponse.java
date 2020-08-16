@@ -1,4 +1,4 @@
-package com.backflip.vadsh.controller.analyzer;
+package com.backflip.vadsh.controller.analytics;
 
 import com.backflip.vadsh.controller.dto.ResponseDto;
 import lombok.*;
