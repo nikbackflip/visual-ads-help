@@ -25,6 +25,5 @@ public enum Analytic {
 
     public boolean analyze(Graph graph, Config config) {
         return analyzer.analyze(graph, config);
-
     }
 }
