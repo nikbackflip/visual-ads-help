@@ -4,6 +4,7 @@ import com.backflip.vadsh.ds.graph.Config;
 import com.backflip.vadsh.ds.graph.Edge;
 import com.backflip.vadsh.ds.graph.Graph;
 import com.backflip.vadsh.ds.graph.task.TaskDefinition;
+import com.backflip.vadsh.ds.graph.task.TaskResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class TasksController {
 
     @ResponseBody
     @PostMapping(path = "/{taskId}", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public void executeTasks(@RequestBody TaskRequest taskRequest, @PathVariable String taskId) {
+    public TaskResponse executeTasks(@RequestBody TaskRequest taskRequest, @PathVariable String taskId) {
         List<Edge> edges = taskRequest.getGraph().getEdges().stream()
                 .map(em -> new Edge(em.getFromId(), em.getToId(), em.getWeight()))
                 .collect(toList());
@@ -46,6 +47,6 @@ public class TasksController {
 
         TaskDefinition requestedTask = fromId(taskId);
 
-        requestedTask.execute(graph, config, taskRequest.getParams());
+        return requestedTask.execute(graph, config, taskRequest.getParams());
     }
 }

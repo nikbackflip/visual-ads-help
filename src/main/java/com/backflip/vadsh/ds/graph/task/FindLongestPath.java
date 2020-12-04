@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class FindLongestPath implements Task {
     @Override
-    public void execute(Graph graph, Config config, Map<String, Integer> params) {
-
+    public TaskResponse execute(Graph graph, Config config, Map<String, Integer> params) {
+        return null;
     }
 }

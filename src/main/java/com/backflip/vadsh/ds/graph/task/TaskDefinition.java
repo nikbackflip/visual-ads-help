@@ -60,8 +60,8 @@ public enum TaskDefinition {
         }
     }
 
-    public void execute(Graph graph, Config config, Map<String, Integer> params) {
-        task.execute(graph, config, params);
+    public TaskResponse execute(Graph graph, Config config, Map<String, Integer> params) {
+        return task.execute(graph, config, params);
     }
 
     @Getter

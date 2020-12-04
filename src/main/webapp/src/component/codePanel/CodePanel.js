@@ -44,6 +44,7 @@ class CodePanel extends React.Component {
                 activeTabRender = <TasksTab
                     graph={this.props.graph}
                     config={this.props.config}
+                    handleGraphUpdate={this.props.handleGraphUpdate}
                 />
                 break;
             }

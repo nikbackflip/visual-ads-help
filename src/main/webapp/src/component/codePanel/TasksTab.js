@@ -6,7 +6,8 @@ class TasksDropdown extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            params: {}
+            params: {},
+            lastResponse: ""
         };
     }
 
@@ -65,9 +66,18 @@ class TasksDropdown extends React.Component {
         }).then((response) => {
             return response.json();
         }).then((data) => {
+            self.props.graph.nodes.forEach(n => n.selected = false);
+            self.props.graph.edges.forEach(n => n.selected = false);
+
+            self.props.graph.nodes.filter(n => {
+                return data.nodes.find(nn => n.id === nn)
+            }).forEach((n) => n.selected=true);
+
             self.setState({
                 lastResponse: data
             });
+
+            self.props.handleGraphUpdate(self.props.graph);
         });
     }
 
@@ -124,7 +134,7 @@ class TasksDropdown extends React.Component {
                     </div>
                 </div>
                 <div className="Code-panel-tasks-bottom">
-                    RESULT WILL BE HERE
+                    {JSON.stringify(this.state.lastResponse)}
                 </div>
             </div>
         )
@@ -182,6 +192,7 @@ class TasksTab extends React.Component {
                 tasks={this.state.tasks}
                 graph={this.props.graph}
                 config={this.props.config}
+                handleGraphUpdate={this.props.handleGraphUpdate}
             />
         )
     }
