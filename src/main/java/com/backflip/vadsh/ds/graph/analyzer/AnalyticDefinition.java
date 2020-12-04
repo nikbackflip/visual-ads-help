@@ -3,7 +3,7 @@ package com.backflip.vadsh.ds.graph.analyzer;
 import com.backflip.vadsh.ds.graph.Config;
 import com.backflip.vadsh.ds.graph.Graph;
 
-public enum Analytic {
+public enum AnalyticDefinition {
 
     DIRECTIONAL("directional", new DirectionalAnalyzer()),
     WEIGHTED("weighted", new WeightedAnalyzer()),
@@ -11,7 +11,7 @@ public enum Analytic {
     TREE("tree", new TreeAnalyzer()),
     DAG("DAG", new DagAnalyzer());
 
-    Analytic(String label, Analyzer analyzer) {
+    AnalyticDefinition(String label, Analyzer analyzer) {
         this.label = label;
         this.analyzer = analyzer;
     }

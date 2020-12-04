@@ -1,7 +1,7 @@
 package com.backflip.vadsh.controller.tasks;
 
 import com.backflip.vadsh.controller.dto.ResponseDto;
-import com.backflip.vadsh.ds.graph.task.Task;
+import com.backflip.vadsh.ds.graph.task.TaskDefinition;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +29,7 @@ public class TasksResponse extends ResponseDto {
     private static class AvailableTask {
         private String label;
         private String id;
-        private List<Task.TaskParameter> parameters;
+        private List<TaskDefinition.TaskParameter> parameters;
     }
 
 
@@ -37,7 +37,7 @@ public class TasksResponse extends ResponseDto {
 
         private final List<AvailableTask> tasks = new LinkedList<>();
 
-        public Builder withTask(Task task) {
+        public Builder withTask(TaskDefinition task) {
             tasks.add(new AvailableTask(task.getLabel(), task.getId(), task.getTaskParameters()));
             return this;
         }
