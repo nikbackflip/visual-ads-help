@@ -18,9 +18,9 @@ public class FindTreeCenterTest {
 
     @ParameterizedTest
     @MethodSource("input")
-    public void analyzerTest(Graph graph, List<Integer> expected) {
+    public void taskTest(Graph graph, List<Integer> expected) {
         //given
-        FindTreeCenter task = new FindTreeCenter();
+        Task task = new FindTreeCenter();
 
         //when
         TaskResponse result = task.execute(graph, notDirectionalConfig, Collections.emptyMap());
@@ -44,8 +44,7 @@ public class FindTreeCenterTest {
                 Arguments.of(twoNodesTree, List.of(0, 1)),
                 Arguments.of(lineTree, List.of(2)),
                 Arguments.of(bigTree, List.of(11)),
-                Arguments.of(bigTree2, List.of(11))
+                Arguments.of(bigTree2, List.of(1, 11))
         );
     }
-
 }

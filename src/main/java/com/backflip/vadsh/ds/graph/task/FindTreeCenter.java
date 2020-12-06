@@ -34,6 +34,6 @@ public class FindTreeCenter implements Task {
                 graph.get(parent).removeIf(v -> v.equals(leaf));
             }
         }
-        return TaskResponse.builder().nodes(new ArrayList<>(remainingNodes)).build();
+        return TaskResponse.builder().nodes(new ArrayList<>(remainingNodes)).edges(Collections.emptyList()).build();
     }
 }

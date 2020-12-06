@@ -69,9 +69,17 @@ class TasksDropdown extends React.Component {
             self.props.graph.nodes.forEach(n => n.selected = false);
             self.props.graph.edges.forEach(n => n.selected = false);
 
-            self.props.graph.nodes.filter(n => {
-                return data.nodes.find(nn => n.id === nn)
-            }).forEach((n) => n.selected=true);
+            if (data.nodes.length !== 0) {
+                self.props.graph.nodes.filter(n => {
+                    return data.nodes.find(nn => n.id === nn)
+                }).forEach((n) => n.selected = true);
+            }
+
+            if (data.edges.length !== 0) {
+                self.props.graph.edges.filter(e => {
+                    return data.edges.find(ee => e.fromId === ee.from && e.toId === ee.to)
+                }).forEach((e) => e.selected = true);
+            }
 
             self.setState({
                 lastResponse: data
