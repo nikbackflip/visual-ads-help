@@ -18,7 +18,7 @@ public class FindMinimumSpanningTreeTest {
 
     @ParameterizedTest
     @MethodSource("input")
-    public void taskTest(Graph graph, List<Integer> expected) {
+    public void taskTest(Graph graph, List<Edge> expected) {
         //given
         Task task = new FindMinimumSpanningTree();
 
@@ -48,8 +48,6 @@ public class FindMinimumSpanningTreeTest {
         );
 
     }
-
-
 }
 
 

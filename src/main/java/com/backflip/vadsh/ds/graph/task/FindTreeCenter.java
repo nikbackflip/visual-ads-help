@@ -14,7 +14,7 @@ public class FindTreeCenter implements Task {
         int n = graphInput.n();
 
         if (n == 0) {
-            return TaskResponse.builder().nodes(Collections.emptyList()).build();
+            return TaskResponse.emptyResponse();
         }
 
         Set<Integer> remainingNodes = new HashSet<>();
