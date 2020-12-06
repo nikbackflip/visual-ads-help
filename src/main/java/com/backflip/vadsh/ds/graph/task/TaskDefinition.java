@@ -27,12 +27,6 @@ public enum TaskDefinition {
             List.of(TaskParameter.of("from", "From Node"), TaskParameter.of("to", "To Node")),
             new FindShortestPath()
     ),
-    FIND_LONGEST_PATH(
-            "Find Longest Path",
-            Constants.LONGEST_PATH_ID,
-            List.of(TaskParameter.of("from", "From Node"), TaskParameter.of("to", "To Node")),
-            new FindLongestPath()
-    ),
     FIND_MINIMUM_SPANNING_TREE(
             "Find Minimum Spanning Tree",
             Constants.MINIMUM_SPANNING_TREE_ID,
@@ -51,8 +45,6 @@ public enum TaskDefinition {
                 return FIND_TREE_CERNER;
             case Constants.SHORTEST_PATH_ID:
                 return FIND_SHORTEST_PATH;
-            case Constants.LONGEST_PATH_ID:
-                return FIND_LONGEST_PATH;
             case Constants.MINIMUM_SPANNING_TREE_ID:
                 return FIND_MINIMUM_SPANNING_TREE;
             default:
@@ -78,7 +70,6 @@ public enum TaskDefinition {
     private static final class Constants {
         private static final String TREE_CENTER_ID = "treeCenter";
         private static final String SHORTEST_PATH_ID = "shortestPath";
-        private static final String LONGEST_PATH_ID = "longestPath";
         private static final String MINIMUM_SPANNING_TREE_ID = "minimumSpanningTree";
     }
 }
