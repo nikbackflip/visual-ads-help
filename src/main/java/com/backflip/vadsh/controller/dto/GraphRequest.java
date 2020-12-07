@@ -40,5 +40,4 @@ public class GraphRequest {
         private boolean selfLoopsAllowed;
     }
 
-
 }

@@ -84,7 +84,7 @@ class GraphAnalytics extends React.Component {
         return (
             <div>
                 <div className="Info-panel-label">Graph is:</div>
-                <FetchingAnalytic
+                <FetchingAnalytic className="Info-panel-scroll Info-panel-analytics"
                     config={this.props.config}
                     graph={this.props.graph}
                 />

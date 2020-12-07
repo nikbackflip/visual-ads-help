@@ -3,15 +3,17 @@ package com.backflip.vadsh.ds.graph.analyzer;
 import com.backflip.vadsh.ds.graph.Config;
 import com.backflip.vadsh.ds.graph.Graph;
 
-public enum Analytic {
+public enum AnalyticDefinition {
 
     DIRECTIONAL("directional", new DirectionalAnalyzer()),
     WEIGHTED("weighted", new WeightedAnalyzer()),
     COMPLETE("complete", new CompleteAnalyzer()),
     TREE("tree", new TreeAnalyzer()),
-    DAG("DAG", new DagAnalyzer());
+    DAG("DAG", new DagAnalyzer()),
+    NEGATIVE_CYCLES("negative cycles", new NegativeCyclesAnalyzer()),
+    DISCONNECTED("disconnected", new DisconnectedAnalyzer());
 
-    Analytic(String label, Analyzer analyzer) {
+    AnalyticDefinition(String label, Analyzer analyzer) {
         this.label = label;
         this.analyzer = analyzer;
     }
@@ -25,6 +27,5 @@ public enum Analytic {
 
     public boolean analyze(Graph graph, Config config) {
         return analyzer.analyze(graph, config);
-
     }
 }

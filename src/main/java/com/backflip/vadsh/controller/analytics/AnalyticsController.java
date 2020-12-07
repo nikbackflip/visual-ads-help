@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.backflip.vadsh.ds.graph.analyzer.Analytic.*;
+import static com.backflip.vadsh.ds.graph.analyzer.AnalyticDefinition.*;
 import static java.util.stream.Collectors.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 

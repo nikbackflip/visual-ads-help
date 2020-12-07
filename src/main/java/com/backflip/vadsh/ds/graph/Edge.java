@@ -2,9 +2,13 @@ package com.backflip.vadsh.ds.graph;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 @EqualsAndHashCode
 @AllArgsConstructor
+@Getter
+@Setter
 public final class Edge {
 
     private final int from;

@@ -65,7 +65,6 @@ export class MatrixDisplay extends React.Component {
                 const value = parseFloat(elements[j]);
                 if (!this.props.config.selfLoopsAllowed &&  i === j && value !== 0) throw "Graph is configured to forbid self loops.";
                 if (isNaN(value)) throw "Matrix values are not valid.";
-                console.log(this.props.config);
                 if (!(this.props.config.graphWeighted || (value === 0 || value === 1))) throw "Graph is configured to be unweighted.";
                 validatedToNodes.push(value);
             }

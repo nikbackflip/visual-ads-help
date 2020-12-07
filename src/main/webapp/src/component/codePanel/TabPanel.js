@@ -1,5 +1,5 @@
 import React from 'react';
-import {JAVA_MODE, MATRIX_EDGE_MODE, TABS_NAMES} from "./CodePanelConstants";
+import {JAVA_MODE, MATRIX_EDGE_MODE, TABS_NAMES, TASKS_MODE} from "./CodePanelConstants";
 import ControlButton from "../controlPanel/ControlButton";
 
 
@@ -42,6 +42,13 @@ class TabPanel extends React.Component {
                     name={TABS_NAMES[MATRIX_EDGE_MODE]}
                     handleButtonClick={this.setActiveTab}
                     isActive={this.isButtonActive(MATRIX_EDGE_MODE)}
+                />
+
+                <ControlButton
+                    mode={TASKS_MODE}
+                    name={TABS_NAMES[TASKS_MODE]}
+                    handleButtonClick={this.setActiveTab}
+                    isActive={this.isButtonActive(TASKS_MODE)}
                 />
             </div>
         );

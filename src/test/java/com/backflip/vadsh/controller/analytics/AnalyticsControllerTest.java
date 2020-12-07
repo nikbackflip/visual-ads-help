@@ -1,6 +1,6 @@
-package com.backflip.vadsh.controller.generator;
+package com.backflip.vadsh.controller.analytics;
 
-import com.backflip.vadsh.ds.graph.analyzer.Analytic;
+import com.backflip.vadsh.ds.graph.analyzer.AnalyticDefinition;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -30,7 +30,7 @@ public class AnalyticsControllerTest {
 
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.analytics", iterableWithSize(Analytic.values().length)));
+                .andExpect(jsonPath("$.analytics", iterableWithSize(AnalyticDefinition.values().length)));
     }
 
 }

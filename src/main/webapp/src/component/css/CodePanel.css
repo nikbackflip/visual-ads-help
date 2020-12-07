@@ -112,3 +112,84 @@
     float: right;
     white-space: normal;
 }
+
+.Code-panel-tasks-up {
+    height: 30%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.Code-panel-tasks-bottom {
+    height: 70%
+}
+
+.Code-panel-tasks-input {
+    float: left;
+    width: 60%;
+    height: 100%;
+}
+
+.Code-panel-tasks-exec {
+    float: right;
+    /*width: 30%*/
+    height: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.Code-panel-tasks-exec-button {
+    width: 150px;
+    height: 50px;
+}
+
+.Code-panel-tasks-dropdown {
+    font-family: Verdana, monospace;
+    font-weight: bold;
+    font-size: 16px;
+    background-color: #3C3F41;
+    border: 0;
+    border-bottom: 2px solid;
+    outline: 0;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    margin-left: 8px;
+    width: 100%
+}
+
+.Code-panel-tasks-parameter-label {
+    white-space: nowrap;
+    font-family: Verdana, monospace;
+    font-size: 16px;
+    font-weight: bold;
+    float: left;
+}
+
+.Code-panel-tasks-parameter-div {
+    margin-top: 8px;
+    margin-left: 8px;
+}
+
+.Code-panel-tasks-parameter-span {
+    display: block;
+    overflow: hidden;
+    padding: 0 4px 0 6px;
+}
+
+.Code-panel-tasks-parameter-input {
+    font-family: Verdana, monospace;
+    font-weight: bold;
+    font-size: 16px;
+    background-color: #3C3F41;
+    border: 0;
+    border-bottom: 2px solid;
+    outline: 0;
+    width: 100%;
+}
+
+.Code-panel-task-response {
+    font-weight: bold;
+    font-family: Verdana, monospace;
+    word-break: break-all;
+    margin-left: 8px;
+    white-space: pre;
+}
