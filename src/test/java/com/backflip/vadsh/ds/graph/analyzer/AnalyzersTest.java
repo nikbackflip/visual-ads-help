@@ -70,7 +70,12 @@ public class AnalyzersTest {
                 Arguments.of(negativeCyclesAnalyzer, singleNodeSelfLoopNegative, defaultConfig, true),
                 Arguments.of(negativeCyclesAnalyzer, completeGraphWithoutSelfLoops, defaultConfig, false),
                 Arguments.of(negativeCyclesAnalyzer, negativeCycle, defaultConfig, true),
-                Arguments.of(negativeCyclesAnalyzer, unreachableNegativeCycle, defaultConfig, true)
+                Arguments.of(negativeCyclesAnalyzer, unreachableNegativeCycle, defaultConfig, true),
+
+                Arguments.of(disconnectedAnalyzer, singleNode, defaultConfig, false),
+                Arguments.of(disconnectedAnalyzer, completeGraphWithSelfLoops, defaultConfig, false),
+                Arguments.of(disconnectedAnalyzer, disconnectedComponent, defaultConfig, true),
+                Arguments.of(disconnectedAnalyzer, singleDisconnectedNode, defaultConfig, true)
         );
     }
 
@@ -80,6 +85,7 @@ public class AnalyzersTest {
     private final static Analyzer treeAnalyzer = new TreeAnalyzer();
     private final static Analyzer dagAnalyzer = new DagAnalyzer();
     private final static Analyzer negativeCyclesAnalyzer = new NegativeCyclesAnalyzer();
+    private final static Analyzer disconnectedAnalyzer = new DisconnectedAnalyzer();
 
     private final static Config defaultConfig = new Config(true, true, true);
     private final static Config weightedConfig = new Config(false, true, false);
@@ -102,6 +108,8 @@ public class AnalyzersTest {
     private final static Graph dagWithFreeNode = new Graph(List.of(new Edge(0, 1, 1.0), new Edge(1, 3, 1.0), new Edge(3, 8, 1.0), new Edge(8, 10, 1.0), new Edge(0, 4, 1.0), new Edge(4, 7, 1.0), new Edge(7, 9, 1.0), new Edge(0, 2, 1.0), new Edge(2, 8, 1.0), new Edge(4, 5, 1.0)), 12);
     private final static Graph negativeCycle = new Graph(List.of(new Edge(0, 2, 1.0), new Edge(2, 1, 1.0), new Edge(1, 0, -3.0), new Edge(2, 3, 1.0), new Edge(3, 5, 1.0), new Edge(3, 4, 1.0), new Edge(4, 2, 1.0)), 6);
     private final static Graph unreachableNegativeCycle = new Graph(List.of(new Edge(0, 1, 1.0), new Edge(1, 3, 1.0), new Edge(3, 0, 1.0), new Edge(2, 2, -1.0)), 4);
+    private final static Graph disconnectedComponent = new Graph(List.of(new Edge(0, 0, 1.0), new Edge(0, 5, 1.0), new Edge(1, 3, 1.0), new Edge(2, 3, 6.0), new Edge(2, 6, -10.0), new Edge(3, 1, 10.0), new Edge(3, 2, 6.0), new Edge(3, 4, 1.0), new Edge(4, 0, 3.0), new Edge(5, 1, 1.0), new Edge(6, 0, 1.0), new Edge(6, 2, 10.0), new Edge(6, 6, 7.0), new Edge(7, 8, 1.0), new Edge(8, 9, 1.0), new Edge(9, 7, 1.0)), 10);
+    private final static Graph singleDisconnectedNode = new Graph(List.of(new Edge(1, 2, 1.0),new Edge(2, 1, 1.0),new Edge(1, 3, 1.0),new Edge(3, 2, 1.0)), 4);
 
 }
 

@@ -10,7 +10,8 @@ public enum AnalyticDefinition {
     COMPLETE("complete", new CompleteAnalyzer()),
     TREE("tree", new TreeAnalyzer()),
     DAG("DAG", new DagAnalyzer()),
-    NEGATIVE_CYCLES("negative cycles", new NegativeCyclesAnalyzer());
+    NEGATIVE_CYCLES("negative cycles", new NegativeCyclesAnalyzer()),
+    DISCONNECTED("disconnected", new DisconnectedAnalyzer());
 
     AnalyticDefinition(String label, Analyzer analyzer) {
         this.label = label;

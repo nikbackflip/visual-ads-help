@@ -3,6 +3,7 @@ package com.backflip.vadsh.ds.graph.task;
 import com.backflip.vadsh.ds.graph.Config;
 import com.backflip.vadsh.ds.graph.Edge;
 import com.backflip.vadsh.ds.graph.Graph;
+import com.backflip.vadsh.ds.graph.analyzer.AnalyticDefinition;
 
 import java.util.*;
 
@@ -68,6 +69,6 @@ public class FindMinimumSpanningTree implements Task {
 
     @Override
     public boolean executionPossible(Graph graph, Config config) {
-        return true;
+        return !AnalyticDefinition.DISCONNECTED.analyze(graph, config);
     }
 }
