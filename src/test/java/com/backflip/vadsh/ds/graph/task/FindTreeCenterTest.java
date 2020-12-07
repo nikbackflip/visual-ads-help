@@ -3,16 +3,21 @@ package com.backflip.vadsh.ds.graph.task;
 import com.backflip.vadsh.ds.graph.Config;
 import com.backflip.vadsh.ds.graph.Edge;
 import com.backflip.vadsh.ds.graph.Graph;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import static java.util.Collections.emptyList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static java.util.Collections.emptyMap;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class FindTreeCenterTest {
 
@@ -23,7 +28,7 @@ public class FindTreeCenterTest {
         Task task = new FindTreeCenter();
 
         //when
-        TaskResult result = task.execute(graph, notDirectionalConfig, Collections.emptyMap());
+        TaskResult result = task.execute(graph, notDirectionalConfig, emptyMap());
 
         //then
         assertEquals(expected, ((TaskExecutionSuccess)result).getNodes());
@@ -46,5 +51,68 @@ public class FindTreeCenterTest {
                 Arguments.of(bigTree, List.of(11)),
                 Arguments.of(bigTree2, List.of(1, 11))
         );
+    }
+
+    @Test
+    public void executeTask_success() {
+        //given
+        Map<String, Integer> params = emptyMap();
+        Graph graph = bigTree;
+        Config config = new Config(false, true, true);
+
+        //when
+        TaskResult result = TaskDefinition.FIND_TREE_CERNER.execute(graph, config, params);
+
+        //then
+        assertThat(result, isA(TaskExecutionSuccess.class));
+        assertFalse(result.failed());
+    }
+
+    @Test
+    public void validateParameters_failOnParametersPresent() {
+        //given
+        Map<String, Integer> params = Map.of("test", 0);
+        Graph graph = new Graph(emptyList(), 0);
+        Config config = new Config(true, true, true);
+
+        //when
+        TaskResult result = TaskDefinition.FIND_TREE_CERNER.execute(graph, config, params);
+
+        //then
+        assertThat(result, isA(TaskExecutionFailed.class));
+        assertTrue(result.failed());
+        assertEquals("Wrong parameters number", ((TaskExecutionFailed)result).getMessage());
+    }
+
+    @Test
+    public void validatePrerequisites_failOnDirectionalGraph() {
+        //given
+        Map<String, Integer> params = emptyMap();
+        Graph graph = new Graph(emptyList(), 0);
+        Config config = new Config(true, true, true);
+
+        //when
+        TaskResult result = TaskDefinition.FIND_TREE_CERNER.execute(graph, config, params);
+
+        //then
+        assertThat(result, isA(TaskExecutionFailed.class));
+        assertTrue(result.failed());
+        assertEquals("Graph must be undirected", ((TaskExecutionFailed)result).getMessage());
+    }
+
+    @Test
+    public void validatePrerequisites_failOnGraphNotATree() {
+        //given
+        Map<String, Integer> params = emptyMap();
+        Graph graph = new Graph(List.of(new Edge(0, 1, 1.0), new Edge(1, 0, 1.0), new Edge(1, 2, 1.0), new Edge(2, 1, 1.0), new Edge(2, 0, 1.0), new Edge(0, 2, 1.0)), 3);
+        Config config = new Config(false, true, true);
+
+        //when
+        TaskResult result = TaskDefinition.FIND_TREE_CERNER.execute(graph, config, params);
+
+        //then
+        assertThat(result, isA(TaskExecutionFailed.class));
+        assertTrue(result.failed());
+        assertEquals("Graph must be a tree", ((TaskExecutionFailed)result).getMessage());
     }
 }

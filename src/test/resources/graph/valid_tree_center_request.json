@@ -1,0 +1,168 @@
+{
+  "graph": {
+    "nodes": [
+      {
+        "id": 0,
+        "x": 320,
+        "y": 197,
+        "color": "#4C80FF",
+        "selected": false,
+        "highlighted": false,
+        "name": 0
+      },
+      {
+        "id": 1,
+        "x": 484,
+        "y": 123,
+        "color": "#4C80FF",
+        "selected": false,
+        "highlighted": false,
+        "name": 1
+      },
+      {
+        "id": 2,
+        "x": 606,
+        "y": 207,
+        "color": "#FF7EC7",
+        "selected": false,
+        "highlighted": false,
+        "name": 2
+      },
+      {
+        "id": 3,
+        "x": 390,
+        "y": 254,
+        "color": "#BF42FF",
+        "selected": false,
+        "highlighted": false,
+        "name": 3
+      },
+      {
+        "id": 4,
+        "x": 317,
+        "y": 360,
+        "color": "#BF42FF",
+        "selected": false,
+        "highlighted": false,
+        "name": 4
+      },
+      {
+        "id": 5,
+        "x": 519,
+        "y": 355,
+        "color": "#4C80FF",
+        "selected": false,
+        "highlighted": false,
+        "name": 5
+      }
+    ],
+    "edges": [
+      {
+        "id": 0,
+        "fromId": 0,
+        "toId": 1,
+        "weight": 1,
+        "selected": false,
+        "highlighted": false,
+        "direction": "noDirections",
+        "pairId": 1
+      },
+      {
+        "id": 1,
+        "fromId": 1,
+        "toId": 0,
+        "weight": 1,
+        "selected": false,
+        "highlighted": false,
+        "direction": "noDirections",
+        "pairId": 0
+      },
+      {
+        "id": 2,
+        "fromId": 1,
+        "toId": 2,
+        "weight": 1,
+        "selected": false,
+        "highlighted": false,
+        "direction": "noDirections",
+        "pairId": 3
+      },
+      {
+        "id": 3,
+        "fromId": 2,
+        "toId": 1,
+        "weight": 1,
+        "selected": false,
+        "highlighted": false,
+        "direction": "noDirections",
+        "pairId": 2
+      },
+      {
+        "id": 4,
+        "fromId": 2,
+        "toId": 4,
+        "weight": 1,
+        "selected": false,
+        "highlighted": false,
+        "direction": "noDirections",
+        "pairId": 5
+      },
+      {
+        "id": 5,
+        "fromId": 4,
+        "toId": 2,
+        "weight": 1,
+        "selected": false,
+        "highlighted": false,
+        "direction": "noDirections",
+        "pairId": 4
+      },
+      {
+        "id": 6,
+        "fromId": 3,
+        "toId": 1,
+        "weight": 1,
+        "selected": false,
+        "highlighted": false,
+        "direction": "noDirections",
+        "pairId": 7
+      },
+      {
+        "id": 7,
+        "fromId": 1,
+        "toId": 3,
+        "weight": 1,
+        "selected": false,
+        "highlighted": false,
+        "direction": "noDirections",
+        "pairId": 6
+      },
+      {
+        "id": 8,
+        "fromId": 5,
+        "toId": 4,
+        "weight": 1,
+        "selected": false,
+        "highlighted": false,
+        "direction": "noDirections",
+        "pairId": 9
+      },
+      {
+        "id": 9,
+        "fromId": 4,
+        "toId": 5,
+        "weight": 1,
+        "selected": false,
+        "highlighted": false,
+        "direction": "noDirections",
+        "pairId": 8
+      }
+    ],
+    "config": {
+      "graphDirectional": false,
+      "graphWeighted": true,
+      "selfLoopsAllowed": true
+    }
+  },
+  "params": {}
+}

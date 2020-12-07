@@ -3,16 +3,22 @@ package com.backflip.vadsh.ds.graph.task;
 import com.backflip.vadsh.ds.graph.Config;
 import com.backflip.vadsh.ds.graph.Edge;
 import com.backflip.vadsh.ds.graph.Graph;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import static java.util.Collections.emptyList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static java.util.Collections.emptyMap;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.isA;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FindMinimumSpanningTreeTest {
 
@@ -46,6 +52,53 @@ public class FindMinimumSpanningTreeTest {
                 Arguments.of(completeGraph, List.of(new Edge(0, 1, 1.0), new Edge(1, 3, 1.0), new Edge(0, 6, 1.0), new Edge(6, 2, 1.0), new Edge(1, 8, 1.0), new Edge(8, 7, 1.0), new Edge(7, 5, 1.0), new Edge(5, 4, 1.0), new Edge(7, 9, 1.0))),
                 Arguments.of(weightedGraph, List.of(new Edge(1, 4, 1.0), new Edge(4, 3, 1.0), new Edge(5, 2, 1.0), new Edge(2, 0, 1.0), new Edge(0, 4, 1.0)))
         );
+    }
+
+    @Test
+    public void executeTask_success() {
+        //given
+        Map<String, Integer> params = emptyMap();
+        Graph graph = completeGraph;
+        Config config = new Config(true, true, true);
+
+        //when
+        TaskResult result = TaskDefinition.FIND_MINIMUM_SPANNING_TREE.execute(graph, config, params);
+
+        //then
+        assertThat(result, isA(TaskExecutionSuccess.class));
+        assertFalse(result.failed());
+    }
+
+    @Test
+    public void validateParameters_failOnParametersPresent() {
+        //given
+        Map<String, Integer> params = Map.of("test", 0);
+        Graph graph = new Graph(emptyList(), 0);
+        Config config = new Config(true, true, true);
+
+        //when
+        TaskResult result = TaskDefinition.FIND_MINIMUM_SPANNING_TREE.execute(graph, config, params);
+
+        //then
+        assertThat(result, isA(TaskExecutionFailed.class));
+        assertTrue(result.failed());
+        assertEquals("Wrong parameters number", ((TaskExecutionFailed)result).getMessage());
+    }
+
+    @Test
+    public void validatePrerequisites_failOnDisconnectedGraph() {
+        //given
+        Map<String, Integer> params = emptyMap();
+        Graph graph = new Graph(List.of(new Edge(1, 2, 1.0),new Edge(2, 1, 1.0),new Edge(1, 3, 1.0),new Edge(3, 2, 1.0)), 4);
+        Config config = new Config(true, true, true);
+
+        //when
+        TaskResult result = TaskDefinition.FIND_MINIMUM_SPANNING_TREE.execute(graph, config, params);
+
+        //then
+        assertThat(result, isA(TaskExecutionFailed.class));
+        assertTrue(result.failed());
+        assertEquals("Graph must not contain disconnected components", ((TaskExecutionFailed)result).getMessage());
     }
 }
 

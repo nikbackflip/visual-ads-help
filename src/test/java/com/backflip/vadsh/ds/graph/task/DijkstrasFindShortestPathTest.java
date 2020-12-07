@@ -3,6 +3,7 @@ package com.backflip.vadsh.ds.graph.task;
 import com.backflip.vadsh.ds.graph.Config;
 import com.backflip.vadsh.ds.graph.Edge;
 import com.backflip.vadsh.ds.graph.Graph;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -11,7 +12,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static java.util.Collections.emptyList;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.isA;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DijkstrasFindShortestPathTest {
 
@@ -43,6 +48,117 @@ public class DijkstrasFindShortestPathTest {
                 Arguments.of(weightedGraph, Map.of("from", 0, "to", 19), List.of(new Edge(0, 4, 1.0), new Edge(4, 3, 1.0), new Edge(3, 19, 1.0))),
                 Arguments.of(weightedGraph, Map.of("from", 16, "to", 12), List.of(new Edge(16, 15, 1.0), new Edge(15, 8, 1.0), new Edge(8, 3, 1.0), new Edge(3, 12, 1.0)))
         );
+    }
+
+    @Test
+    public void executeTask_success() {
+        //given
+        Map<String, Integer> params = Map.of("from", 0, "to", 19);
+        Graph graph = weightedGraph;
+        Config config = new Config(true, true, true);
+
+        //when
+        TaskResult result = TaskDefinition.FIND_SHORTEST_PATH_DIJKSTRAS.execute(graph, config, params);
+
+        //then
+        assertThat(result, isA(TaskExecutionSuccess.class));
+        assertFalse(result.failed());
+    }
+
+    @Test
+    public void validateParameters_failOnParametersWrongNumber() {
+        //given
+        Map<String, Integer> params = Map.of("test", 0);
+        Graph graph = new Graph(emptyList(), 0);
+        Config config = new Config(true, true, true);
+
+        //when
+        TaskResult result = TaskDefinition.FIND_SHORTEST_PATH_DIJKSTRAS.execute(graph, config, params);
+
+        //then
+        assertThat(result, isA(TaskExecutionFailed.class));
+        assertTrue(result.failed());
+        assertEquals("Wrong parameters number", ((TaskExecutionFailed)result).getMessage());
+    }
+
+    @Test
+    public void validateParameters_failOnFromNodeAbsent() {
+        //given
+        Map<String, Integer> params = Map.of("test", 0, "to", 0);
+        Graph graph = new Graph(emptyList(), 0);
+        Config config = new Config(true, true, true);
+
+        //when
+        TaskResult result = TaskDefinition.FIND_SHORTEST_PATH_DIJKSTRAS.execute(graph, config, params);
+
+        //then
+        assertThat(result, isA(TaskExecutionFailed.class));
+        assertTrue(result.failed());
+        assertEquals("Parameter From Node absent", ((TaskExecutionFailed)result).getMessage());
+    }
+
+    @Test
+    public void validateParameters_failOnToNodeAbsent() {
+        //given
+        Map<String, Integer> params = Map.of("from", 0, "test", 0);
+        Graph graph = new Graph(List.of(new Edge(0, 1, 1.0), new Edge(1, 0, 1.0)), 2);
+        Config config = new Config(true, true, true);
+
+        //when
+        TaskResult result = TaskDefinition.FIND_SHORTEST_PATH_DIJKSTRAS.execute(graph, config, params);
+
+        //then
+        assertThat(result, isA(TaskExecutionFailed.class));
+        assertTrue(result.failed());
+        assertEquals("Parameter To Node absent", ((TaskExecutionFailed)result).getMessage());
+    }
+
+    @Test
+    public void validateParameters_failOnFromNodeOutOfBounds() {
+        //given
+        Map<String, Integer> params = Map.of("from", -1, "to", 0);
+        Graph graph = new Graph(emptyList(), 0);
+        Config config = new Config(true, true, true);
+
+        //when
+        TaskResult result = TaskDefinition.FIND_SHORTEST_PATH_DIJKSTRAS.execute(graph, config, params);
+
+        //then
+        assertThat(result, isA(TaskExecutionFailed.class));
+        assertTrue(result.failed());
+        assertEquals("Parameter From Node is invalid", ((TaskExecutionFailed)result).getMessage());
+    }
+
+    @Test
+    public void validateParameters_failOnToNodeOutOfBounds() {
+        //given
+        Map<String, Integer> params = Map.of("from", 0, "to", 99);
+        Graph graph = new Graph(emptyList(), 0);
+        Config config = new Config(true, true, true);
+
+        //when
+        TaskResult result = TaskDefinition.FIND_SHORTEST_PATH_DIJKSTRAS.execute(graph, config, params);
+
+        //then
+        assertThat(result, isA(TaskExecutionFailed.class));
+        assertTrue(result.failed());
+        assertEquals("Parameter From Node is invalid", ((TaskExecutionFailed)result).getMessage());
+    }
+
+    @Test
+    public void validatePrerequisites_failOnGraphWithNegativeCycles() {
+        //given
+        Map<String, Integer> params = Map.of("from", 0, "to", 0);
+        Graph graph = new Graph(List.of(new Edge(0, 0, -1)), 1);
+        Config config = new Config(true, true, true);
+
+        //when
+        TaskResult result = TaskDefinition.FIND_SHORTEST_PATH_DIJKSTRAS.execute(graph, config, params);
+
+        //then
+        assertThat(result, isA(TaskExecutionFailed.class));
+        assertTrue(result.failed());
+        assertEquals("Graph must not contain negative cycles", ((TaskExecutionFailed)result).getMessage());
     }
 }
 
