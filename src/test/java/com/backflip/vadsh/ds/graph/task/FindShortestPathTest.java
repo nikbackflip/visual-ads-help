@@ -22,10 +22,10 @@ public class FindShortestPathTest {
         Task task = new FindShortestPath();
 
         //when
-        TaskResponse result = task.execute(graph, config, params);
+        TaskResult result = task.execute(graph, config, params);
 
         //then
-        assertEquals(expected, result.getEdges());
+        assertEquals(expected, ((TaskExecutionSuccess)result).getEdges());
     }
 
     private final static Config config = new Config(true, true, false);

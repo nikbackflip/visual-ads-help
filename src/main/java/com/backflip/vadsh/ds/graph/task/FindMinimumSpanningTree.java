@@ -8,8 +8,38 @@ import java.util.*;
 
 public class FindMinimumSpanningTree implements Task {
 
+    static final class UnionFind {
+
+        int[] array;
+
+        UnionFind(int n) {
+            array = new int[n];
+            for (int i = 0; i < n; i++) {
+                array[i] = i;
+            }
+        }
+
+        void unify(int x, int y) {
+            if (find(x) == find(y)) {
+                return;
+            }
+            if (find(y) == y) {
+                array[y] = x;
+            }
+            unify(x, find(y));
+        }
+
+        int find(int x) {
+            if (array[x] == x) {
+                return x;
+            }
+            return find(array[x]);
+        }
+
+    }
+
     @Override
-    public TaskResponse execute(Graph graphInput, Config config, Map<String, Integer> params) {
+    public TaskResult execute(Graph graphInput, Config config, Map<String, Integer> params) {
         List<Edge> graph = graphInput.edgeList();
         int n = graphInput.n();
 
@@ -28,37 +58,16 @@ public class FindMinimumSpanningTree implements Task {
             }
         }
 
-        return  TaskResponse.builder().nodes(Collections.emptyList()).edges(mst).build();
+        return  TaskResult.success(Collections.emptyList(), mst);
     }
 
-}
-
-class UnionFind {
-
-    int[] array;
-
-    UnionFind(int n) {
-        array = new int[n];
-        for (int i = 0; i < n; i++) {
-            array[i] = i;
-        }
+    @Override
+    public boolean paramsValid(Graph graph, Config config, Map<String, Integer> params) {
+        return params.isEmpty();
     }
 
-    void unify(int x, int y) {
-        if (find(x) == find(y)) {
-            return;
-        }
-        if (find(y) == y) {
-            array[y] = x;
-        }
-        unify(x, find(y));
+    @Override
+    public boolean executionPossible(Graph graph, Config config) {
+        return true;
     }
-
-    int find(int x) {
-        if (array[x] == x) {
-            return x;
-        }
-        return find(array[x]);
-    }
-
 }

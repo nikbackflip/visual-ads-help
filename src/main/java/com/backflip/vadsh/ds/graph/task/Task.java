@@ -6,5 +6,10 @@ import com.backflip.vadsh.ds.graph.Graph;
 import java.util.Map;
 
 public interface Task {
-    TaskResponse execute(Graph graph, Config config, Map<String, Integer> params);
+
+    TaskResult execute(Graph graph, Config config, Map<String, Integer> params);
+
+    boolean paramsValid(Graph graph, Config config, Map<String, Integer> params);
+
+    boolean executionPossible(Graph graph, Config config);
 }

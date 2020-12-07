@@ -2,6 +2,7 @@ package com.backflip.vadsh.ds.graph.task;
 
 import com.backflip.vadsh.ds.graph.Config;
 import com.backflip.vadsh.ds.graph.Graph;
+import com.backflip.vadsh.ds.graph.analyzer.AnalyticDefinition;
 
 import java.util.*;
 import java.util.stream.IntStream;
@@ -9,12 +10,12 @@ import java.util.stream.IntStream;
 public class FindTreeCenter implements Task {
 
     @Override
-    public TaskResponse execute(Graph graphInput, Config config, Map<String, Integer> params) {
+    public TaskResult execute(Graph graphInput, Config config, Map<String, Integer> params) {
         List<List<Integer>> graph = graphInput.adjacencyList();
         int n = graphInput.n();
 
         if (n == 0) {
-            return TaskResponse.emptyResponse();
+            return TaskResult.success();
         }
 
         Set<Integer> remainingNodes = new HashSet<>();
@@ -34,6 +35,16 @@ public class FindTreeCenter implements Task {
                 graph.get(parent).removeIf(v -> v.equals(leaf));
             }
         }
-        return TaskResponse.builder().nodes(new ArrayList<>(remainingNodes)).edges(Collections.emptyList()).build();
+        return TaskResult.success(new ArrayList<>(remainingNodes), Collections.emptyList());
+    }
+
+    @Override
+    public boolean paramsValid(Graph graph, Config config, Map<String, Integer> params) {
+        return params.isEmpty();
+    }
+
+    @Override
+    public boolean executionPossible(Graph graph, Config config) {
+        return AnalyticDefinition.TREE.analyze(graph, config);
     }
 }

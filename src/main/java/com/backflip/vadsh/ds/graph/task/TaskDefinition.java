@@ -52,7 +52,9 @@ public enum TaskDefinition {
         }
     }
 
-    public TaskResponse execute(Graph graph, Config config, Map<String, Integer> params) {
+    public TaskResult execute(Graph graph, Config config, Map<String, Integer> params) {
+        if (!task.paramsValid(graph, config, params)) return new TaskExecutionFailed("Params invalid");
+        if (!task.executionPossible(graph, config)) return new TaskExecutionFailed("Execution not possible");
         return task.execute(graph, config, params);
     }
 

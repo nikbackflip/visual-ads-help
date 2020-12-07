@@ -63,7 +63,14 @@ public class AnalyzersTest {
                 Arguments.of(dagAnalyzer, dag, directionalConfig, true),
                 Arguments.of(dagAnalyzer, dag, notDirectionalConfig, false),
                 Arguments.of(dagAnalyzer, dagWithFreeNode, directionalConfig, true),
-                Arguments.of(dagAnalyzer, singleNode, notDirectionalConfig, false)
+                Arguments.of(dagAnalyzer, singleNode, notDirectionalConfig, false),
+
+                Arguments.of(negativeCyclesAnalyzer, singleNode, defaultConfig, false),
+                Arguments.of(negativeCyclesAnalyzer, singleNodeSelfLoop, defaultConfig, false),
+                Arguments.of(negativeCyclesAnalyzer, singleNodeSelfLoopNegative, defaultConfig, true),
+                Arguments.of(negativeCyclesAnalyzer, completeGraphWithoutSelfLoops, defaultConfig, false),
+                Arguments.of(negativeCyclesAnalyzer, negativeCycle, defaultConfig, true),
+                Arguments.of(negativeCyclesAnalyzer, unreachableNegativeCycle, defaultConfig, true)
         );
     }
 
@@ -72,7 +79,9 @@ public class AnalyzersTest {
     private final static Analyzer completeAnalyzer = new CompleteAnalyzer();
     private final static Analyzer treeAnalyzer = new TreeAnalyzer();
     private final static Analyzer dagAnalyzer = new DagAnalyzer();
+    private final static Analyzer negativeCyclesAnalyzer = new NegativeCyclesAnalyzer();
 
+    private final static Config defaultConfig = new Config(true, true, true);
     private final static Config weightedConfig = new Config(false, true, false);
     private final static Config notWeightedConfig = new Config(true, false, true);
     private final static Config directionalConfig = new Config(true, false, false);
@@ -84,12 +93,15 @@ public class AnalyzersTest {
     private final static Graph completeGraphWithoutSelfLoops = new Graph(List.of(new Edge(0, 1, 1), new Edge(0, 2, 1), new Edge(1, 0, 1), new Edge(1, 2, 1), new Edge(2, 0, 1), new Edge(2, 1, 1)), 3);
     private final static Graph incompleteGraph = new Graph(List.of(new Edge(0, 1, 1), new Edge(1, 0, 1), new Edge(1, 2, 1), new Edge(2, 0, 1), new Edge(2, 1, 1)), 3);
     private final static Graph singleNodeSelfLoop = new Graph(List.of(new Edge(0, 0, 1)), 1);
+    private final static Graph singleNodeSelfLoopNegative = new Graph(List.of(new Edge(0, 0, -1)), 1);
     private final static Graph singleNode = new Graph(emptyList(), 1);
     private final static Graph tree = new Graph(List.of(new Edge(0, 1, 1.0), new Edge(0, 2, 1.0), new Edge(2, 3, 1.0), new Edge(2, 4, 1.0), new Edge(2, 5, 1.0)), 6);
     private final static Graph treeNotDirectional = new Graph(List.of(new Edge(0, 1, 1.0), new Edge(0, 2, 1.0), new Edge(2, 3, 1.0), new Edge(2, 4, 1.0), new Edge(2, 5, 1.0), new Edge(1, 0, 1.0), new Edge(2, 0, 1.0), new Edge(3, 2, 1.0), new Edge(4, 2, 1.0), new Edge(5, 2, 1.0)), 6);
     private final static Graph treeWithFreeNode = new Graph(List.of(new Edge(0, 1, 1.0), new Edge(0, 2, 1.0), new Edge(2, 3, 1.0), new Edge(2, 4, 1.0), new Edge(2, 5, 1.0)), 7);
     private final static Graph dag = new Graph(List.of(new Edge(0, 1, 1.0), new Edge(1, 3, 1.0), new Edge(3, 8, 1.0), new Edge(8, 10, 1.0), new Edge(0, 4, 1.0), new Edge(4, 7, 1.0), new Edge(7, 9, 1.0), new Edge(0, 2, 1.0), new Edge(2, 8, 1.0), new Edge(4, 5, 1.0)), 11);
     private final static Graph dagWithFreeNode = new Graph(List.of(new Edge(0, 1, 1.0), new Edge(1, 3, 1.0), new Edge(3, 8, 1.0), new Edge(8, 10, 1.0), new Edge(0, 4, 1.0), new Edge(4, 7, 1.0), new Edge(7, 9, 1.0), new Edge(0, 2, 1.0), new Edge(2, 8, 1.0), new Edge(4, 5, 1.0)), 12);
+    private final static Graph negativeCycle = new Graph(List.of(new Edge(0, 2, 1.0), new Edge(2, 1, 1.0), new Edge(1, 0, -3.0), new Edge(2, 3, 1.0), new Edge(3, 5, 1.0), new Edge(3, 4, 1.0), new Edge(4, 2, 1.0)), 6);
+    private final static Graph unreachableNegativeCycle = new Graph(List.of(new Edge(0, 1, 1.0), new Edge(1, 3, 1.0), new Edge(3, 0, 1.0), new Edge(2, 2, -1.0)), 4);
 
 }
 

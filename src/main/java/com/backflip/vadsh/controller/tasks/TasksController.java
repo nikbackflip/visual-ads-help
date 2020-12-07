@@ -1,10 +1,11 @@
 package com.backflip.vadsh.controller.tasks;
 
+import com.backflip.vadsh.controller.exception.BadRequestException;
 import com.backflip.vadsh.ds.graph.Config;
 import com.backflip.vadsh.ds.graph.Edge;
 import com.backflip.vadsh.ds.graph.Graph;
 import com.backflip.vadsh.ds.graph.task.TaskDefinition;
-import com.backflip.vadsh.ds.graph.task.TaskResponse;
+import com.backflip.vadsh.ds.graph.task.TaskResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.backflip.vadsh.controller.exception.BadRequestException.badRequest;
 import static com.backflip.vadsh.ds.graph.task.TaskDefinition.fromId;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -35,7 +37,7 @@ public class TasksController {
 
     @ResponseBody
     @PostMapping(path = "/{taskId}", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public TaskResponse executeTasks(@RequestBody TaskRequest taskRequest, @PathVariable String taskId) {
+    public TaskResult executeTasks(@RequestBody TaskRequest taskRequest, @PathVariable String taskId) throws BadRequestException {
         List<Edge> edges = taskRequest.getGraph().getEdges().stream()
                 .map(em -> new Edge(em.getFromId(), em.getToId(), em.getWeight()))
                 .collect(toList());
@@ -47,6 +49,9 @@ public class TasksController {
 
         TaskDefinition requestedTask = fromId(taskId);
 
-        return requestedTask.execute(graph, config, taskRequest.getParams());
+        TaskResult result = requestedTask.execute(graph, config, taskRequest.getParams());
+        if (result.failed()) throw badRequest(result);
+
+        return result;
     }
 }

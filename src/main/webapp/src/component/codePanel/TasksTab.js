@@ -66,6 +66,10 @@ class TasksDropdown extends React.Component {
         }).then((response) => {
             return response.json();
         }).then((data) => {
+            self.setState({
+                lastResponse: data
+            });
+
             self.props.graph.nodes.forEach(n => n.selected = false);
             self.props.graph.edges.forEach(n => n.selected = false);
 
@@ -80,10 +84,6 @@ class TasksDropdown extends React.Component {
                     return data.edges.find(ee => e.fromId === ee.from && e.toId === ee.to)
                 }).forEach((e) => e.selected = true);
             }
-
-            self.setState({
-                lastResponse: data
-            });
 
             self.props.handleGraphUpdate(self.props.graph);
         });

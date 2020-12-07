@@ -23,10 +23,10 @@ public class FindMinimumSpanningTreeTest {
         Task task = new FindMinimumSpanningTree();
 
         //when
-        TaskResponse result = task.execute(graph, notDirectionalConfig, Collections.emptyMap());
+        TaskResult result = task.execute(graph, notDirectionalConfig, Collections.emptyMap());
 
         //then
-        assertEquals(expected, result.getEdges());
+        assertEquals(expected, ((TaskExecutionSuccess)result).getEdges());
     }
 
     private final static Config notDirectionalConfig = new Config(false, true, true);
@@ -46,7 +46,6 @@ public class FindMinimumSpanningTreeTest {
                 Arguments.of(completeGraph, List.of(new Edge(0, 1, 1.0), new Edge(1, 3, 1.0), new Edge(0, 6, 1.0), new Edge(6, 2, 1.0), new Edge(1, 8, 1.0), new Edge(8, 7, 1.0), new Edge(7, 5, 1.0), new Edge(5, 4, 1.0), new Edge(7, 9, 1.0))),
                 Arguments.of(weightedGraph, List.of(new Edge(1, 4, 1.0), new Edge(4, 3, 1.0), new Edge(5, 2, 1.0), new Edge(2, 0, 1.0), new Edge(0, 4, 1.0)))
         );
-
     }
 }
 

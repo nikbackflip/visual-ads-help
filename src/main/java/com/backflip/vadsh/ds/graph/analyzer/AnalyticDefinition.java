@@ -9,7 +9,8 @@ public enum AnalyticDefinition {
     WEIGHTED("weighted", new WeightedAnalyzer()),
     COMPLETE("complete", new CompleteAnalyzer()),
     TREE("tree", new TreeAnalyzer()),
-    DAG("DAG", new DagAnalyzer());
+    DAG("DAG", new DagAnalyzer()),
+    NEGATIVE_CYCLES("negative cycles", new NegativeCyclesAnalyzer());
 
     AnalyticDefinition(String label, Analyzer analyzer) {
         this.label = label;

@@ -3,15 +3,14 @@ package com.backflip.vadsh.ds.graph.task;
 import com.backflip.vadsh.ds.graph.Config;
 import com.backflip.vadsh.ds.graph.Edge;
 import com.backflip.vadsh.ds.graph.Graph;
+import com.backflip.vadsh.ds.graph.analyzer.AnalyticDefinition;
 
 import java.util.*;
-
-import static com.backflip.vadsh.ds.graph.task.TaskResponse.emptyResponse;
 
 public class FindShortestPath implements Task {
 
     @Override
-    public TaskResponse execute(Graph graphInput, Config config, Map<String, Integer> params) {
+    public TaskResult execute(Graph graphInput, Config config, Map<String, Integer> params) {
         Map<Integer, List<Edge>> graph = graphInput.adjacencyListAsMap();
         int n = graphInput.n();
 
@@ -19,7 +18,7 @@ public class FindShortestPath implements Task {
         int to = params.get("to");
 
         if (n == 0) {
-            return emptyResponse();
+            return TaskResult.success();
         }
 
         Float[] dist = new Float[n];
@@ -89,8 +88,25 @@ public class FindShortestPath implements Task {
             path.add(new Edge(prev[i], i, 1.0));
             i = prev[i];
         }
-        path.remove(path.size()-1);
+        path.remove(path.size() - 1);
         Collections.reverse(path);
-        return TaskResponse.builder().nodes(Collections.emptyList()).edges(path).build();
+        return TaskResult.success(Collections.emptyList(), path);
     }
+
+    @Override
+    public boolean paramsValid(Graph graph, Config config, Map<String, Integer> params) {
+        return params != null && params.size() == 2
+                && nodeValid(params.get("from"), graph.n())
+                && nodeValid(params.get("to"), graph.n());
+    }
+
+    @Override
+    public boolean executionPossible(Graph graph, Config config) {
+        return !AnalyticDefinition.NEGATIVE_CYCLES.analyze(graph, config);
+    }
+
+    private boolean nodeValid(Integer node, int n) {
+        return node != null && node >= 0 && node < n;
+    }
+
 }

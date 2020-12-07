@@ -23,10 +23,10 @@ public class FindTreeCenterTest {
         Task task = new FindTreeCenter();
 
         //when
-        TaskResponse result = task.execute(graph, notDirectionalConfig, Collections.emptyMap());
+        TaskResult result = task.execute(graph, notDirectionalConfig, Collections.emptyMap());
 
         //then
-        assertEquals(expected, result.getNodes());
+        assertEquals(expected, ((TaskExecutionSuccess)result).getNodes());
     }
 
     private final static Config notDirectionalConfig = new Config(false, true, true);
