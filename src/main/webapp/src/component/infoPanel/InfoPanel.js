@@ -80,27 +80,31 @@ class InfoPanel extends React.Component {
         return (
             <div className="App-info-panel">
                 <ElementsCounter entityName={"nodes"} count={nodes.length}/>
-                <ElementsCounter entityName={"edges"}
-                                 count={totalEdges}/>
+                <ElementsCounter entityName={"edges"} count={totalEdges}/>
                 <div className="App-line-split"/>
-                <GraphAnalytics
-                    config={this.props.config}
-                    graph={this.props.graph}
-                />
-                {selectedEdges.map(e => {
-                    if (e.direction === ABSENT_DIRECTION) return null;
-                    if (e.direction !== SELF_DIRECTION) excludedEdges.push(e.pairId);
-                    return excludedEdges.find(ex => ex === e.id) ? null :
-                        <DisplayEdge
-                            key={e.id}
-                            element={e}
-                            config={this.props.config}
-                            pair={edges.find(p => p.id === e.pairId)}
-                            getNodeName={this.getNodeName}
-                            updateElement={this.updateEdge}
-                            updateBoth={this.updateTwoEdges}
-                        />
-                })}
+                <div>
+                    <GraphAnalytics
+                        config={this.props.config}
+                        graph={this.props.graph}
+                    />
+                </div>
+                <div className="Info-panel-scroll Info-panel-edges">
+                    {selectedEdges.map(e => {
+                        if (e.direction === ABSENT_DIRECTION) return null;
+                        if (e.direction !== SELF_DIRECTION) excludedEdges.push(e.pairId);
+                        return excludedEdges.find(ex => ex === e.id) ? null :
+                            <DisplayEdge
+                                key={e.id}
+                                element={e}
+                                config={this.props.config}
+                                pair={edges.find(p => p.id === e.pairId)}
+                                getNodeName={this.getNodeName}
+                                updateElement={this.updateEdge}
+                                updateBoth={this.updateTwoEdges}
+                            />
+                    })}
+                </div>
+{/*
                 {selectedNodes.map(n => {
                     return <DisplayNode
                         key={n.id}
@@ -108,6 +112,7 @@ class InfoPanel extends React.Component {
                         updateElement={this.updateNode}
                     />
                 })}
+*/}
             </div>
         );
     }

@@ -56,3 +56,37 @@
 .Info-panel-button {
     padding: 10px 15px;
 }
+
+.Info-panel-edges {
+    height: calc((100vh - 50px) / 100 * 75);
+}
+
+.Info-panel-analytics {
+    height: calc((100vh - 50px) / 100 * 25);
+}
+
+.Info-panel-scroll {
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+.Info-panel-scroll::-webkit-scrollbar {
+    width: 10px;
+    height: 0;
+    background-color: transparent;
+}
+
+.Info-panel-scroll::-webkit-scrollbar-corner {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.Info-panel-scroll::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #25282A;
+}
+
+.Info-panel-scroll::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: transparent;
+}

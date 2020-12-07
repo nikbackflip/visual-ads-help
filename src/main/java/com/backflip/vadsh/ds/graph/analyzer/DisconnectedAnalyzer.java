@@ -13,18 +13,25 @@ public class DisconnectedAnalyzer implements Analyzer {
         int n = graph.n();
         if (n == 0) return false;
 
-        boolean[] visited = new boolean[n];
-        for (int i = 0; i < n; i ++) {
-            visited[i] = false;
-        }
+        for (int j = 0; j < n; j++) {
+            boolean[] visited = new boolean[n];
+            for (int i = 0; i < n; i ++) {
+                visited[i] = false;
+            }
+            visited[j] = true;
 
-        visited[0] = true;
-        dfs(0, g, visited);
+            dfs(j, g, visited);
 
-        for (int i = 0; i < n; i ++) {
-            if (!visited[i]) return true;
+            boolean iterationConnected = true;
+            for (int i = 0; i < n; i ++) {
+                if (!visited[i]) {
+                    iterationConnected = false;
+                    break;
+                }
+            }
+            if (iterationConnected) return false;
         }
-        return false;
+        return true;
     }
 
     private void dfs(int node, List<List<Integer>> graph, boolean[] visited) {

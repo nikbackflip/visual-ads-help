@@ -75,7 +75,8 @@ public class AnalyzersTest {
                 Arguments.of(disconnectedAnalyzer, singleNode, defaultConfig, false),
                 Arguments.of(disconnectedAnalyzer, completeGraphWithSelfLoops, defaultConfig, false),
                 Arguments.of(disconnectedAnalyzer, disconnectedComponent, defaultConfig, true),
-                Arguments.of(disconnectedAnalyzer, singleDisconnectedNode, defaultConfig, true)
+                Arguments.of(disconnectedAnalyzer, singleDisconnectedNode, defaultConfig, true),
+                Arguments.of(disconnectedAnalyzer, componentUnreachableFromZero, defaultConfig, false)
         );
     }
 
@@ -110,7 +111,7 @@ public class AnalyzersTest {
     private final static Graph unreachableNegativeCycle = new Graph(List.of(new Edge(0, 1, 1.0), new Edge(1, 3, 1.0), new Edge(3, 0, 1.0), new Edge(2, 2, -1.0)), 4);
     private final static Graph disconnectedComponent = new Graph(List.of(new Edge(0, 0, 1.0), new Edge(0, 5, 1.0), new Edge(1, 3, 1.0), new Edge(2, 3, 6.0), new Edge(2, 6, -10.0), new Edge(3, 1, 10.0), new Edge(3, 2, 6.0), new Edge(3, 4, 1.0), new Edge(4, 0, 3.0), new Edge(5, 1, 1.0), new Edge(6, 0, 1.0), new Edge(6, 2, 10.0), new Edge(6, 6, 7.0), new Edge(7, 8, 1.0), new Edge(8, 9, 1.0), new Edge(9, 7, 1.0)), 10);
     private final static Graph singleDisconnectedNode = new Graph(List.of(new Edge(1, 2, 1.0),new Edge(2, 1, 1.0),new Edge(1, 3, 1.0),new Edge(3, 2, 1.0)), 4);
-
+    private final static Graph componentUnreachableFromZero = new Graph(List.of(new Edge(0, 2, 1.0), new Edge(2, 3, 1.0), new Edge(3, 0, 1.0), new Edge(0, 1, 1.0), new Edge(1, 8, 1.0), new Edge(8, 0, 1.0), new Edge(0, 4, 1.0), new Edge(4, 8, 1.0), new Edge(8, 7, 1.0), new Edge(1, 1, 1.0), new Edge(7, 1, 1.0), new Edge(1, 6, 1.0), new Edge(6, 8, 1.0), new Edge(5, 8, 1.0), new Edge(3, 6, 1.0)), 9);
 }
 
 

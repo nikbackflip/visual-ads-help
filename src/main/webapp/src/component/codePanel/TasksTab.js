@@ -7,7 +7,7 @@ class TasksDropdown extends React.Component {
         super(props);
         this.state = {
             params: {},
-            lastResponse: ""
+            response: {}
         };
     }
 
@@ -64,27 +64,41 @@ class TasksDropdown extends React.Component {
                 params: this.state.params
             })
         }).then((response) => {
-            return response.json();
+            return response.json().then(json => ({status: response.status, json}))
         }).then((data) => {
-            self.setState({
-                lastResponse: data
-            });
+
+            if (data.status === 400) {
+                self.setState({
+                    response: {
+                        success: false,
+                        message: data.json.message
+                    }
+                });
+                return;
+            }
 
             self.props.graph.nodes.forEach(n => n.selected = false);
             self.props.graph.edges.forEach(n => n.selected = false);
 
-            if (data.nodes.length !== 0) {
+            if (data.json.nodes.length !== 0) {
                 self.props.graph.nodes.filter(n => {
-                    return data.nodes.find(nn => n.id === nn)
+                    return data.json.nodes.find(nn => n.id === nn)
                 }).forEach((n) => n.selected = true);
             }
 
-            if (data.edges.length !== 0) {
+            if (data.json.edges.length !== 0) {
                 self.props.graph.edges.filter(e => {
-                    return data.edges.find(ee => e.fromId === ee.from && e.toId === ee.to)
+                    return data.json.edges.find(ee => e.fromId === ee.from && e.toId === ee.to)
                 }).forEach((e) => e.selected = true);
             }
 
+            self.setState({
+                response: {
+                    success: true,
+                    edges: data.json.edges,
+                    nodes: data.json.nodes
+                }
+            });
             self.props.handleGraphUpdate(self.props.graph);
         });
     }
@@ -109,6 +123,10 @@ class TasksDropdown extends React.Component {
                     </div>
                 )
             }) : null;
+
+
+        console.log(this.state.response);
+
         return (
             <div className="Code-panel-whole-height">
                 <div className="Code-panel-tasks-up">
@@ -141,11 +159,45 @@ class TasksDropdown extends React.Component {
                         </button>
                     </div>
                 </div>
-                <div className="Code-panel-tasks-bottom">
-                    {JSON.stringify(this.state.lastResponse)}
+                <div className="Code-panel-tasks-bottom Code-panel-task-response">
+                    {
+                        !this.state.response.success ? this.state.response.message :
+                            <div>
+                                <NodesResponse
+                                    nodes={this.state.response.nodes}
+                                />
+                                <EdgesResponse
+                                    edges={this.state.response.edges}
+                                />
+                            </div>
+                    }
                 </div>
             </div>
         )
+    }
+}
+
+class NodesResponse extends React.Component {
+    render() {
+        if (this.props.nodes.length === 0) return <div />
+        return <div>
+            Nodes:
+            {
+                this.props.nodes.join(", ")
+            }
+        </div>
+    }
+}
+class EdgesResponse extends React.Component {
+    render() {
+        if (this.props.edges.length === 0) return <div />
+        return <div>
+            Nodes:
+            <br />
+            {
+                this.props.edges.map(e => e.from + " -> " + e.to).join(", ")
+            }
+        </div>
     }
 }
 
