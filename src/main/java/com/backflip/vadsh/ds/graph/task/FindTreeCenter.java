@@ -2,7 +2,6 @@ package com.backflip.vadsh.ds.graph.task;
 
 import com.backflip.vadsh.ds.graph.Config;
 import com.backflip.vadsh.ds.graph.Graph;
-import com.backflip.vadsh.ds.graph.analyzer.AnalyticDefinition;
 
 import java.util.*;
 import java.util.stream.IntStream;
@@ -36,15 +35,5 @@ public class FindTreeCenter implements Task {
             }
         }
         return TaskResult.success(new ArrayList<>(remainingNodes), Collections.emptyList());
-    }
-
-    @Override
-    public boolean paramsValid(Graph graph, Config config, Map<String, Integer> params) {
-        return params.isEmpty();
-    }
-
-    @Override
-    public boolean executionPossible(Graph graph, Config config) {
-        return AnalyticDefinition.TREE.analyze(graph, config);
     }
 }

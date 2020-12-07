@@ -3,7 +3,6 @@ package com.backflip.vadsh.ds.graph.task;
 import com.backflip.vadsh.ds.graph.Config;
 import com.backflip.vadsh.ds.graph.Edge;
 import com.backflip.vadsh.ds.graph.Graph;
-import com.backflip.vadsh.ds.graph.analyzer.AnalyticDefinition;
 
 import java.util.*;
 
@@ -92,21 +91,4 @@ public class DijkstrasFindShortestPath implements Task {
         Collections.reverse(path);
         return TaskResult.success(Collections.emptyList(), path);
     }
-
-    @Override
-    public boolean paramsValid(Graph graph, Config config, Map<String, Integer> params) {
-        return params != null && params.size() == 2
-                && nodeValid(params.get("from"), graph.n())
-                && nodeValid(params.get("to"), graph.n());
-    }
-
-    @Override
-    public boolean executionPossible(Graph graph, Config config) {
-        return !AnalyticDefinition.NEGATIVE_CYCLES.analyze(graph, config);
-    }
-
-    private boolean nodeValid(Integer node, int n) {
-        return node != null && node >= 0 && node < n;
-    }
-
 }
