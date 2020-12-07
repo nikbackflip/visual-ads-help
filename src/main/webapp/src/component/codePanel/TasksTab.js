@@ -124,9 +124,6 @@ class TasksDropdown extends React.Component {
                 )
             }) : null;
 
-
-        console.log(this.state.response);
-
         return (
             <div className="Code-panel-whole-height">
                 <div className="Code-panel-tasks-up">
