@@ -13,13 +13,13 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class FindShortestPathTest {
+public class DijkstrasFindShortestPathTest {
 
     @ParameterizedTest
     @MethodSource("input")
     public void taskTest(Graph graph, Map<String, Integer> params, List<Edge> expected) {
         //given
-        Task task = new FindShortestPath();
+        Task task = new DijkstrasFindShortestPath();
 
         //when
         TaskResult result = task.execute(graph, config, params);

@@ -7,7 +7,7 @@ import com.backflip.vadsh.ds.graph.analyzer.AnalyticDefinition;
 
 import java.util.*;
 
-public class FindShortestPath implements Task {
+public class DijkstrasFindShortestPath implements Task {
 
     @Override
     public TaskResult execute(Graph graphInput, Config config, Map<String, Integer> params) {

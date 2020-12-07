@@ -21,11 +21,11 @@ public enum TaskDefinition {
             emptyList(),
             new FindTreeCenter()
     ),
-    FIND_SHORTEST_PATH(
-            "Find Shortest Path",
-            Constants.SHORTEST_PATH_ID,
+    FIND_SHORTEST_PATH_DIJKSTRAS(
+            "Find Shortest Path - Dijkstra's",
+            Constants.DIJKSTRAS_SHORTEST_PATH_ID,
             List.of(TaskParameter.of("from", "From Node"), TaskParameter.of("to", "To Node")),
-            new FindShortestPath()
+            new DijkstrasFindShortestPath()
     ),
     FIND_MINIMUM_SPANNING_TREE(
             "Find Minimum Spanning Tree",
@@ -43,8 +43,8 @@ public enum TaskDefinition {
         switch (id) {
             case Constants.TREE_CENTER_ID:
                 return FIND_TREE_CERNER;
-            case Constants.SHORTEST_PATH_ID:
-                return FIND_SHORTEST_PATH;
+            case Constants.DIJKSTRAS_SHORTEST_PATH_ID:
+                return FIND_SHORTEST_PATH_DIJKSTRAS;
             case Constants.MINIMUM_SPANNING_TREE_ID:
                 return FIND_MINIMUM_SPANNING_TREE;
             default:
@@ -71,7 +71,7 @@ public enum TaskDefinition {
 
     private static final class Constants {
         private static final String TREE_CENTER_ID = "treeCenter";
-        private static final String SHORTEST_PATH_ID = "shortestPath";
+        private static final String DIJKSTRAS_SHORTEST_PATH_ID = "shortestPathDijkstras";
         private static final String MINIMUM_SPANNING_TREE_ID = "minimumSpanningTree";
     }
 }
