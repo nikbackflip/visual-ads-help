@@ -23,7 +23,10 @@ public enum TaskDefinition {
             "Find Tree Center",
             Constants.TREE_CENTER_ID,
             emptyList(),
-            List.of(TaskPrerequisite.of(TREE::analyze, "Graph must be a tree")),
+            List.of(
+                    TaskPrerequisite.of((g, c) -> !DIRECTIONAL.analyze(g, c), "Graph must be undirected"),
+                    TaskPrerequisite.of(TREE::analyze, "Graph must be a tree")
+            ),
             new FindTreeCenter()
     ),
     FIND_SHORTEST_PATH_DIJKSTRAS(
