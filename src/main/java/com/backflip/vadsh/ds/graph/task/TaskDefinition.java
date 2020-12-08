@@ -36,6 +36,13 @@ public enum TaskDefinition {
             List.of(TaskPrerequisite.of((g, c) -> !NEGATIVE_CYCLES.analyze(g, c), "Graph must not contain negative cycles")),
             new DijkstrasFindShortestPath()
     ),
+    FIND_SHORTEST_PATH_BELLMAN_FORD(
+            "Find Shortest Path - Bellman-Ford",
+            Constants.BELLMAN_FORD_SHORTEST_PATH_ID,
+            List.of(TaskParameter.of("from", "From Node"), TaskParameter.of("to", "To Node")),
+            emptyList(),
+            new BellmanFordFindShortestPath()
+    ),
     FIND_MINIMUM_SPANNING_TREE(
             "Find Minimum Spanning Tree",
             Constants.MINIMUM_SPANNING_TREE_ID,
@@ -56,6 +63,8 @@ public enum TaskDefinition {
                 return FIND_TREE_CERNER;
             case Constants.DIJKSTRAS_SHORTEST_PATH_ID:
                 return FIND_SHORTEST_PATH_DIJKSTRAS;
+            case Constants.BELLMAN_FORD_SHORTEST_PATH_ID:
+                return FIND_SHORTEST_PATH_BELLMAN_FORD;
             case Constants.MINIMUM_SPANNING_TREE_ID:
                 return FIND_MINIMUM_SPANNING_TREE;
             default:
@@ -131,6 +140,7 @@ public enum TaskDefinition {
     private static final class Constants {
         private static final String TREE_CENTER_ID = "treeCenter";
         private static final String DIJKSTRAS_SHORTEST_PATH_ID = "shortestPathDijkstras";
+        private static final String BELLMAN_FORD_SHORTEST_PATH_ID = "shortestPathBellmanFord";
         private static final String MINIMUM_SPANNING_TREE_ID = "minimumSpanningTree";
     }
 }
