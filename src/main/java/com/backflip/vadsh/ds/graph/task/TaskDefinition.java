@@ -56,6 +56,13 @@ public enum TaskDefinition {
             emptyList(),
             List.of(TaskPrerequisite.of(DIRECTIONAL::analyze, "Graph must be directional")),
             new FindStronglyConnectedComponents()
+    ),
+    FIND_BRIDGES(
+            "Find Bridges",
+            Constants.BRIDGES_ID,
+            emptyList(),
+            List.of(TaskPrerequisite.of((g, c) -> !DIRECTIONAL.analyze(g, c), "Graph must be undirected")),
+            new FindBridges()
     );
 
     private final String label;
@@ -76,6 +83,8 @@ public enum TaskDefinition {
                 return FIND_MINIMUM_SPANNING_TREE;
             case Constants.STRONGLY_CONNECTED_COMPONENTS_ID:
                 return FIND_STRONGLY_CONNECTED_COMPONENTS;
+            case Constants.BRIDGES_ID:
+                return FIND_BRIDGES;
             default:
                 throw new IllegalStateException("Unexpected value: " + id);
         }
@@ -152,6 +161,7 @@ public enum TaskDefinition {
         private static final String DIJKSTRAS_SHORTEST_PATH_ID = "shortestPathDijkstras";
         private static final String BELLMAN_FORD_SHORTEST_PATH_ID = "shortestPathBellmanFord";
         private static final String MINIMUM_SPANNING_TREE_ID = "minimumSpanningTree";
+        private static final String BRIDGES_ID = "bridges";
     }
 }
 
