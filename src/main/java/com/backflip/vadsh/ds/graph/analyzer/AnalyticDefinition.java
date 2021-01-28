@@ -28,4 +28,8 @@ public enum AnalyticDefinition {
     public boolean analyze(Graph graph, Config config) {
         return analyzer.analyze(graph, config);
     }
+
+    public boolean analyzeAndNegate(Graph graph, Config config) {
+        return !analyze(graph, config);
+    }
 }
