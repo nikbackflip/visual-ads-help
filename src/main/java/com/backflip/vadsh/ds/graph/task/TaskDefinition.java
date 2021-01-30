@@ -79,6 +79,13 @@ public enum TaskDefinition {
             List.of(FROM_NODE, TO_NODE),
             List.of(TaskPrerequisite.of(DAG, "Graph must be a directed acyclic graph")),
             new DagFindLongestPath()
+    ),
+    FIND_TOPOLOGICAL_ORDER(
+            "Find Topological Order",
+            Constants.TOPOLOGICAL_ORDER_ID,
+            emptyList(),
+            List.of(TaskPrerequisite.of(DAG, "Graph must be a directed acyclic graph")),
+            new FindTopologicalOrder()
     );
 
     private final String label;
@@ -105,6 +112,8 @@ public enum TaskDefinition {
                 return FIND_SHORTEST_PATH_DAG;
             case Constants.DAG_LONGEST_PATH_ID:
                 return FIND_LONGEST_PATH_DAG;
+            case Constants.TOPOLOGICAL_ORDER_ID:
+                return FIND_TOPOLOGICAL_ORDER;
             default:
                 throw new IllegalStateException("Unexpected value: " + id);
         }
@@ -196,6 +205,7 @@ public enum TaskDefinition {
         private static final String BRIDGES_ID = "bridges";
         private static final String DAG_SHORTEST_PATH_ID = "shortestPathDag";
         private static final String DAG_LONGEST_PATH_ID = "longestPathDag";
+        private static final String TOPOLOGICAL_ORDER_ID = "topologicalOrder";
     }
 }
 
