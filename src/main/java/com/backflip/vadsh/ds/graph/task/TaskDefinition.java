@@ -65,6 +65,13 @@ public enum TaskDefinition {
             emptyList(),
             List.of(TaskPrerequisite.of(not(DIRECTIONAL), "Graph must be undirected")),
             new FindBridges()
+    ),
+    FIND_SHORTEST_PATH_DAG(
+            "Find Shortest Path - DAG",
+            Constants.DAG_SHORTEST_PATH_ID,
+            List.of(FROM_NODE, TO_NODE),
+            List.of(TaskPrerequisite.of(DAG, "Graph must be a directed acyclic graph")),
+            new DagFindShortestPath()
     );
 
     private final String label;
@@ -87,6 +94,8 @@ public enum TaskDefinition {
                 return FIND_STRONGLY_CONNECTED_COMPONENTS;
             case Constants.BRIDGES_ID:
                 return FIND_BRIDGES;
+            case Constants.DAG_SHORTEST_PATH_ID:
+                return FIND_SHORTEST_PATH_DAG;
             default:
                 throw new IllegalStateException("Unexpected value: " + id);
         }
@@ -176,6 +185,7 @@ public enum TaskDefinition {
         private static final String BELLMAN_FORD_SHORTEST_PATH_ID = "shortestPathBellmanFord";
         private static final String MINIMUM_SPANNING_TREE_ID = "minimumSpanningTree";
         private static final String BRIDGES_ID = "bridges";
+        private static final String DAG_SHORTEST_PATH_ID = "shortestPathDag";
     }
 }
 
