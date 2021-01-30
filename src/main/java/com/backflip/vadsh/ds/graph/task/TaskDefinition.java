@@ -72,6 +72,13 @@ public enum TaskDefinition {
             List.of(FROM_NODE, TO_NODE),
             List.of(TaskPrerequisite.of(DAG, "Graph must be a directed acyclic graph")),
             new DagFindShortestPath()
+    ),
+    FIND_LONGEST_PATH_DAG(
+            "Find Longest Path - DAG",
+            Constants.DAG_LONGEST_PATH_ID,
+            List.of(FROM_NODE, TO_NODE),
+            List.of(TaskPrerequisite.of(DAG, "Graph must be a directed acyclic graph")),
+            new DagFindLongestPath()
     );
 
     private final String label;
@@ -96,6 +103,8 @@ public enum TaskDefinition {
                 return FIND_BRIDGES;
             case Constants.DAG_SHORTEST_PATH_ID:
                 return FIND_SHORTEST_PATH_DAG;
+            case Constants.DAG_LONGEST_PATH_ID:
+                return FIND_LONGEST_PATH_DAG;
             default:
                 throw new IllegalStateException("Unexpected value: " + id);
         }
@@ -186,6 +195,7 @@ public enum TaskDefinition {
         private static final String MINIMUM_SPANNING_TREE_ID = "minimumSpanningTree";
         private static final String BRIDGES_ID = "bridges";
         private static final String DAG_SHORTEST_PATH_ID = "shortestPathDag";
+        private static final String DAG_LONGEST_PATH_ID = "longestPathDag";
     }
 }
 
