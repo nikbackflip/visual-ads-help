@@ -75,7 +75,7 @@ public class FindStronglyConnectedComponents implements Task {
         return -1;
     }
 
-    static class Counter {
+    private static class Counter {
         int c = 0;
         int inc() {
             return c++;

@@ -16,6 +16,7 @@ import java.util.stream.Stream;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.isA;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,7 +32,7 @@ public class FindBridgesTest {
         TaskResult result = task.execute(graph, undirectionalConfig, Collections.emptyMap());
 
         //then
-        assertEquals(expected, ((TaskExecutionSuccess)result).getEdges());
+        assertThat(((TaskExecutionSuccess)result).getEdges(), containsInAnyOrder(expected.toArray()));
     }
 
     private final static Config undirectionalConfig = new Config(false, true, true);
@@ -44,6 +45,7 @@ public class FindBridgesTest {
     private final static Graph fourComponentsGraph = new Graph(List.of(new Edge(0, 1, 1.0), new Edge(1, 0, 1.0), new Edge(1, 2, 1.0), new Edge(2, 1, 1.0), new Edge(2, 0, 1.0), new Edge(0, 2, 1.0), new Edge(2, 3, 1.0), new Edge(3, 2, 1.0), new Edge(3, 4, 1.0), new Edge(4, 3, 1.0), new Edge(4, 5, 1.0), new Edge(5, 4, 1.0), new Edge(5, 6, 1.0), new Edge(6, 5, 1.0), new Edge(6, 3, 1.0), new Edge(3, 6, 1.0), new Edge(2, 7, 1.0), new Edge(7, 2, 1.0), new Edge(7, 8, 1.0), new Edge(8, 7, 1.0), new Edge(8, 9, 1.0), new Edge(9, 8, 1.0), new Edge(9, 7, 1.0), new Edge(7, 9, 1.0), new Edge(5, 10, 1.0), new Edge(10, 5, 1.0)), 11);
     private final static Graph tree = new Graph(List.of(new Edge(0, 2, 1.0),new Edge(2, 0, 1.0),new Edge(2, 6, 1.0),new Edge(6, 2, 1.0),new Edge(6, 11, 1.0),new Edge(11, 6, 1.0),new Edge(11, 12, 1.0),new Edge(12, 11, 1.0),new Edge(12, 7, 1.0),new Edge(7, 12, 1.0),new Edge(5, 2, 1.0),new Edge(2, 5, 1.0),new Edge(2, 10, 1.0),new Edge(10, 2, 1.0),new Edge(1, 4, 1.0),new Edge(4, 1, 1.0),new Edge(4, 3, 1.0),new Edge(3, 4, 1.0),new Edge(3, 9, 1.0),new Edge(9, 3, 1.0),new Edge(8, 13, 1.0),new Edge(13, 8, 1.0),new Edge(8, 6, 1.0),new Edge(6, 8, 1.0),new Edge(3, 11, 1.0),new Edge(11, 3, 1.0)), 14);
     private final static Graph disconnectedComponents = new Graph(List.of(new Edge(0, 1, 1.0), new Edge(1, 0, 1.0), new Edge(1, 2, 1.0), new Edge(2, 1, 1.0), new Edge(2, 0, 1.0), new Edge(0, 2, 1.0), new Edge(3, 4, 1.0), new Edge(4, 3, 1.0), new Edge(4, 5, 1.0), new Edge(5, 4, 1.0), new Edge(5, 3, 1.0), new Edge(3, 5, 1.0)), 6);
+    private final static Graph butterflyGraph = new Graph(List.of(new Edge(0, 1, 1.0), new Edge(1, 0, 1.0), new Edge(1, 2, 1.0), new Edge(2, 1, 1.0), new Edge(2, 3, 1.0), new Edge(3, 2, 1.0), new Edge(3, 4, 1.0), new Edge(4, 3, 1.0), new Edge(4, 2, 1.0), new Edge(2, 4, 1.0), new Edge(2, 0, 1.0), new Edge(0, 2, 1.0)), 5);
 
     private static Stream<Arguments> input() {
         return Stream.of(
@@ -55,7 +57,8 @@ public class FindBridgesTest {
                 Arguments.of(threeComponentsGraph, List.of(new Edge(2, 3, 1.0), new Edge(2, 7, 1.0))),
                 Arguments.of(fourComponentsGraph, List.of(new Edge(2, 3, 1.0), new Edge(2, 7, 1.0), new Edge(5, 10, 1.0))),
                 Arguments.of(tree, List.of(new Edge(0, 2, 1.0), new Edge(2, 6, 1.0), new Edge(6, 11, 1.0), new Edge(11, 12, 1.0), new Edge(12, 7, 1.0) ,new Edge(2, 5, 1.0), new Edge(2, 10, 1.0), new Edge(4, 1, 1.0), new Edge(3, 4, 1.0), new Edge(3, 9, 1.0), new Edge(8, 13, 1.0), new Edge(6, 8, 1.0), new Edge(11, 3, 1.0))),
-                Arguments.of(disconnectedComponents, emptyList())
+                Arguments.of(disconnectedComponents, emptyList()),
+                Arguments.of(butterflyGraph, emptyList())
         );
     }
 

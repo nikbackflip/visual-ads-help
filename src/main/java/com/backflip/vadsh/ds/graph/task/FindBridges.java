@@ -22,49 +22,34 @@ public class FindBridges implements Task {
         int[] visited = new int[n];
         for (int i = 0; i < n; i++) visited[i] = -1;
 
-        Map<Integer, Set<Integer>> excludedEdges = new HashMap<>();
-        for (int i = 0; i < n; i++) {
-            excludedEdges.put(i, new HashSet<>());
-        }
-
-        int next = getNotVisited(visited);
-        while (next != -1) {
-            dfs(g, next, new Counter(), visited, llv, excludedEdges);
-            next = getNotVisited(visited);
-        }
-
         List<Edge> bridges = new ArrayList<>();
-        for(Edge e: graph.edgeList()) {
-            if (llv[visited[e.from()]] < llv[visited[e.to()]])
-                bridges.add(e);
+
+        Counter c = new Counter();
+        for (int i = 0; i < n; i++) {
+            if (visited[i] != -1) continue;
+            dfs(g, i, -1, visited, llv, c, bridges);
         }
 
         return TaskResult.success(emptyList(), bridges);
     }
 
-    private int getNotVisited(int[] visited) {
-        for (int i = 0; i < visited.length; i++) {
-            if (visited[i] == -1) return i;
-        }
-        return -1;
-    }
+    private void dfs(List<List<Integer>> g, int from, int parent, int[] visited, int[] llv, Counter c, List<Edge> bridges) {
+        if (visited[from] != -1) return;
 
-    private void dfs(List<List<Integer>> g, int current, Counter counter, int[] visited, int[] llv, Map<Integer, Set<Integer>> excludedEdges) {
-        if (visited[current] != -1) return;
+        int currRef = c.inc();
+        visited[from] = currRef;
+        llv[from] = currRef;
 
-        visited[current] = counter.inc();
-        int currRef = visited[current];
-        llv[currRef] = currRef;
-
-        for (Integer child: g.get(current)) {
-            if (excludedEdges.get(current).contains(child)) continue;
-            excludedEdges.get(child).add(current);
-            dfs(g, child, counter, visited, llv, excludedEdges);
-            if (llv[visited[child]] < llv[currRef]) llv[currRef] = llv[visited[child]];
+        for (Integer to: g.get(from)) {
+            if (to == parent) continue;
+            dfs(g, to, from, visited, llv, c, bridges);
+            if (llv[to] < llv[from]) llv[from] = llv[to];
+            else if (llv[to] > visited[from]) bridges.add(new Edge(from, to, 1.0));
         }
     }
 
-    static class Counter {
+
+    private static class Counter {
         int c = 0;
         int inc() {
             return c++;
