@@ -66,6 +66,13 @@ public enum TaskDefinition {
             List.of(TaskPrerequisite.of(not(DIRECTIONAL), "Graph must be undirected")),
             new FindBridges()
     ),
+    FIND_ARTICULATION_POINTS(
+            "Find Articulation Points",
+            Constants.ARTICULATION_POINTS_ID,
+            emptyList(),
+            List.of(TaskPrerequisite.of(not(DIRECTIONAL), "Graph must be undirected")),
+            new FindArticulationPoints()
+    ),
     FIND_SHORTEST_PATH_DAG(
             "Find Shortest Path - DAG",
             Constants.DAG_SHORTEST_PATH_ID,
@@ -108,6 +115,8 @@ public enum TaskDefinition {
                 return FIND_STRONGLY_CONNECTED_COMPONENTS;
             case Constants.BRIDGES_ID:
                 return FIND_BRIDGES;
+            case Constants.ARTICULATION_POINTS_ID:
+                return FIND_ARTICULATION_POINTS;
             case Constants.DAG_SHORTEST_PATH_ID:
                 return FIND_SHORTEST_PATH_DAG;
             case Constants.DAG_LONGEST_PATH_ID:
@@ -203,6 +212,7 @@ public enum TaskDefinition {
         private static final String BELLMAN_FORD_SHORTEST_PATH_ID = "shortestPathBellmanFord";
         private static final String MINIMUM_SPANNING_TREE_ID = "minimumSpanningTree";
         private static final String BRIDGES_ID = "bridges";
+        private static final String ARTICULATION_POINTS_ID = "articulationPoints";
         private static final String DAG_SHORTEST_PATH_ID = "shortestPathDag";
         private static final String DAG_LONGEST_PATH_ID = "longestPathDag";
         private static final String TOPOLOGICAL_ORDER_ID = "topologicalOrder";
