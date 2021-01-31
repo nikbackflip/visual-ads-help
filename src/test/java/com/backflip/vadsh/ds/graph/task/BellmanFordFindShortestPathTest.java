@@ -16,15 +16,14 @@ import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isA;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class DijkstrasFindShortestPathTest {
+public class BellmanFordFindShortestPathTest {
 
     @ParameterizedTest
     @MethodSource("input")
     public void taskTest(Graph graph, Map<String, Integer> params, List<Edge> expected) {
         //given
-        Task task = new DijkstrasFindShortestPath();
+        Task task = new BellmanFordFindShortestPath();
 
         //when
         TaskResult result = task.execute(graph, config, params);
@@ -58,7 +57,7 @@ public class DijkstrasFindShortestPathTest {
         Config config = new Config(true, true, true);
 
         //when
-        TaskResult result = TaskDefinition.FIND_SHORTEST_PATH_DIJKSTRAS.execute(graph, config, params);
+        TaskResult result = TaskDefinition.FIND_SHORTEST_PATH_BELLMAN_FORD.execute(graph, config, params);
 
         //then
         assertThat(result, isA(TaskExecutionSuccess.class));
@@ -73,7 +72,7 @@ public class DijkstrasFindShortestPathTest {
         Config config = new Config(true, true, true);
 
         //when
-        TaskResult result = TaskDefinition.FIND_SHORTEST_PATH_DIJKSTRAS.execute(graph, config, params);
+        TaskResult result = TaskDefinition.FIND_SHORTEST_PATH_BELLMAN_FORD.execute(graph, config, params);
 
         //then
         assertThat(result, isA(TaskExecutionFailed.class));
@@ -89,7 +88,7 @@ public class DijkstrasFindShortestPathTest {
         Config config = new Config(true, true, true);
 
         //when
-        TaskResult result = TaskDefinition.FIND_SHORTEST_PATH_DIJKSTRAS.execute(graph, config, params);
+        TaskResult result = TaskDefinition.FIND_SHORTEST_PATH_BELLMAN_FORD.execute(graph, config, params);
 
         //then
         assertThat(result, isA(TaskExecutionFailed.class));
@@ -105,7 +104,7 @@ public class DijkstrasFindShortestPathTest {
         Config config = new Config(true, true, true);
 
         //when
-        TaskResult result = TaskDefinition.FIND_SHORTEST_PATH_DIJKSTRAS.execute(graph, config, params);
+        TaskResult result = TaskDefinition.FIND_SHORTEST_PATH_BELLMAN_FORD.execute(graph, config, params);
 
         //then
         assertThat(result, isA(TaskExecutionFailed.class));
@@ -121,7 +120,7 @@ public class DijkstrasFindShortestPathTest {
         Config config = new Config(true, true, true);
 
         //when
-        TaskResult result = TaskDefinition.FIND_SHORTEST_PATH_DIJKSTRAS.execute(graph, config, params);
+        TaskResult result = TaskDefinition.FIND_SHORTEST_PATH_BELLMAN_FORD.execute(graph, config, params);
 
         //then
         assertThat(result, isA(TaskExecutionFailed.class));
@@ -137,7 +136,7 @@ public class DijkstrasFindShortestPathTest {
         Config config = new Config(true, true, true);
 
         //when
-        TaskResult result = TaskDefinition.FIND_SHORTEST_PATH_DIJKSTRAS.execute(graph, config, params);
+        TaskResult result = TaskDefinition.FIND_SHORTEST_PATH_BELLMAN_FORD.execute(graph, config, params);
 
         //then
         assertThat(result, isA(TaskExecutionFailed.class));
@@ -148,32 +147,16 @@ public class DijkstrasFindShortestPathTest {
     @Test
     public void validatePrerequisites_failOnGraphWithNegativeCycles() {
         //given
-        Map<String, Integer> params = Map.of("from", 0, "to", 0);
-        Graph graph = new Graph(List.of(new Edge(0, 0, -1)), 1);
+        Map<String, Integer> params = Map.of("from", 0, "to", 3);
+        Graph graph = new Graph(List.of(new Edge(0, 1, 1.0), new Edge(1, 2, -3.0), new Edge(2, 3, 1.0), new Edge(2, 4, 1.0), new Edge(4, 1, 1.0)), 5);
         Config config = new Config(true, true, true);
 
         //when
-        TaskResult result = TaskDefinition.FIND_SHORTEST_PATH_DIJKSTRAS.execute(graph, config, params);
+        TaskResult result = TaskDefinition.FIND_SHORTEST_PATH_BELLMAN_FORD.execute(graph, config, params);
 
         //then
         assertThat(result, isA(TaskExecutionFailed.class));
         assertTrue(result.failed());
-        assertEquals("Graph must not contain negative cycles", ((TaskExecutionFailed)result).getMessage());
-    }
-
-    @Test
-    public void validatePrerequisites_failOnUnreachableNode() {
-        //given
-        Map<String, Integer> params = Map.of("from", 0, "to", 4);
-        Graph graph = new Graph(List.of(new Edge(0, 2, 1.0), new Edge(2, 3, 1.0), new Edge(3, 1, 1.0), new Edge(4, 1, 1.0)), 5);
-        Config config = new Config(true, true, true);
-
-        //when
-        TaskResult result = TaskDefinition.FIND_SHORTEST_PATH_DIJKSTRAS.execute(graph, config, params);
-
-        //then
-        assertThat(result, isA(TaskExecutionFailed.class));
-        assertTrue(result.failed());
-        assertEquals("Node 4 is unreachable from node 0", ((TaskExecutionFailed)result).getMessage());
+        assertEquals("Negative cycle detected", ((TaskExecutionFailed)result).getMessage());
     }
 }

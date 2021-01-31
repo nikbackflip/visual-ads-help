@@ -76,7 +76,19 @@ public class AnalyzersTest {
                 Arguments.of(disconnectedAnalyzer, completeGraphWithSelfLoops, defaultConfig, false),
                 Arguments.of(disconnectedAnalyzer, disconnectedComponent, defaultConfig, true),
                 Arguments.of(disconnectedAnalyzer, singleDisconnectedNode, defaultConfig, true),
-                Arguments.of(disconnectedAnalyzer, componentUnreachableFromZero, defaultConfig, false)
+                Arguments.of(disconnectedAnalyzer, componentUnreachableFromZero, defaultConfig, false),
+
+                Arguments.of(eulerianPathAnalyzer, singleNode, directionalConfig, true),
+                Arguments.of(eulerianPathAnalyzer, disconnectedNodes, directionalConfig, true),
+                Arguments.of(eulerianPathAnalyzer, componentUnreachableFromZero, directionalConfig, false),
+                Arguments.of(eulerianPathAnalyzer, completeGraphWithSelfLoops, directionalConfig, true),
+                Arguments.of(eulerianPathAnalyzer, incompleteGraph, directionalConfig, true),
+                Arguments.of(eulerianPathAnalyzer, tree, directionalConfig, false),
+                Arguments.of(eulerianPathAnalyzer, singleNode, notDirectionalConfig, true),
+                Arguments.of(eulerianPathAnalyzer, disconnectedNodes, notDirectionalConfig, true),
+                Arguments.of(eulerianPathAnalyzer, disconnectedComponents, notDirectionalConfig, false),
+                Arguments.of(eulerianPathAnalyzer, singleDiagonalSquare, notDirectionalConfig, true),
+                Arguments.of(eulerianPathAnalyzer, doubleDiagonalsSquare, notDirectionalConfig, false)
         );
     }
 
@@ -87,6 +99,7 @@ public class AnalyzersTest {
     private final static Analyzer dagAnalyzer = new DagAnalyzer();
     private final static Analyzer negativeCyclesAnalyzer = new NegativeCyclesAnalyzer();
     private final static Analyzer disconnectedAnalyzer = new DisconnectedAnalyzer();
+    private final static Analyzer eulerianPathAnalyzer = new EulerianPathAnalyzer();
 
     private final static Config defaultConfig = new Config(true, true, true);
     private final static Config weightedConfig = new Config(false, true, false);
@@ -102,6 +115,7 @@ public class AnalyzersTest {
     private final static Graph singleNodeSelfLoop = new Graph(List.of(new Edge(0, 0, 1)), 1);
     private final static Graph singleNodeSelfLoopNegative = new Graph(List.of(new Edge(0, 0, -1)), 1);
     private final static Graph singleNode = new Graph(emptyList(), 1);
+    private final static Graph disconnectedNodes = new Graph(emptyList(), 3);
     private final static Graph tree = new Graph(List.of(new Edge(0, 1, 1.0), new Edge(0, 2, 1.0), new Edge(2, 3, 1.0), new Edge(2, 4, 1.0), new Edge(2, 5, 1.0)), 6);
     private final static Graph treeNotDirectional = new Graph(List.of(new Edge(0, 1, 1.0), new Edge(0, 2, 1.0), new Edge(2, 3, 1.0), new Edge(2, 4, 1.0), new Edge(2, 5, 1.0), new Edge(1, 0, 1.0), new Edge(2, 0, 1.0), new Edge(3, 2, 1.0), new Edge(4, 2, 1.0), new Edge(5, 2, 1.0)), 6);
     private final static Graph treeWithFreeNode = new Graph(List.of(new Edge(0, 1, 1.0), new Edge(0, 2, 1.0), new Edge(2, 3, 1.0), new Edge(2, 4, 1.0), new Edge(2, 5, 1.0)), 7);
@@ -112,6 +126,9 @@ public class AnalyzersTest {
     private final static Graph disconnectedComponent = new Graph(List.of(new Edge(0, 0, 1.0), new Edge(0, 5, 1.0), new Edge(1, 3, 1.0), new Edge(2, 3, 6.0), new Edge(2, 6, -10.0), new Edge(3, 1, 10.0), new Edge(3, 2, 6.0), new Edge(3, 4, 1.0), new Edge(4, 0, 3.0), new Edge(5, 1, 1.0), new Edge(6, 0, 1.0), new Edge(6, 2, 10.0), new Edge(6, 6, 7.0), new Edge(7, 8, 1.0), new Edge(8, 9, 1.0), new Edge(9, 7, 1.0)), 10);
     private final static Graph singleDisconnectedNode = new Graph(List.of(new Edge(1, 2, 1.0),new Edge(2, 1, 1.0),new Edge(1, 3, 1.0),new Edge(3, 2, 1.0)), 4);
     private final static Graph componentUnreachableFromZero = new Graph(List.of(new Edge(0, 2, 1.0), new Edge(2, 3, 1.0), new Edge(3, 0, 1.0), new Edge(0, 1, 1.0), new Edge(1, 8, 1.0), new Edge(8, 0, 1.0), new Edge(0, 4, 1.0), new Edge(4, 8, 1.0), new Edge(8, 7, 1.0), new Edge(1, 1, 1.0), new Edge(7, 1, 1.0), new Edge(1, 6, 1.0), new Edge(6, 8, 1.0), new Edge(5, 8, 1.0), new Edge(3, 6, 1.0)), 9);
+    private final static Graph disconnectedComponents = new Graph(List.of(new Edge(0, 1, 1.0), new Edge(1, 0, 1.0), new Edge(2, 3, 1.0), new Edge(3, 2, 1.0)), 4);
+    private final static Graph singleDiagonalSquare = new Graph(List.of(new Edge(0, 3, 1.0), new Edge(3, 0, 1.0), new Edge(3, 2, 1.0), new Edge(2, 3, 1.0), new Edge(2, 1, 1.0), new Edge(1, 2, 1.0), new Edge(1, 0, 1.0), new Edge(0, 1, 1.0), new Edge(0, 2, 1.0), new Edge(2, 0, 1.0)), 4);
+    private final static Graph doubleDiagonalsSquare = new Graph(List.of(new Edge(0, 3, 1.0), new Edge(3, 0, 1.0), new Edge(3, 2, 1.0), new Edge(2, 3, 1.0), new Edge(2, 1, 1.0), new Edge(1, 2, 1.0), new Edge(1, 0, 1.0), new Edge(0, 1, 1.0), new Edge(0, 2, 1.0), new Edge(2, 0, 1.0), new Edge(1, 3, 1.0), new Edge(3, 1, 1.0)), 4);
 }
 
 

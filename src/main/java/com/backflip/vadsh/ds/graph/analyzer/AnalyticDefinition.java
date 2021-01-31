@@ -11,7 +11,8 @@ public enum AnalyticDefinition {
     TREE("tree", new TreeAnalyzer()),
     DAG("DAG", new DagAnalyzer()),
     NEGATIVE_CYCLES("negative cycles", new NegativeCyclesAnalyzer()),
-    DISCONNECTED("disconnected", new DisconnectedAnalyzer());
+    DISCONNECTED("disconnected", new DisconnectedAnalyzer()),
+    EULERIAN_PATH("eulerian path", new EulerianPathAnalyzer());
 
     AnalyticDefinition(String label, Analyzer analyzer) {
         this.label = label;
@@ -27,5 +28,9 @@ public enum AnalyticDefinition {
 
     public boolean analyze(Graph graph, Config config) {
         return analyzer.analyze(graph, config);
+    }
+
+    public boolean analyzeAndNegate(Graph graph, Config config) {
+        return !analyze(graph, config);
     }
 }

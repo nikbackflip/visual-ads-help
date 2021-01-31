@@ -6,6 +6,8 @@ import com.backflip.vadsh.ds.graph.Graph;
 
 import java.util.*;
 
+import static java.lang.String.format;
+
 public class DijkstrasFindShortestPath implements Task {
 
     @Override
@@ -15,10 +17,6 @@ public class DijkstrasFindShortestPath implements Task {
 
         int from = params.get("from");
         int to = params.get("to");
-
-        if (n == 0) {
-            return TaskResult.success();
-        }
 
         Float[] dist = new Float[n];
         for (int i = 0; i < n; i++) {
@@ -79,6 +77,10 @@ public class DijkstrasFindShortestPath implements Task {
                     prev[edge.to()] = e.index;
                 }
             }
+        }
+
+        if (dist[to] == Float.POSITIVE_INFINITY) {
+            return TaskResult.failure(format("Node %s is unreachable from node %s", to, from));
         }
 
         List<Edge> path = new ArrayList<>();

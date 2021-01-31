@@ -96,7 +96,8 @@ class TasksDropdown extends React.Component {
                 response: {
                     success: true,
                     edges: data.json.edges,
-                    nodes: data.json.nodes
+                    nodes: data.json.nodes,
+                    components: data.json.components
                 }
             });
             self.props.handleGraphUpdate(self.props.graph);
@@ -166,6 +167,9 @@ class TasksDropdown extends React.Component {
                                 <EdgesResponse
                                     edges={this.state.response.edges}
                                 />
+                                <ComponentsResponse
+                                    components={this.state.response.components}
+                                />
                             </div>
                     }
                 </div>
@@ -189,10 +193,22 @@ class EdgesResponse extends React.Component {
     render() {
         if (this.props.edges.length === 0) return <div />
         return <div>
-            Nodes:
+            Edges:
             <br />
             {
                 this.props.edges.map(e => e.from + " -> " + e.to).join(", ")
+            }
+        </div>
+    }
+}
+class ComponentsResponse extends React.Component {
+    render() {
+        if (this.props.components.length === 0) return <div />
+        return <div>
+            Components:
+            <br />
+            {
+                this.props.components.map(c => c.join(", ")).join("\n")
             }
         </div>
     }
