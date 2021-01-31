@@ -93,6 +93,16 @@ public enum TaskDefinition {
             emptyList(),
             List.of(TaskPrerequisite.of(DAG, "Graph must be a directed acyclic graph")),
             new FindTopologicalOrder()
+    ),
+    FIND_EULERIAN_PATH(
+            "Find Eulerian Path",
+            Constants.EULERIAN_PATH_ID,
+            emptyList(),
+            List.of(
+                    TaskPrerequisite.of(EULERIAN_PATH, "Eulerian path does not exist"),
+                    TaskPrerequisite.of(DIRECTIONAL, "Graph must be directional")
+                    ),
+            new FindEulerianPath()
     );
 
     private final String label;
@@ -123,6 +133,8 @@ public enum TaskDefinition {
                 return FIND_LONGEST_PATH_DAG;
             case Constants.TOPOLOGICAL_ORDER_ID:
                 return FIND_TOPOLOGICAL_ORDER;
+            case Constants.EULERIAN_PATH_ID:
+                return FIND_EULERIAN_PATH;
             default:
                 throw new IllegalStateException("Unexpected value: " + id);
         }
@@ -216,6 +228,7 @@ public enum TaskDefinition {
         private static final String DAG_SHORTEST_PATH_ID = "shortestPathDag";
         private static final String DAG_LONGEST_PATH_ID = "longestPathDag";
         private static final String TOPOLOGICAL_ORDER_ID = "topologicalOrder";
+        private static final String EULERIAN_PATH_ID = "eulerianPath";
     }
 }
 

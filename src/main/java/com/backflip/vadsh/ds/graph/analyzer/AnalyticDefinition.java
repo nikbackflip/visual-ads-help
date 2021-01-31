@@ -11,7 +11,8 @@ public enum AnalyticDefinition {
     TREE("tree", new TreeAnalyzer()),
     DAG("DAG", new DagAnalyzer()),
     NEGATIVE_CYCLES("negative cycles", new NegativeCyclesAnalyzer()),
-    DISCONNECTED("disconnected", new DisconnectedAnalyzer());
+    DISCONNECTED("disconnected", new DisconnectedAnalyzer()),
+    EULERIAN_PATH("eulerian path", new EulerianPathAnalyzer());
 
     AnalyticDefinition(String label, Analyzer analyzer) {
         this.label = label;
