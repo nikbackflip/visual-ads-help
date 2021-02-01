@@ -45,13 +45,13 @@ public class FindStronglyConnectedComponents implements Task {
         llv[currRef] = currRef;
         stack.add(currRef);
 
-        for (Integer child: g.get(current)) {
+        for (Integer child : g.get(current)) {
             dfs(g, child, visited, llv, stack, components, c);
             if (stack.contains(visited[child])) llv[currRef] = min(llv[visited[child]], llv[currRef]);
         }
         if (llv[currRef] == currRef) {
             Set<Integer> component = new HashSet<>();
-            while(stack.peek() != currRef) {
+            while (stack.peek() != currRef) {
                 component.add(getByRef(visited, stack.pop()));
             }
             component.add(getByRef(visited, stack.pop()));
@@ -77,6 +77,7 @@ public class FindStronglyConnectedComponents implements Task {
 
     private static class Counter {
         int c = 0;
+
         int inc() {
             return c++;
         }

@@ -19,7 +19,7 @@ public class EulerianPathAnalyzer implements Analyzer {
         int[] in = new int[n];
         int[] out = new int[n];
 
-        for (Edge ed: edges) {
+        for (Edge ed : edges) {
             out[ed.from()]++;
             in[ed.to()]++;
         }

@@ -30,7 +30,7 @@ public class FindTreeCenter implements Task {
                     leafs.add(i);
                 }
             }
-            for(Integer leaf: leafs) {
+            for (Integer leaf : leafs) {
                 Integer parent = graph.get(leaf).get(0);
                 remainingNodes.remove(leaf);
                 graph.get(leaf).removeIf(v -> v.equals(parent));

@@ -22,19 +22,19 @@ public class NegativeCyclesAnalyzer implements Analyzer {
         for (int i = 0; i < n; i++) {
             dist[i] = Float.POSITIVE_INFINITY;
         }
-        dist[n-1] = 0;
+        dist[n - 1] = 0;
 
 
-        for (int i = 0; i < n-1; i++) {
-            for(Edge e: edges) {
+        for (int i = 0; i < n - 1; i++) {
+            for (Edge e : edges) {
                 if (dist[e.from()] + e.weight() < dist[e.to()]) {
-                    dist[e.to()] = dist[e.from()] + (float)e.weight();
+                    dist[e.to()] = dist[e.from()] + (float) e.weight();
                 }
             }
         }
 
-        for (int i = 0; i < n-1; i++) {
-            for(Edge e: edges) {
+        for (int i = 0; i < n - 1; i++) {
+            for (Edge e : edges) {
                 if (dist[e.from()] + e.weight() < dist[e.to()]) {
                     return true;
                 }

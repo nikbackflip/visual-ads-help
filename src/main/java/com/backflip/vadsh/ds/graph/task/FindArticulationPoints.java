@@ -40,7 +40,7 @@ public class FindArticulationPoints implements Task {
         visited[from] = currRef;
         llv[from] = currRef;
 
-        for (Integer to: g.get(from)) {
+        for (Integer to : g.get(from)) {
             if (to == parent) continue;
             dfs(g, to, from, visited, llv, c, articulationPoints);
 
@@ -48,8 +48,7 @@ public class FindArticulationPoints implements Task {
             else if (llv[to] > visited[from]) {
                 if (g.get(from).size() > 1) articulationPoints.add(from);
                 if (g.get(to).size() > 1) articulationPoints.add(to);
-            }
-            else if (visited[from] == llv[to] && parent != -1 && llv[parent] < llv[from]) {
+            } else if (visited[from] == llv[to] && parent != -1 && llv[parent] < llv[from]) {
                 articulationPoints.add(from);
             }
         }
@@ -58,6 +57,7 @@ public class FindArticulationPoints implements Task {
 
     private static class Counter {
         private int c = 0;
+
         int inc() {
             return c++;
         }

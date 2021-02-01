@@ -5,8 +5,8 @@ import com.backflip.vadsh.template.TemplateArgs;
 import java.util.Map;
 
 import static java.lang.String.format;
-import static java.util.Map.of;
 import static java.util.Collections.unmodifiableMap;
+import static java.util.Map.of;
 
 public class GraphArgs implements TemplateArgs {
 

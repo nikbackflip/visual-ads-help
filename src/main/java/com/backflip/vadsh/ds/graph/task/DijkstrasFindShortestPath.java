@@ -68,14 +68,14 @@ public class DijkstrasFindShortestPath implements Task {
         pq.add(new QueueEntry(from, 0f));
         dist[from] = 0f;
 
-        while(!pq.isEmpty()) {
+        while (!pq.isEmpty()) {
             QueueEntry e = pq.poll();
             List<Edge> outEdges = graph.get(e.index);
 
-            for (Edge edge: outEdges) {
+            for (Edge edge : outEdges) {
                 if (dist[e.index] + edge.weight() < dist[edge.to()]) {
-                    dist[edge.to()] = dist[e.index] + (float)edge.weight();
-                    pq.add(new QueueEntry(edge.to(), (float)edge.getWeight()));
+                    dist[edge.to()] = dist[e.index] + (float) edge.weight();
+                    pq.add(new QueueEntry(edge.to(), (float) edge.getWeight()));
                     prev[edge.to()] = e.index;
                 }
             }

@@ -11,11 +11,12 @@ import java.util.Map;
 import java.util.function.BiPredicate;
 
 import static com.backflip.vadsh.ds.graph.analyzer.AnalyticDefinition.*;
-import static com.backflip.vadsh.ds.graph.task.TaskDefinition.TaskParameter.*;
-import static com.backflip.vadsh.ds.graph.task.TaskDefinition.TaskPrerequisite.*;
+import static com.backflip.vadsh.ds.graph.task.TaskDefinition.TaskParameter.FROM_NODE;
+import static com.backflip.vadsh.ds.graph.task.TaskDefinition.TaskParameter.TO_NODE;
+import static com.backflip.vadsh.ds.graph.task.TaskDefinition.TaskPrerequisite.not;
 import static com.backflip.vadsh.ds.graph.task.TaskResult.failure;
 import static java.lang.String.format;
-import static java.util.Collections.*;
+import static java.util.Collections.emptyList;
 
 @Getter
 @AllArgsConstructor
@@ -101,7 +102,7 @@ public enum TaskDefinition {
             List.of(
                     TaskPrerequisite.of(EULERIAN_PATH, "Eulerian path does not exist"),
                     TaskPrerequisite.of(DIRECTIONAL, "Graph must be directional")
-                    ),
+            ),
             new FindEulerianPath()
     );
 
@@ -154,17 +155,19 @@ public enum TaskDefinition {
         if (taskParameters.size() != params.size()) {
             return new Validation(false, "Wrong parameters number");
         }
-        for (TaskParameter expectedParam: taskParameters) {
+        for (TaskParameter expectedParam : taskParameters) {
             Integer value = params.get(expectedParam.id);
             if (value == null) return new Validation(false, format("Parameter %s absent", expectedParam.label));
-            if (value < 0 || value >= graphSize) return new Validation(false, format("Parameter %s is invalid", expectedParam.label));
+            if (value < 0 || value >= graphSize)
+                return new Validation(false, format("Parameter %s is invalid", expectedParam.label));
         }
         return new Validation(true, "success");
     }
 
     private Validation validatePrerequisites(Graph graph, Config config) {
-        for (TaskPrerequisite prerequisite: prerequisites) {
-            if (!prerequisite.condition.test(graph, config)) return new Validation(false, prerequisite.getFailureMessage());
+        for (TaskPrerequisite prerequisite : prerequisites) {
+            if (!prerequisite.condition.test(graph, config))
+                return new Validation(false, prerequisite.getFailureMessage());
         }
         return new Validation(true, "success");
     }

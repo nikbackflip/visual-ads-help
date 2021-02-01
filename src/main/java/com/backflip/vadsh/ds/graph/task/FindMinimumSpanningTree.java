@@ -4,7 +4,10 @@ import com.backflip.vadsh.ds.graph.Config;
 import com.backflip.vadsh.ds.graph.Edge;
 import com.backflip.vadsh.ds.graph.Graph;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 
 import static com.backflip.vadsh.ds.graph.task.TaskResult.successEdges;
 
@@ -50,7 +53,7 @@ public class FindMinimumSpanningTree implements Task {
         graph.sort(Comparator.comparing(Edge::weight));
         UnionFind uf = new UnionFind(n);
 
-        for (Edge e: graph) {
+        for (Edge e : graph) {
             int from = e.from();
             int to = e.to();
 
@@ -60,6 +63,6 @@ public class FindMinimumSpanningTree implements Task {
             }
         }
 
-        return  successEdges(mst);
+        return successEdges(mst);
     }
 }

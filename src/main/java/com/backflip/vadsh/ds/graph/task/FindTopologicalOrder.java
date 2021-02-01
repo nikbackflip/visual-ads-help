@@ -33,7 +33,7 @@ public class FindTopologicalOrder implements Task {
 
     private void dfs(List<List<Edge>> g, int i, boolean[] visited, List<Integer> order) {
         visited[i] = true;
-        for(Edge e: g.get(i)) {
+        for (Edge e : g.get(i)) {
             if (!visited[e.to()]) {
                 dfs(g, e.to(), visited, order);
             }

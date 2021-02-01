@@ -4,9 +4,13 @@ import com.backflip.vadsh.ds.graph.Config;
 import com.backflip.vadsh.ds.graph.Edge;
 import com.backflip.vadsh.ds.graph.Graph;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-import static com.backflip.vadsh.ds.graph.task.TaskResult.*;
+import static com.backflip.vadsh.ds.graph.task.TaskResult.success;
+import static com.backflip.vadsh.ds.graph.task.TaskResult.successEdges;
 
 public class FindEulerianPath implements Task {
 
@@ -21,7 +25,7 @@ public class FindEulerianPath implements Task {
         int[] in = new int[n];
         int[] out = new int[n];
 
-        for (Edge ed: edges) {
+        for (Edge ed : edges) {
             out[ed.from()]++;
             in[ed.to()]++;
         }
@@ -29,7 +33,8 @@ public class FindEulerianPath implements Task {
         int startNode = -1;
         for (int i = 0; i < n; i++) {
             if (out[i] - in[i] == 1) {
-                startNode = i; break;
+                startNode = i;
+                break;
             }
             if (startNode == -1) startNode = 0;
         }
@@ -41,7 +46,7 @@ public class FindEulerianPath implements Task {
 
         List<Edge> result = new LinkedList<>();
         for (int i = 0; i < path.size() - 1; i++) {
-            result.add(new Edge(path.get(i), path.get(i+1), 1.0));
+            result.add(new Edge(path.get(i), path.get(i + 1), 1.0));
         }
 
         return successEdges(result);
