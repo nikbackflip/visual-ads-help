@@ -6,6 +6,9 @@ import com.backflip.vadsh.ds.graph.Graph;
 
 import java.util.*;
 
+import static com.backflip.vadsh.ds.graph.task.TaskResult.failure;
+import static com.backflip.vadsh.ds.graph.task.TaskResult.successEdges;
+
 public class BellmanFordFindShortestPath implements Task {
 
     @Override
@@ -46,7 +49,7 @@ public class BellmanFordFindShortestPath implements Task {
             }
         }
 
-        if (dist[to] == Float.NEGATIVE_INFINITY) return TaskResult.failure("Negative cycle detected");
+        if (dist[to] == Float.NEGATIVE_INFINITY) return failure("Negative cycle detected");
 
         List<Edge> path = new ArrayList<>();
         int fromNode = route[to];
@@ -57,6 +60,6 @@ public class BellmanFordFindShortestPath implements Task {
             fromNode = route[toNode];
         }
         Collections.reverse(path);
-        return TaskResult.success(Collections.emptyList(), path);
+        return successEdges(path);
     }
 }

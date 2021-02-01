@@ -14,10 +14,14 @@ public abstract class TaskResult {
         return !success;
     }
 
-    public static TaskResult success(List<Integer> nodes, List<Edge> edges) {
+    public static TaskResult successNodes(List<Integer> nodes) {
         nodes = nodes == null ? Collections.emptyList() : nodes;
+        return new TaskExecutionSuccess(nodes, Collections.emptyList(), Collections.emptyList());
+    }
+
+    public static TaskResult successEdges(List<Edge> edges) {
         edges = edges == null ? Collections.emptyList() : edges;
-        return new TaskExecutionSuccess(nodes, edges, Collections.emptyList());
+        return new TaskExecutionSuccess(Collections.emptyList(), edges, Collections.emptyList());
     }
 
     public static TaskResult success(List<Set<Integer>> components) {

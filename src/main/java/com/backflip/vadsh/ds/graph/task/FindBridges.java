@@ -6,6 +6,7 @@ import com.backflip.vadsh.ds.graph.Graph;
 
 import java.util.*;
 
+import static com.backflip.vadsh.ds.graph.task.TaskResult.successEdges;
 import static java.util.Collections.*;
 
 public class FindBridges implements Task {
@@ -30,7 +31,7 @@ public class FindBridges implements Task {
             dfs(g, i, -1, visited, llv, c, bridges);
         }
 
-        return TaskResult.success(emptyList(), bridges);
+        return successEdges(bridges);
     }
 
     private void dfs(List<List<Integer>> g, int from, int parent, int[] visited, int[] llv, Counter c, List<Edge> bridges) {

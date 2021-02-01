@@ -22,7 +22,7 @@ public class FindEulerianPathTest {
 
     @ParameterizedTest
     @MethodSource("input")
-    public void taskTest(Graph graph, List<Integer> expected) {
+    public void taskTest(Graph graph, List<Edge> expected) {
         //given
         Task task = new FindEulerianPath();
 
@@ -30,7 +30,7 @@ public class FindEulerianPathTest {
         TaskResult result = task.execute(graph, directionalConfig, emptyMap());
 
         //then
-        assertEquals(expected, ((TaskExecutionSuccess)result).getNodes());
+        assertEquals(expected, ((TaskExecutionSuccess)result).getEdges());
     }
 
     private final static Config directionalConfig = new Config(true, true, true);
@@ -50,13 +50,13 @@ public class FindEulerianPathTest {
                 Arguments.of(emptyGraph, emptyList()),
                 Arguments.of(oneNodeGraph, emptyList()),
                 Arguments.of(disconnectedNodesGraph, emptyList()),
-                Arguments.of(singleSelfLoopGraph, List.of(0, 0)),
-                Arguments.of(twoNodesGraph, List.of(0, 1)),
-                Arguments.of(lineGraph, List.of(0, 1, 2, 3, 4)),
-                Arguments.of(triangleGraph, List.of(0, 1, 2, 0)),
-                Arguments.of(bigGraph, List.of(0, 1, 2, 4, 3, 1, 3, 5, 5, 0)),
-                Arguments.of(bigGraph2, List.of(6, 7, 8, 9, 6, 3, 0, 2, 1, 3, 4)),
-                Arguments.of(fullGraph, List.of(0, 1, 0, 2, 0, 3, 0, 4, 1, 2, 1, 3, 1, 4, 2, 3, 2, 4, 3, 4, 0))
+                Arguments.of(singleSelfLoopGraph, List.of(new Edge(0, 0, 1.0))),
+                Arguments.of(twoNodesGraph, List.of(new Edge(0, 1, 1.0))),
+                Arguments.of(lineGraph, List.of(new Edge(0, 1, 1.0), new Edge(1, 2, 1.0), new Edge(2, 3, 1.0), new Edge(3, 4, 1.0))),
+                Arguments.of(triangleGraph, List.of(new Edge(0, 1, 1.0), new Edge(1, 2, 1.0), new Edge(2, 0, 1.0))),
+                Arguments.of(bigGraph, List.of(new Edge(0, 1, 1.0), new Edge(1, 2, 1.0), new Edge(2, 4, 1.0), new Edge(4, 3, 1.0), new Edge(3, 1, 1.0), new Edge(1, 3, 1.0), new Edge(3, 5, 1.0), new Edge(5, 5, 1.0), new Edge(5, 0, 1.0))),
+                Arguments.of(bigGraph2, List.of(new Edge(6, 7, 1.0), new Edge(7, 8, 1.0), new Edge(8, 9, 1.0), new Edge(9, 6, 1.0), new Edge(6, 3, 1.0), new Edge(3, 0, 1.0), new Edge(0, 2, 1.0), new Edge(2, 1, 1.0), new Edge(1, 3, 1.0), new Edge(3, 4, 1.0))),
+                Arguments.of(fullGraph, List.of(new Edge(0, 1, 1.0), new Edge(1, 0, 1.0), new Edge(0, 2, 1.0), new Edge(2, 0, 1.0), new Edge(0, 3, 1.0), new Edge(3, 0, 1.0), new Edge(0, 4, 1.0), new Edge(4, 1, 1.0), new Edge(1, 2, 1.0), new Edge(2, 1, 1.0), new Edge(1, 3, 1.0), new Edge(3, 1, 1.0), new Edge(1, 4, 1.0), new Edge(4, 2, 1.0), new Edge(2, 3, 1.0), new Edge(3, 2, 1.0), new Edge(2, 4, 1.0), new Edge(4, 3, 1.0), new Edge(3, 4, 1.0), new Edge(4, 0, 1.0)))
         );
     }
 

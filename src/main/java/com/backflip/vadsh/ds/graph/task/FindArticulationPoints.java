@@ -5,8 +5,7 @@ import com.backflip.vadsh.ds.graph.Graph;
 
 import java.util.*;
 
-import static com.backflip.vadsh.ds.graph.task.TaskResult.success;
-import static java.util.Collections.*;
+import static com.backflip.vadsh.ds.graph.task.TaskResult.successNodes;
 
 public class FindArticulationPoints implements Task {
 
@@ -31,7 +30,7 @@ public class FindArticulationPoints implements Task {
             dfs(g, i, -1, visited, llv, c, articulationPoints);
         }
 
-        return success(new ArrayList<>(articulationPoints), emptyList());
+        return successNodes(new ArrayList<>(articulationPoints));
     }
 
     private void dfs(List<List<Integer>> g, int from, int parent, int[] visited, int[] llv, Counter c, Set<Integer> articulationPoints) {

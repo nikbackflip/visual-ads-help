@@ -9,6 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import static com.backflip.vadsh.ds.graph.task.TaskResult.failure;
+import static com.backflip.vadsh.ds.graph.task.TaskResult.successEdges;
 import static java.lang.String.format;
 
 public class DagFindShortestPath implements Task {
@@ -48,7 +50,7 @@ public class DagFindShortestPath implements Task {
         }
 
         if (dist[to] == Float.POSITIVE_INFINITY) {
-            return TaskResult.failure(format("Node %s is unreachable from node %s", to, from));
+            return failure(format("Node %s is unreachable from node %s", to, from));
         }
 
         List<Edge> path = new LinkedList<>();
@@ -59,7 +61,7 @@ public class DagFindShortestPath implements Task {
         }
         Collections.reverse(path);
 
-        return TaskResult.success(Collections.emptyList(), path);
+        return successEdges(path);
     }
 
     private Integer[] topSort(List<List<Edge>> g) {

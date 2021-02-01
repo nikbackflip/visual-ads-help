@@ -6,6 +6,8 @@ import com.backflip.vadsh.ds.graph.Graph;
 
 import java.util.*;
 
+import static com.backflip.vadsh.ds.graph.task.TaskResult.successEdges;
+
 public class FindMinimumSpanningTree implements Task {
 
     static final class UnionFind {
@@ -58,6 +60,6 @@ public class FindMinimumSpanningTree implements Task {
             }
         }
 
-        return  TaskResult.success(Collections.emptyList(), mst);
+        return  successEdges(mst);
     }
 }

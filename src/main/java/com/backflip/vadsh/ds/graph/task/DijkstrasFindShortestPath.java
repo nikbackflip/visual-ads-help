@@ -6,6 +6,8 @@ import com.backflip.vadsh.ds.graph.Graph;
 
 import java.util.*;
 
+import static com.backflip.vadsh.ds.graph.task.TaskResult.failure;
+import static com.backflip.vadsh.ds.graph.task.TaskResult.successEdges;
 import static java.lang.String.format;
 
 public class DijkstrasFindShortestPath implements Task {
@@ -80,7 +82,7 @@ public class DijkstrasFindShortestPath implements Task {
         }
 
         if (dist[to] == Float.POSITIVE_INFINITY) {
-            return TaskResult.failure(format("Node %s is unreachable from node %s", to, from));
+            return failure(format("Node %s is unreachable from node %s", to, from));
         }
 
         List<Edge> path = new ArrayList<>();
@@ -91,6 +93,6 @@ public class DijkstrasFindShortestPath implements Task {
         }
         path.remove(path.size() - 1);
         Collections.reverse(path);
-        return TaskResult.success(Collections.emptyList(), path);
+        return successEdges(path);
     }
 }

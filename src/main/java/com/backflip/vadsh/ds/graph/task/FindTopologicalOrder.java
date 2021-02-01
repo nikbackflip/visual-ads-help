@@ -9,6 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import static com.backflip.vadsh.ds.graph.task.TaskResult.successNodes;
+
 public class FindTopologicalOrder implements Task {
 
     @Override
@@ -26,7 +28,7 @@ public class FindTopologicalOrder implements Task {
         }
 
         Collections.reverse(order);
-        return TaskResult.success(order, Collections.emptyList());
+        return successNodes(order);
     }
 
     private void dfs(List<List<Edge>> g, int i, boolean[] visited, List<Integer> order) {
