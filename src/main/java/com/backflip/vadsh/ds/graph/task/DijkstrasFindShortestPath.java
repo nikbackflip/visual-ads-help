@@ -6,6 +6,8 @@ import com.backflip.vadsh.ds.graph.Graph;
 
 import java.util.*;
 
+import static com.backflip.vadsh.ds.graph.task.TaskResult.failure;
+import static com.backflip.vadsh.ds.graph.task.TaskResult.successEdges;
 import static java.lang.String.format;
 
 public class DijkstrasFindShortestPath implements Task {
@@ -66,21 +68,21 @@ public class DijkstrasFindShortestPath implements Task {
         pq.add(new QueueEntry(from, 0f));
         dist[from] = 0f;
 
-        while(!pq.isEmpty()) {
+        while (!pq.isEmpty()) {
             QueueEntry e = pq.poll();
             List<Edge> outEdges = graph.get(e.index);
 
-            for (Edge edge: outEdges) {
+            for (Edge edge : outEdges) {
                 if (dist[e.index] + edge.weight() < dist[edge.to()]) {
-                    dist[edge.to()] = dist[e.index] + (float)edge.weight();
-                    pq.add(new QueueEntry(edge.to(), (float)edge.getWeight()));
+                    dist[edge.to()] = dist[e.index] + (float) edge.weight();
+                    pq.add(new QueueEntry(edge.to(), (float) edge.getWeight()));
                     prev[edge.to()] = e.index;
                 }
             }
         }
 
         if (dist[to] == Float.POSITIVE_INFINITY) {
-            return TaskResult.failure(format("Node %s is unreachable from node %s", to, from));
+            return failure(format("Node %s is unreachable from node %s", to, from));
         }
 
         List<Edge> path = new ArrayList<>();
@@ -91,6 +93,6 @@ public class DijkstrasFindShortestPath implements Task {
         }
         path.remove(path.size() - 1);
         Collections.reverse(path);
-        return TaskResult.success(Collections.emptyList(), path);
+        return successEdges(path);
     }
 }

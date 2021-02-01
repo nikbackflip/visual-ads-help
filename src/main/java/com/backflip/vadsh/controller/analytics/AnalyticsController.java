@@ -9,13 +9,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static com.backflip.vadsh.ds.graph.analyzer.AnalyticDefinition.*;
-import static java.util.stream.Collectors.*;
+import static com.backflip.vadsh.ds.graph.analyzer.AnalyticDefinition.values;
+import static java.util.stream.Collectors.toList;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Log4j2

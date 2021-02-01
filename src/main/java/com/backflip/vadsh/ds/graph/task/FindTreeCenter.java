@@ -6,6 +6,9 @@ import com.backflip.vadsh.ds.graph.Graph;
 import java.util.*;
 import java.util.stream.IntStream;
 
+import static com.backflip.vadsh.ds.graph.task.TaskResult.success;
+import static com.backflip.vadsh.ds.graph.task.TaskResult.successNodes;
+
 public class FindTreeCenter implements Task {
 
     @Override
@@ -14,7 +17,7 @@ public class FindTreeCenter implements Task {
         int n = graphInput.n();
 
         if (n == 0) {
-            return TaskResult.success();
+            return success();
         }
 
         Set<Integer> remainingNodes = new HashSet<>();
@@ -27,13 +30,13 @@ public class FindTreeCenter implements Task {
                     leafs.add(i);
                 }
             }
-            for(Integer leaf: leafs) {
+            for (Integer leaf : leafs) {
                 Integer parent = graph.get(leaf).get(0);
                 remainingNodes.remove(leaf);
                 graph.get(leaf).removeIf(v -> v.equals(parent));
                 graph.get(parent).removeIf(v -> v.equals(leaf));
             }
         }
-        return TaskResult.success(new ArrayList<>(remainingNodes), Collections.emptyList());
+        return successNodes(new ArrayList<>(remainingNodes));
     }
 }

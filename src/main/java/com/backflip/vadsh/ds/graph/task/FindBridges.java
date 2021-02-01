@@ -4,9 +4,11 @@ import com.backflip.vadsh.ds.graph.Config;
 import com.backflip.vadsh.ds.graph.Edge;
 import com.backflip.vadsh.ds.graph.Graph;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-import static java.util.Collections.*;
+import static com.backflip.vadsh.ds.graph.task.TaskResult.successEdges;
 
 public class FindBridges implements Task {
 
@@ -30,7 +32,7 @@ public class FindBridges implements Task {
             dfs(g, i, -1, visited, llv, c, bridges);
         }
 
-        return TaskResult.success(emptyList(), bridges);
+        return successEdges(bridges);
     }
 
     private void dfs(List<List<Integer>> g, int from, int parent, int[] visited, int[] llv, Counter c, List<Edge> bridges) {
@@ -40,7 +42,7 @@ public class FindBridges implements Task {
         visited[from] = currRef;
         llv[from] = currRef;
 
-        for (Integer to: g.get(from)) {
+        for (Integer to : g.get(from)) {
             if (to == parent) continue;
             dfs(g, to, from, visited, llv, c, bridges);
             if (llv[to] < llv[from]) llv[from] = llv[to];
@@ -51,6 +53,7 @@ public class FindBridges implements Task {
 
     private static class Counter {
         int c = 0;
+
         int inc() {
             return c++;
         }

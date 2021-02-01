@@ -9,6 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import static com.backflip.vadsh.ds.graph.task.TaskResult.failure;
+import static com.backflip.vadsh.ds.graph.task.TaskResult.successEdges;
 import static java.lang.String.format;
 
 public class DagFindLongestPath implements Task {
@@ -49,7 +51,7 @@ public class DagFindLongestPath implements Task {
         }
 
         if (dist[to] == Float.NEGATIVE_INFINITY) {
-            return TaskResult.failure(format("Node %s is unreachable from node %s", to, from));
+            return failure(format("Node %s is unreachable from node %s", to, from));
         }
 
         List<Edge> path = new LinkedList<>();
@@ -60,14 +62,14 @@ public class DagFindLongestPath implements Task {
         }
         Collections.reverse(path);
 
-        return TaskResult.success(Collections.emptyList(), path);
+        return successEdges(path);
     }
 
     private Integer[] topSort(List<List<Edge>> g) {
         List<Integer> sort = new LinkedList<>();
         boolean[] visited = new boolean[g.size()];
 
-        for(int i = 0; i < g.size(); i++) {
+        for (int i = 0; i < g.size(); i++) {
             if (!visited[i]) {
                 dfs(g, i, sort, visited);
             }
@@ -81,7 +83,7 @@ public class DagFindLongestPath implements Task {
     private void dfs(List<List<Edge>> g, int i, List<Integer> sort, boolean[] visited) {
         visited[i] = true;
         List<Edge> edges = g.get(i);
-        for (Edge e: edges) {
+        for (Edge e : edges) {
             if (!visited[e.to()]) {
                 dfs(g, e.to(), sort, visited);
             }
@@ -91,9 +93,9 @@ public class DagFindLongestPath implements Task {
 
     private void dfs(List<List<Edge>> g, int i, Float[] dist, int[] prev) {
         List<Edge> outs = g.get(i);
-        for (Edge edge: outs) {
+        for (Edge edge : outs) {
             if (dist[edge.from()] + edge.weight() > dist[edge.to()]) {
-                dist[edge.to()] = dist[edge.from()] + (float)edge.weight();
+                dist[edge.to()] = dist[edge.from()] + (float) edge.weight();
                 prev[edge.to()] = edge.from();
             }
             dfs(g, edge.to(), dist, prev);

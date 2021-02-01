@@ -4,7 +4,13 @@ import com.backflip.vadsh.ds.graph.Config;
 import com.backflip.vadsh.ds.graph.Edge;
 import com.backflip.vadsh.ds.graph.Graph;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import static com.backflip.vadsh.ds.graph.task.TaskResult.failure;
+import static com.backflip.vadsh.ds.graph.task.TaskResult.successEdges;
 
 public class BellmanFordFindShortestPath implements Task {
 
@@ -26,19 +32,19 @@ public class BellmanFordFindShortestPath implements Task {
 
         dist[from] = 0;
         route[from] = -1;
-        for (int j = 0; j < n-1; j++) {
-            for(List<Edge> edges: g) {
-                for (Edge e: edges) {
+        for (int j = 0; j < n - 1; j++) {
+            for (List<Edge> edges : g) {
+                for (Edge e : edges) {
                     if (dist[e.from()] + e.weight() < dist[e.to()]) {
-                        dist[e.to()] = dist[e.from()] + (float)e.weight();
+                        dist[e.to()] = dist[e.from()] + (float) e.weight();
                         route[e.to()] = e.from();
                     }
                 }
             }
         }
-        for (int j = 0; j < n-1; j++) {
-            for(List<Edge> edges: g) {
-                for (Edge e: edges) {
+        for (int j = 0; j < n - 1; j++) {
+            for (List<Edge> edges : g) {
+                for (Edge e : edges) {
                     if (dist[e.from()] + e.weight() < dist[e.to()]) {
                         dist[e.to()] = Float.NEGATIVE_INFINITY;
                     }
@@ -46,17 +52,17 @@ public class BellmanFordFindShortestPath implements Task {
             }
         }
 
-        if (dist[to] == Float.NEGATIVE_INFINITY) return TaskResult.failure("Negative cycle detected");
+        if (dist[to] == Float.NEGATIVE_INFINITY) return failure("Negative cycle detected");
 
         List<Edge> path = new ArrayList<>();
         int fromNode = route[to];
         int toNode = to;
-        while(fromNode != -1) {
+        while (fromNode != -1) {
             path.add(new Edge(fromNode, toNode, 1.0));
             toNode = fromNode;
             fromNode = route[toNode];
         }
         Collections.reverse(path);
-        return TaskResult.success(Collections.emptyList(), path);
+        return successEdges(path);
     }
 }

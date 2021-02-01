@@ -1,7 +1,10 @@
 package com.backflip.vadsh.controller.analytics;
 
 import com.backflip.vadsh.controller.dto.ResponseDto;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.LinkedList;
 import java.util.List;
