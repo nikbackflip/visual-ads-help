@@ -81,9 +81,9 @@ class TasksDropdown extends React.Component {
             self.props.graph.edges.forEach(n => n.selected = false);
 
             if (data.json.nodes.length !== 0) {
-                self.props.graph.nodes.filter(n => {
-                    return data.json.nodes.find(nn => n.id === nn)
-                }).forEach((n) => n.selected = true);
+                for(let i = 0; i < data.json.nodes.length; i++) {
+                    self.props.graph.nodes.find(n => n.id === data.json.nodes[i]).selected = true;
+                }
             }
 
             if (data.json.edges.length !== 0) {
