@@ -86,18 +86,6 @@ class TasksDropdown extends React.Component {
             self.props.graph.nodes.forEach(n => n.selected = false);
             self.props.graph.edges.forEach(n => n.selected = false);
 
-            // if (data.json.nodes.length !== 0) {
-            //     for(let i = 0; i < data.json.nodes.length; i++) {
-            //         self.props.graph.nodes.find(n => n.id === data.json.nodes[i]).selected = true;
-            //     }
-            // }
-            //
-            // if (data.json.edges.length !== 0) {
-            //     self.props.graph.edges.filter(e => {
-            //         return data.json.edges.find(ee => e.fromId === ee.from && e.toId === ee.to)
-            //     }).forEach((e) => e.selected = true);
-            // }
-
             self.setState({
                 response: {
                     success: true,
@@ -243,7 +231,7 @@ class NodesResponse extends React.Component {
             <p/>
             <div>
                 <div className="Code-panel-tasks-result">
-                    <div className="Code-panel-node-row">
+                    <div className="Code-panel-row">
                         {
                             this.props.nodes.map(n => {
                                 const currNode = this.props.graph.nodes.find(nn => n === nn.id);
@@ -298,13 +286,96 @@ class Node extends React.Component {
     }
 }
 class EdgesResponse extends React.Component {
+    selectEdge = (edge) => {
+        this.props.graph.edges.forEach((e) => {
+            e.selected = e.fromId === edge.from && e.toId === edge.to;
+            e.highlighted = false;
+        })
+        this.props.handleGraphUpdate(this.props.graph);
+    }
+    highlightEdge = (edge) => {
+        this.props.graph.edges.forEach((e) => {
+            e.highlighted = e.fromId === edge.from && e.toId === edge.to;
+        })
+        this.props.handleGraphUpdate(this.props.graph);
+    }
+    selectAll = () => {
+        for (let i = 0; i < this.props.graph.edges.length; i++) {
+            this.props.graph.edges[i].selected = false;
+            this.props.graph.edges[i].highlighted = false;
+        }
+        for (let i = 0; i < this.props.edges.length; i++) {
+            this.props.graph.edges.find(e => e.fromId === this.props.edges[i].from && e.toId === this.props.edges[i].to).selected = true;
+        }
+        this.props.handleGraphUpdate(this.props.graph);
+    }
     render() {
         if (this.props.edges.length === 0) return <div />
-        return <div>
+        return <div className="Code-panel-tasks-result-container">
             <p/>
-            {
-                this.props.edges.map(e => e.from + " -> " + e.to).join(", ")
-            }
+            <div>
+                <div className="Code-panel-tasks-result">
+                    <div className="Code-panel-row">
+                        {
+                            this.props.edges.map(e => {
+                                const currEdge = this.props.graph.edges.find(ee => e.to === ee.toId && e.from === ee.fromId);
+                                return <Edge
+                                    key={e.to+"->"+e.from}
+                                    from={e.from}
+                                    to={e.to}
+                                    selected={currEdge === undefined ? false : currEdge.selected}
+                                    highlighted={currEdge === undefined ? false : currEdge.highlighted}
+                                    selectEdge={this.selectEdge}
+                                    highlightEdge={this.highlightEdge}
+                                />
+                            })
+                        }
+                    </div>
+                </div>
+                <div className="Code-panel-tasks-highlight">
+                    <button
+                        className="Control-panel-button Code-panel-tasks-highlight-button"
+                        onClick={this.selectAll}
+                    >
+                        SELECT
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+}
+class Edge extends React.Component {
+
+    onMouseEnter = () => {
+        this.props.highlightEdge({
+            from: this.props.from,
+            to: this.props.to
+        });
+    }
+    onMouseLeave = () => {
+        this.props.highlightEdge({
+            from: -1,
+            to: -1
+        });
+    }
+    onClick = () => {
+        this.props.selectEdge({
+            from: this.props.from,
+            to: this.props.to
+        });
+    }
+
+    render() {
+        let style = "Code-panel-edge ";
+        if (this.props.selected) style = style + "Code-panel-highlight-full";
+        else if (this.props.highlighted) style = style + "Code-panel-highlight-half";
+        return <div
+            className={style}
+            onMouseEnter={this.onMouseEnter}
+            onMouseLeave={this.onMouseLeave}
+            onClick={this.onClick}
+        >
+            {this.props.from + "→" + this.props.to}
         </div>
     }
 }

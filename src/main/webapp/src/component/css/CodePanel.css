@@ -168,21 +168,29 @@
     white-space: nowrap;
 }
 
-/*.Code-panel-node-box {*/
-/*    float: left;*/
-/*    height: 20px;*/
-/*    width: 20px;*/
-/*    clear: both;*/
-/*}*/
-
-.Code-panel-node-row {
-    display: table;
+.Code-panel-row {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     border-spacing: 10px;
-
 }
+
+.Code-panel-row .item {
+    flex: 1;
+}
+
+.Code-panel-row > div {
+    margin: 6px;
+}
+
+.Code-panel-edge {
+    height: 30px;
+    width: 70px;
+}
+
 .Code-panel-node {
-    display: table-cell;
-    height: 20px;
+    height: 30px;
     width: 20px;
 }
 
