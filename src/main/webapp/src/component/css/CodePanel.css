@@ -237,3 +237,29 @@
     margin-left: 8px;
     white-space: pre;
 }
+
+.Task-result-scroll {
+    overflow: scroll;
+    height: calc(((100vh) / 100 * 70) - 25px);
+}
+
+.Task-result-scroll::-webkit-scrollbar {
+    width: 10px;
+    height: 0;
+    background-color: transparent;
+}
+
+.Task-result-scroll::-webkit-scrollbar-corner {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.Task-result-scroll::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #25282A;
+}
+
+.Task-result-scroll::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: transparent;
+}

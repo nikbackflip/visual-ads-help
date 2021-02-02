@@ -174,7 +174,7 @@ class TasksDropdown extends React.Component {
                     </div>
                 </div>
                 <div>
-                    <div className="App-line-split"/>
+                <div className="App-line-split"/>
                 {
                     displayResult ?
                         <div className="Code-panel-tasks-bottom Code-panel-task-response">
@@ -185,7 +185,7 @@ class TasksDropdown extends React.Component {
                                         <p/>
                                         {this.state.response.message}
                                     </div> :
-                                    <div>
+                                    <div className="Task-result-scroll">
                                         <NodesResponse
                                             nodes={this.state.response.nodes}
                                             handleGraphUpdate={this.props.handleGraphUpdate}
@@ -250,8 +250,8 @@ class NodesResponse extends React.Component {
                                 return <Node
                                     key={n}
                                     id={n}
-                                    selected={currNode.selected}
-                                    highlighted={currNode.highlighted}
+                                    selected={currNode === undefined ? false : currNode.selected}
+                                    highlighted={currNode === undefined ? false : currNode.highlighted}
                                     selectNode={this.selectNode}
                                     highlightNode={this.highlightNode}
                                 />
@@ -314,7 +314,14 @@ class ComponentsResponse extends React.Component {
         return <div>
             <p/>
             {
-                this.props.components.map(c => c.join(", ")).join("\n")
+                this.props.components.map(c => {
+                    return <NodesResponse
+                        key={c.join("")}
+                        nodes={c}
+                        handleGraphUpdate={this.props.handleGraphUpdate}
+                        graph={this.props.graph}
+                    />
+                })
             }
         </div>
     }
