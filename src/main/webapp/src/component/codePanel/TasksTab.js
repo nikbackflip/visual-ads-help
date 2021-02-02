@@ -86,17 +86,17 @@ class TasksDropdown extends React.Component {
             self.props.graph.nodes.forEach(n => n.selected = false);
             self.props.graph.edges.forEach(n => n.selected = false);
 
-            if (data.json.nodes.length !== 0) {
-                for(let i = 0; i < data.json.nodes.length; i++) {
-                    self.props.graph.nodes.find(n => n.id === data.json.nodes[i]).selected = true;
-                }
-            }
-
-            if (data.json.edges.length !== 0) {
-                self.props.graph.edges.filter(e => {
-                    return data.json.edges.find(ee => e.fromId === ee.from && e.toId === ee.to)
-                }).forEach((e) => e.selected = true);
-            }
+            // if (data.json.nodes.length !== 0) {
+            //     for(let i = 0; i < data.json.nodes.length; i++) {
+            //         self.props.graph.nodes.find(n => n.id === data.json.nodes[i]).selected = true;
+            //     }
+            // }
+            //
+            // if (data.json.edges.length !== 0) {
+            //     self.props.graph.edges.filter(e => {
+            //         return data.json.edges.find(ee => e.fromId === ee.from && e.toId === ee.to)
+            //     }).forEach((e) => e.selected = true);
+            // }
 
             self.setState({
                 response: {
@@ -188,12 +188,18 @@ class TasksDropdown extends React.Component {
                                     <div>
                                         <NodesResponse
                                             nodes={this.state.response.nodes}
+                                            handleGraphUpdate={this.props.handleGraphUpdate}
+                                            graph={this.props.graph}
                                         />
                                         <EdgesResponse
                                             edges={this.state.response.edges}
+                                            handleGraphUpdate={this.props.handleGraphUpdate}
+                                            graph={this.props.graph}
                                         />
                                         <ComponentsResponse
                                             components={this.state.response.components}
+                                            handleGraphUpdate={this.props.handleGraphUpdate}
+                                            graph={this.props.graph}
                                         />
                                     </div>
                             }
@@ -207,13 +213,87 @@ class TasksDropdown extends React.Component {
 }
 
 class NodesResponse extends React.Component {
+    selectNode = (id) => {
+        this.props.graph.nodes.forEach((n) => {
+            n.selected = n.id === id;
+            n.highlighted = false;
+        })
+        this.props.handleGraphUpdate(this.props.graph);
+    }
+    highlightNode = (id) => {
+        this.props.graph.nodes.forEach((n) => {
+            n.highlighted = n.id === id;
+        })
+        this.props.handleGraphUpdate(this.props.graph);
+    }
+    selectAll = () => {
+        for (let i = 0; i < this.props.graph.nodes.length; i++) {
+            this.props.graph.nodes[i].selected = false;
+            this.props.graph.nodes[i].highlighted = false;
+        }
+        for (let i = 0; i < this.props.nodes.length; i++) {
+            this.props.graph.nodes.find(n => n.id === this.props.nodes[i]).selected = true;
+        }
+        this.props.handleGraphUpdate(this.props.graph);
+    }
     render() {
         if (this.props.nodes.length === 0) return <div />
-        return <div>
+
+        return <div className="Code-panel-tasks-result-container">
             <p/>
-            {
-                this.props.nodes.join(", ")
-            }
+            <div>
+                <div className="Code-panel-tasks-result">
+                    <div className="Code-panel-node-row">
+                        {
+                            this.props.nodes.map(n => {
+                                const currNode = this.props.graph.nodes.find(nn => n === nn.id);
+                                return <Node
+                                    key={n}
+                                    id={n}
+                                    selected={currNode.selected}
+                                    highlighted={currNode.highlighted}
+                                    selectNode={this.selectNode}
+                                    highlightNode={this.highlightNode}
+                                />
+                            })
+                        }
+                    </div>
+                </div>
+                <div className="Code-panel-tasks-highlight">
+                    <button
+                        className="Control-panel-button Code-panel-tasks-highlight-button"
+                        onClick={this.selectAll}
+                    >
+                        SELECT
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+}
+class Node extends React.Component {
+
+    onMouseEnter = () => {
+        this.props.highlightNode(this.props.id);
+    }
+    onMouseLeave = () => {
+        this.props.highlightNode(-1);
+    }
+    onClick = () => {
+        this.props.selectNode(this.props.id);
+    }
+
+    render() {
+        let style = "Code-panel-node ";
+        if (this.props.selected) style = style + "Code-panel-highlight-full";
+        else if (this.props.highlighted) style = style + "Code-panel-highlight-half";
+        return <div
+            className={style}
+            onMouseEnter={this.onMouseEnter}
+            onMouseLeave={this.onMouseLeave}
+            onClick={this.onClick}
+        >
+            {this.props.id}
         </div>
     }
 }
@@ -295,7 +375,6 @@ class TasksTab extends React.Component {
             />
         )
     }
-
 }
 
 export default TasksTab;
