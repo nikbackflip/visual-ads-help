@@ -6,15 +6,19 @@ class TasksDropdown extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            params: {},
-            response: {}
+            params: {}
         };
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (JSON.stringify(prevProps.tasks) !== JSON.stringify(this.props.tasks)) {
             this.setState({
-                selectedTask: this.props.tasks[0]
+                selectedTask: this.props.tasks[0],
+            })
+        }
+        if (JSON.stringify(prevProps.graph) !== JSON.stringify(this.props.graph)) {
+            this.setState({
+                response: undefined
             })
         }
     }
@@ -72,7 +76,9 @@ class TasksDropdown extends React.Component {
                     response: {
                         success: false,
                         message: data.json.message
-                    }
+                    },
+                    lastTask: self.state.selectedTask.label,
+                    lastParams: Object.assign({}, self.state.params)
                 });
                 return;
             }
@@ -98,7 +104,9 @@ class TasksDropdown extends React.Component {
                     edges: data.json.edges,
                     nodes: data.json.nodes,
                     components: data.json.components
-                }
+                },
+                lastTask: self.state.selectedTask.label,
+                lastParams: Object.assign({}, self.state.params)
             });
             self.props.handleGraphUpdate(self.props.graph);
         });
@@ -124,6 +132,14 @@ class TasksDropdown extends React.Component {
                     </div>
                 )
             }) : null;
+
+        const displayResult = this.state.response !== undefined;
+        let resultHeader = "";
+        if (displayResult) {
+            resultHeader =  this.state.lastTask + " " + Object.entries(this.state.lastParams).map(p => {
+                return p[0] + " " + p[1];
+            }).join(" ");
+        }
 
         return (
             <div className="Code-panel-whole-height">
@@ -157,21 +173,33 @@ class TasksDropdown extends React.Component {
                         </button>
                     </div>
                 </div>
-                <div className="Code-panel-tasks-bottom Code-panel-task-response">
-                    {
-                        !this.state.response.success ? this.state.response.message :
-                            <div>
-                                <NodesResponse
-                                    nodes={this.state.response.nodes}
-                                />
-                                <EdgesResponse
-                                    edges={this.state.response.edges}
-                                />
-                                <ComponentsResponse
-                                    components={this.state.response.components}
-                                />
-                            </div>
-                    }
+                <div>
+                    <div className="App-line-split"/>
+                {
+                    displayResult ?
+                        <div className="Code-panel-tasks-bottom Code-panel-task-response">
+                            {resultHeader}
+                            {
+                                !this.state.response.success ?
+                                    <div>
+                                        <p/>
+                                        {this.state.response.message}
+                                    </div> :
+                                    <div>
+                                        <NodesResponse
+                                            nodes={this.state.response.nodes}
+                                        />
+                                        <EdgesResponse
+                                            edges={this.state.response.edges}
+                                        />
+                                        <ComponentsResponse
+                                            components={this.state.response.components}
+                                        />
+                                    </div>
+                            }
+                        </div>
+                    : <div/>
+                }
                 </div>
             </div>
         )
@@ -182,7 +210,7 @@ class NodesResponse extends React.Component {
     render() {
         if (this.props.nodes.length === 0) return <div />
         return <div>
-            Nodes:
+            <p/>
             {
                 this.props.nodes.join(", ")
             }
@@ -193,8 +221,7 @@ class EdgesResponse extends React.Component {
     render() {
         if (this.props.edges.length === 0) return <div />
         return <div>
-            Edges:
-            <br />
+            <p/>
             {
                 this.props.edges.map(e => e.from + " -> " + e.to).join(", ")
             }
@@ -205,8 +232,7 @@ class ComponentsResponse extends React.Component {
     render() {
         if (this.props.components.length === 0) return <div />
         return <div>
-            Components:
-            <br />
+            <p/>
             {
                 this.props.components.map(c => c.join(", ")).join("\n")
             }
