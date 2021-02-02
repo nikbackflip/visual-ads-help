@@ -142,6 +142,58 @@
     height: 50px;
 }
 
+.Code-panel-tasks-highlight {
+    float: right;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.Code-panel-tasks-result {
+    float: left;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.Code-panel-tasks-result-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.Code-panel-tasks-highlight-button {
+    width: 150px;
+    height: 50px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.Code-panel-row {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    border-spacing: 10px;
+}
+
+.Code-panel-row .item {
+    flex: 1;
+}
+
+.Code-panel-row > div {
+    margin: 6px;
+}
+
+.Code-panel-edge {
+    height: 30px;
+    width: 70px;
+}
+
+.Code-panel-node {
+    height: 30px;
+    width: 20px;
+}
+
 .Code-panel-tasks-dropdown {
     font-family: Verdana, monospace;
     font-weight: bold;
@@ -189,7 +241,33 @@
 .Code-panel-task-response {
     font-weight: bold;
     font-family: Verdana, monospace;
-    word-break: break-all;
+    /*word-break: break-all;*/
     margin-left: 8px;
     white-space: pre;
+}
+
+.Task-result-scroll {
+    overflow: scroll;
+    height: calc(((100vh) / 100 * 70) - 25px);
+}
+
+.Task-result-scroll::-webkit-scrollbar {
+    width: 10px;
+    height: 0;
+    background-color: transparent;
+}
+
+.Task-result-scroll::-webkit-scrollbar-corner {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.Task-result-scroll::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #25282A;
+}
+
+.Task-result-scroll::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: transparent;
 }
