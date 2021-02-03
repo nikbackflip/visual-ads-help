@@ -95,15 +95,6 @@ class GlobalGraphConfig extends React.Component {
                         inputProps={{ 'aria-label': 'primary checkbox' }}
                     />
                 </div>
-
-                {
-                    this.configsUpdated() ?
-                        <div className="Drawing-area-config-help">
-                            Applying changes will reset current graph
-                        </div>
-                    : null
-                }
-
                 <div className="Drawing-area-config-submit">
                     <button
                         className={"Control-panel-button Drawing-area-config-button"}

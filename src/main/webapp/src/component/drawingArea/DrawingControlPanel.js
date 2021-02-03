@@ -105,7 +105,6 @@ class DrawingControlPanel extends React.Component {
                                 this.setState({
                                     configDisplay: false
                                 })
-                                this.props.graphReset();
                                 this.props.handleConfigUpdate({
                                     graphDirectional: graphDirectional,
                                     graphWeighted: graphWeighted,
