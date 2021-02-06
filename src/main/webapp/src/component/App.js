@@ -37,10 +37,6 @@ class App extends React.Component {
 
     handleConfigUpdate = (config) => {
         this.setState({
-            graph: {
-                nodes: [],
-                edges: []
-            },
             config: config
         });
     }

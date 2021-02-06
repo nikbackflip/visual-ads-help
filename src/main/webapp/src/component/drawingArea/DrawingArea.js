@@ -14,7 +14,7 @@ import {
     FORWARD_DIRECTION,
     ABSENT_DIRECTION,
     SPLIT_DIRECTION,
-    NO_DIRECTIONS
+    NO_DIRECTIONS, BOTH_DIRECTIONS
 } from './DrawingModeConstants';
 import KonvaNode from "./KonvaNode";
 import KonvaEdge from "./KonvaEdge";
@@ -408,6 +408,50 @@ class DrawingArea extends React.Component {
         }
     }
 
+    updateGraphOnConfigUpdate = (config) => {
+        let nodes = this.props.graph.nodes.slice();
+        let edges = this.props.graph.edges.slice();
+
+        if (!config.graphWeighted && this.props.config.graphWeighted) {
+            for (let i = 0; i < this.props.graph.edges.length; i++) {
+                if (edges[i].direction !== ABSENT_DIRECTION) {
+                    const updatedEdge = Object.assign({}, edges[i]);
+                    updatedEdge.weight = 1;
+                    edges[i] = updatedEdge;
+                }
+            }
+        }
+        if (!config.graphDirectional && this.props.config.graphDirectional) {
+            for (let j = 0; j < this.props.graph.edges.length; j++) {
+                if (edges[j].direction === SELF_DIRECTION) continue;
+
+                const updatedEdge = Object.assign({}, edges[j]);
+                if (edges[j].direction === ABSENT_DIRECTION) {
+                    updatedEdge.weight = edges.find(e => e.id === updatedEdge.pairId).weight;
+                }
+                updatedEdge.direction = NO_DIRECTIONS;
+                edges[j] = updatedEdge;
+            }
+        }
+        if (config.graphDirectional && !this.props.config.graphDirectional) {
+            for (let k = 0; k < this.props.graph.edges.length; k++) {
+                if (edges[k].direction === SELF_DIRECTION) continue;
+
+                const updatedEdge = Object.assign({}, edges[k]);
+                updatedEdge.direction = BOTH_DIRECTIONS;
+                edges[k] = updatedEdge;
+            }
+        }
+        if (!config.selfLoopsAllowed && this.props.config.selfLoopsAllowed) {
+            edges = edges.filter(e => e.direction !== SELF_DIRECTION)
+        }
+        this.props.handleGraphUpdate({
+            nodes: nodes,
+            edges: edges
+        })
+        this.props.handleConfigUpdate(config);
+    }
+
     render() {
         this.customizeIfExternallyGenerated();
         let excludedEdges = [];
@@ -419,7 +463,7 @@ class DrawingArea extends React.Component {
                     modeChange={this.handleModeChange}
                     graphReset={this.resetGraph}
                     config={this.props.config}
-                    handleConfigUpdate = {this.props.handleConfigUpdate}
+                    handleConfigUpdate = {this.updateGraphOnConfigUpdate}
                 />
                 <div className="App-line-split"/>
 
