@@ -1,4 +1,4 @@
-package com.backflip.vadsh.controller.generator;
+package com.backflip.vadsh.controller.template;
 
 import com.backflip.vadsh.controller.dto.GraphRequest;
 import com.backflip.vadsh.controller.dto.ResponseDto;
@@ -19,9 +19,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Log4j2
 @Controller
-@RequestMapping("/generator")
+@RequestMapping("/template")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class GeneratorController {
+public class TemplateController {
 
     private final GraphTemplate template;
 
@@ -34,7 +34,7 @@ public class GeneratorController {
 
         String content = template.construct(graphModel.build());
 
-        return new GraphGeneratorResponse(content);
+        return new TemplateResponse(content);
     }
 
     private void withEdges(GraphArgs.Builder builder, List<GraphRequest.EdgeModel> list) {

@@ -1,4 +1,4 @@
-package com.backflip.vadsh.controller.generator;
+package com.backflip.vadsh.controller.template;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class GeneratorControllerTest {
+public class TemplateControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -22,7 +22,7 @@ public class GeneratorControllerTest {
     @Test
     @Disabled
     public void generateFromValidModel() throws Exception {
-        mockMvc.perform(post("/generator/graph")
+        mockMvc.perform(post("/template/graph")
                 .contentType(APPLICATION_JSON)
                 .content(fromFile("graph/valid_model.json")))
 

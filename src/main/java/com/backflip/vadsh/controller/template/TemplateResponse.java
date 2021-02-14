@@ -1,4 +1,4 @@
-package com.backflip.vadsh.controller.generator;
+package com.backflip.vadsh.controller.template;
 
 import com.backflip.vadsh.controller.dto.ResponseDto;
 import lombok.AllArgsConstructor;
@@ -8,6 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GraphGeneratorResponse extends ResponseDto {
+public class TemplateResponse extends ResponseDto {
     String generated;
 }

@@ -26,7 +26,7 @@ class JavaTab extends React.Component {
             nodes: this.props.graph.nodes
         }
         let self = this;
-        fetch('/generator/graph', {
+        fetch('/template/graph', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
