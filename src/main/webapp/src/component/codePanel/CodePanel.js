@@ -6,9 +6,10 @@ import 'codemirror/mode/clike/clike.js';
 import '../css/CodePanel.css';
 import TabPanel from "./TabPanel";
 import JavaTab from "./JavaTab";
-import {JAVA_MODE, MATRIX_EDGE_MODE, TASKS_MODE} from "./CodePanelConstants";
+import {GENERATOR_MODE, JAVA_MODE, MATRIX_EDGE_MODE, TASKS_MODE} from "./CodePanelConstants";
 import MatrixListTab from "./MatrixListTab";
 import TasksTab from "./TasksTab";
+import GeneratorTab from "./GeneratorTab";
 
 
 class CodePanel extends React.Component {
@@ -45,6 +46,13 @@ class CodePanel extends React.Component {
                     graph={this.props.graph}
                     config={this.props.config}
                     handleGraphUpdate={this.props.handleGraphUpdate}
+                />
+                break;
+            }
+            case GENERATOR_MODE: {
+                activeTabRender = <GeneratorTab
+                    handleGraphUpdate={this.props.handleGraphUpdate}
+                    handleConfigUpdate={this.props.handleConfigUpdate}
                 />
                 break;
             }
