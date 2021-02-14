@@ -512,8 +512,8 @@ class DrawingArea extends React.Component {
                                     id={edge.id}
                                     from={{x: fromNode.x, y: fromNode.y}}
                                     to={{x: toNode.x, y: toNode.y}}
-                                    selected={edge.selected || (edge.direction === NO_DIRECTIONS && this.props.graph.edges.find(e => edge.fromId === e.toId && edge.toId === e.fromId).selected)}
-                                    highlighted={edge.highlighted || (edge.direction === NO_DIRECTIONS && this.props.graph.edges.find(e => edge.fromId === e.toId && edge.toId === e.fromId).highlighted)}
+                                    selected={edge.selected || ((edge.direction === NO_DIRECTIONS || edge.direction === BOTH_DIRECTIONS) && this.props.graph.edges.find(e => edge.fromId === e.toId && edge.toId === e.fromId).selected)}
+                                    highlighted={edge.highlighted || ((edge.direction === NO_DIRECTIONS || edge.direction === BOTH_DIRECTIONS) && this.props.graph.edges.find(e => edge.fromId === e.toId && edge.toId === e.fromId).highlighted)}
                                     weight={this.props.config.graphWeighted ? edge.weight : ""}
                                     handleEdgeClick={this.handleEdgeClick}
                                     direction={edge.direction}

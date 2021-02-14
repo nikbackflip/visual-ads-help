@@ -161,6 +161,7 @@
     white-space: nowrap;
 }
 
+.Code-panel-generate-button,
 .Code-panel-tasks-highlight-button {
     width: 150px;
     height: 50px;
@@ -270,4 +271,14 @@
 .Task-result-scroll::-webkit-scrollbar-track {
     border-radius: 10px;
     background-color: transparent;
+}
+
+.Code-panel-option {
+    height: 30px;
+}
+
+.Code-panel-options {
+    font-weight: bold;
+    font-family: Verdana, monospace;
+    margin-left: 12px;
 }

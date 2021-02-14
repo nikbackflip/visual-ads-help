@@ -26,4 +26,12 @@ public final class Edge {
     public double weight() {
         return weight;
     }
+
+    public static Edge edge(int from, int to) {
+        return new Edge(from, to, 1.0);
+    }
+
+    public static Edge edge(int from, int to, double weight) {
+        return new Edge(from, to, weight);
+    }
 }

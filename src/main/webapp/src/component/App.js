@@ -41,6 +41,10 @@ class App extends React.Component {
         });
     }
 
+    resetGraphFromMatrix = (matrix, config) => {
+
+    }
+
     componentDidMount() {
         this.onPanelsSizeUpdate();
         window.addEventListener("resize", this.onPanelsSizeUpdate);
@@ -88,6 +92,7 @@ class App extends React.Component {
                             graph={this.state.graph}
                             config={this.state.config}
                             handleGraphUpdate={this.handleGraphUpdate}
+                            handleConfigUpdate={this.handleConfigUpdate}
                         />
                     </PropagatingResizablePanels>
                 </div>
