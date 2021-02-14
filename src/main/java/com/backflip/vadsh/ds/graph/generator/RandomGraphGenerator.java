@@ -4,7 +4,6 @@ import com.backflip.vadsh.ds.graph.Config;
 import com.backflip.vadsh.ds.graph.Edge;
 import com.backflip.vadsh.ds.graph.Graph;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -31,11 +30,11 @@ public class RandomGraphGenerator implements GraphGenerator {
     @Override
     public Graph getGraph() {
         double density = calculateDensity();
-        int maxEdges = size * size - 1;
+        int maxEdges = size * (size - 1);
         int edgesCount = (int) Math.floor(maxEdges * density);
 
         List<Edge> edges = new LinkedList<>();
-        double matrix[][] = new double[size][size];
+        double[][] matrix = new double[size][size];
 
         if (direction == DIRECTED) {
 
