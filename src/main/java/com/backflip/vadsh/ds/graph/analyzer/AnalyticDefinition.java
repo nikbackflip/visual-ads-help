@@ -12,7 +12,9 @@ public enum AnalyticDefinition {
     DAG("DAG", new DagAnalyzer()),
     NEGATIVE_CYCLES("negative cycles", new NegativeCyclesAnalyzer()),
     DISCONNECTED("disconnected", new DisconnectedAnalyzer()),
-    EULERIAN_PATH("eulerian path", new EulerianPathAnalyzer());
+    EULERIAN_PATH("eulerian path", new EulerianPathAnalyzer()),
+    DENSE("dense", new DenseAnalyzer()),
+    SPARSE("sparse", new SparseAnalyzer());
 
     AnalyticDefinition(String label, Analyzer analyzer) {
         this.label = label;

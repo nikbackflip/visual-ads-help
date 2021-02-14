@@ -19,7 +19,7 @@ public class GeneratorOptionTest {
         Set<GeneratorOption> remainingOptions = DIRECTED.compatibleOptions();
 
         //then
-        assertThat(remainingOptions, containsInAnyOrder(WEIGHTED, NOT_WEIGHTED, COMPLETE, SPARSE, DENSE, DAG, CYCLIC, ACYCLIC));
+        assertThat(remainingOptions, containsInAnyOrder(WEIGHTED, NOT_WEIGHTED, COMPLETE, SPARSE, DENSE, DAG, CYCLIC, ACYCLIC, RANDOM));
         assertThat(remainingOptions, not(containsInAnyOrder(DIRECTED, NOT_DIRECTED)));
     }
 
@@ -31,7 +31,7 @@ public class GeneratorOptionTest {
         Set<GeneratorOption> remainingOptions = NOT_DIRECTED.compatibleOptions();
 
         //then
-        assertThat(remainingOptions, containsInAnyOrder(WEIGHTED, NOT_WEIGHTED, COMPLETE, SPARSE, DENSE, CYCLIC, ACYCLIC));
+        assertThat(remainingOptions, containsInAnyOrder(WEIGHTED, NOT_WEIGHTED, COMPLETE, SPARSE, DENSE, CYCLIC, ACYCLIC, RANDOM));
         assertThat(remainingOptions, not(containsInAnyOrder(DIRECTED, NOT_DIRECTED, DAG)));
     }
 
@@ -43,7 +43,7 @@ public class GeneratorOptionTest {
         Set<GeneratorOption> remainingOptions = WEIGHTED.compatibleOptions();
 
         //then
-        assertThat(remainingOptions, containsInAnyOrder(DIRECTED, NOT_DIRECTED, COMPLETE, SPARSE, DENSE, DAG, CYCLIC, ACYCLIC));
+        assertThat(remainingOptions, containsInAnyOrder(DIRECTED, NOT_DIRECTED, COMPLETE, SPARSE, DENSE, DAG, CYCLIC, ACYCLIC, RANDOM));
         assertThat(remainingOptions, not(containsInAnyOrder(WEIGHTED, NOT_WEIGHTED)));
     }
 
@@ -55,7 +55,7 @@ public class GeneratorOptionTest {
         Set<GeneratorOption> remainingOptions = NOT_WEIGHTED.compatibleOptions();
 
         //then
-        assertThat(remainingOptions, containsInAnyOrder(DIRECTED, NOT_DIRECTED, COMPLETE, SPARSE, DENSE, DAG, CYCLIC, ACYCLIC));
+        assertThat(remainingOptions, containsInAnyOrder(DIRECTED, NOT_DIRECTED, COMPLETE, SPARSE, DENSE, DAG, CYCLIC, ACYCLIC, RANDOM));
         assertThat(remainingOptions, not(containsInAnyOrder(WEIGHTED, NOT_WEIGHTED)));
     }
 
@@ -68,7 +68,7 @@ public class GeneratorOptionTest {
 
         //then
         assertThat(remainingOptions, containsInAnyOrder(DIRECTED, NOT_DIRECTED, WEIGHTED, NOT_WEIGHTED, CYCLIC));
-        assertThat(remainingOptions, not(containsInAnyOrder(COMPLETE, SPARSE, DENSE, DAG, ACYCLIC)));
+        assertThat(remainingOptions, not(containsInAnyOrder(COMPLETE, SPARSE, DENSE, DAG, ACYCLIC, RANDOM)));
     }
 
     @Test
@@ -79,7 +79,7 @@ public class GeneratorOptionTest {
         Set<GeneratorOption> remainingOptions = SPARSE.compatibleOptions();
 
         //then
-        assertThat(remainingOptions, containsInAnyOrder(DIRECTED, NOT_DIRECTED, WEIGHTED, NOT_WEIGHTED, DAG, CYCLIC, ACYCLIC));
+        assertThat(remainingOptions, containsInAnyOrder(DIRECTED, NOT_DIRECTED, WEIGHTED, NOT_WEIGHTED, DAG, CYCLIC, ACYCLIC, RANDOM));
         assertThat(remainingOptions, not(containsInAnyOrder(COMPLETE, SPARSE, DENSE)));
     }
 
@@ -91,7 +91,7 @@ public class GeneratorOptionTest {
         Set<GeneratorOption> remainingOptions = DENSE.compatibleOptions();
 
         //then
-        assertThat(remainingOptions, containsInAnyOrder(DIRECTED, NOT_DIRECTED, WEIGHTED, NOT_WEIGHTED, DAG, CYCLIC, ACYCLIC));
+        assertThat(remainingOptions, containsInAnyOrder(DIRECTED, NOT_DIRECTED, WEIGHTED, NOT_WEIGHTED, DAG, CYCLIC, ACYCLIC, RANDOM));
         assertThat(remainingOptions, not(containsInAnyOrder(COMPLETE, SPARSE, DENSE)));
     }
 
@@ -104,7 +104,7 @@ public class GeneratorOptionTest {
 
         //then
         assertThat(remainingOptions, containsInAnyOrder(DIRECTED, WEIGHTED, NOT_WEIGHTED, SPARSE, DENSE, ACYCLIC));
-        assertThat(remainingOptions, not(containsInAnyOrder(NOT_DIRECTED, COMPLETE, DAG, CYCLIC)));
+        assertThat(remainingOptions, not(containsInAnyOrder(NOT_DIRECTED, COMPLETE, DAG, CYCLIC, RANDOM)));
     }
 
     @Test
@@ -116,7 +116,7 @@ public class GeneratorOptionTest {
 
         //then
         assertThat(remainingOptions, containsInAnyOrder(DIRECTED, NOT_DIRECTED, WEIGHTED, NOT_WEIGHTED, COMPLETE, SPARSE, DENSE));
-        assertThat(remainingOptions, not(containsInAnyOrder(DAG, CYCLIC, ACYCLIC)));
+        assertThat(remainingOptions, not(containsInAnyOrder(DAG, CYCLIC, ACYCLIC, RANDOM)));
     }
 
     @Test
@@ -128,7 +128,19 @@ public class GeneratorOptionTest {
 
         //then
         assertThat(remainingOptions, containsInAnyOrder(DIRECTED, NOT_DIRECTED, WEIGHTED, NOT_WEIGHTED, SPARSE, DENSE, DAG));
-        assertThat(remainingOptions, not(containsInAnyOrder(COMPLETE, CYCLIC, ACYCLIC)));
+        assertThat(remainingOptions, not(containsInAnyOrder(COMPLETE, CYCLIC, ACYCLIC, RANDOM)));
+    }
+
+    @Test
+    public void getRemainingOptionsForRandom() {
+        //given
+
+        //when
+        Set<GeneratorOption> remainingOptions = RANDOM.compatibleOptions();
+
+        //then
+        assertThat(remainingOptions, containsInAnyOrder(DIRECTED, NOT_DIRECTED, WEIGHTED, NOT_WEIGHTED, SPARSE, DENSE));
+        assertThat(remainingOptions, not(containsInAnyOrder(DAG, COMPLETE, CYCLIC, ACYCLIC, RANDOM)));
     }
 
     @Test
@@ -208,7 +220,7 @@ public class GeneratorOptionTest {
         Set<GeneratorOption> remainingOptions = compatibleOptionsFor(currentOptions);
 
         //then
-        assertThat(remainingOptions, containsInAnyOrder(COMPLETE, SPARSE, DENSE, CYCLIC, ACYCLIC));
+        assertThat(remainingOptions, containsInAnyOrder(COMPLETE, SPARSE, DENSE, CYCLIC, ACYCLIC, RANDOM));
         assertThat(remainingOptions, not(containsInAnyOrder(WEIGHTED, NOT_WEIGHTED, DIRECTED, NOT_DIRECTED, DAG)));
     }
 

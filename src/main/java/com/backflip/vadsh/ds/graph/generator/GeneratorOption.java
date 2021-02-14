@@ -5,17 +5,18 @@ import java.util.stream.Collectors;
 
 public enum GeneratorOption {
 
-    //                           DIRECTED,  NOT_DIRECTED,  WEIGHTED,  NOT_WEIGHTED,  COMPLETE,  SPARSE,  DENSE,  DAG,    CYCLIC,  ACYCLIC,
-    DIRECTED(       false,     false,         true,      true,          true,      true,    true,   true,   true,    true),
-    NOT_DIRECTED(   false,     false,         true,      true,          true,      true,    true,   false,  true,    true),
-    WEIGHTED(       true,      true,          false,     false,         true,      true,    true,   true,   true,    true),
-    NOT_WEIGHTED(   true,      true,          false,     false,         true,      true,    true,   true,   true,    true),
-    COMPLETE(       true,      true,          true,      true,          false,     false,   false,  false,  true,    false),
-    SPARSE(         true,      true,          true,      true,          false,     false,   false,  true,   true,    true),
-    DENSE(          true,      true,          true,      true,          false,     false,   false,  true,   true,    true),
-    DAG(            true,      false,         true,      true,          false,     true,    true,   false,  false,   true),
-    CYCLIC(         true,      true,          true,      true,          true,      true,    true,   false,  false,   false),
-    ACYCLIC(        true,      true,          true,      true,          false,     true,    true,   true,   false,   false);
+    //                           DIRECTED,  NOT_DIRECTED,  WEIGHTED,  NOT_WEIGHTED,  COMPLETE,  SPARSE,  DENSE,  DAG,    CYCLIC,  ACYCLIC,  RANDOM
+    DIRECTED(       false,     false,         true,      true,          true,      true,    true,   true,   true,    true,     true),
+    NOT_DIRECTED(   false,     false,         true,      true,          true,      true,    true,   false,  true,    true,     true),
+    WEIGHTED(       true,      true,          false,     false,         true,      true,    true,   true,   true,    true,     true),
+    NOT_WEIGHTED(   true,      true,          false,     false,         true,      true,    true,   true,   true,    true,     true),
+    COMPLETE(       true,      true,          true,      true,          false,     false,   false,  false,  true,    false,    false),
+    SPARSE(         true,      true,          true,      true,          false,     false,   false,  true,   true,    true,     true),
+    DENSE(          true,      true,          true,      true,          false,     false,   false,  true,   true,    true,     true),
+    DAG(            true,      false,         true,      true,          false,     true,    true,   false,  false,   true,     false),
+    CYCLIC(         true,      true,          true,      true,          true,      true,    true,   false,  false,   false,    false),
+    ACYCLIC(        true,      true,          true,      true,          false,     true,    true,   true,   false,   false,    false),
+    RANDOM(         true,      true,          true,      true,          false,     true,    true,   false,  false,   false,    false);
 
     private final boolean[] compatibility;
 
