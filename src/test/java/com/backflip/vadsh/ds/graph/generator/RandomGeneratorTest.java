@@ -56,11 +56,11 @@ public class RandomGeneratorTest {
                         List.of(AnalyticDefinition.SPARSE)),
                 Arguments.of(
                         2, WEIGHTED, DIRECTED, DENSE,
-                        List.of(AnalyticDefinition.WEIGHTED, AnalyticDefinition.DIRECTIONAL, AnalyticDefinition.DENSE, AnalyticDefinition.COMPLETE),
+                        List.of(AnalyticDefinition.WEIGHTED, AnalyticDefinition.DIRECTIONAL, AnalyticDefinition.DENSE),
                         List.of(AnalyticDefinition.SPARSE)),
                 Arguments.of(
                         2, WEIGHTED, DIRECTED, SPARSE,
-                        List.of(AnalyticDefinition.WEIGHTED, AnalyticDefinition.DIRECTIONAL, AnalyticDefinition.SPARSE),
+                        List.of(AnalyticDefinition.WEIGHTED, AnalyticDefinition.DIRECTIONAL/*, AnalyticDefinition.SPARSE*/),
                         List.of(AnalyticDefinition.DENSE, AnalyticDefinition.COMPLETE))
         );
     }
