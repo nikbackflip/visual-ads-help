@@ -4,6 +4,7 @@ import com.backflip.vadsh.ds.graph.Config;
 import com.backflip.vadsh.ds.graph.Edge;
 import com.backflip.vadsh.ds.graph.Graph;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -34,6 +35,7 @@ public class RandomGraphGenerator implements GraphGenerator {
         int edgesCount = (int) Math.floor(maxEdges * density);
 
         List<Edge> edges = new LinkedList<>();
+        double matrix[][] = new double[size][size];
 
         if (direction == DIRECTED) {
 
@@ -41,8 +43,10 @@ public class RandomGraphGenerator implements GraphGenerator {
                 int fromNode = random.nextInt(size);
                 int toNode = random.nextInt(size);
                 if (fromNode == toNode) continue;
+                if (matrix[fromNode][toNode] != 0) continue;
 
                 edges.add(edge(fromNode, toNode, calculateWeight(weight)));
+                matrix[fromNode][toNode] = 1;
                 edgesCount--;
 
             } while (edgesCount > 0);
@@ -53,15 +57,16 @@ public class RandomGraphGenerator implements GraphGenerator {
                 int fromNode = random.nextInt(size);
                 int toNode = random.nextInt(size);
                 double edgeWeight = calculateWeight(weight);
-
                 if (fromNode == toNode) continue;
+                if (matrix[fromNode][toNode] != 0) continue;
 
                 edges.add(edge(fromNode, toNode, edgeWeight));
                 edges.add(edge(toNode, fromNode, edgeWeight));
+                matrix[fromNode][toNode] = 1;
+                matrix[toNode][fromNode] = 1;
                 edgesCount -= 2;
 
             } while (edgesCount > 1);
-
         }
 
         return new Graph(edges, size);

@@ -9,7 +9,7 @@ public class DenseAnalyzer implements Analyzer {
     public boolean analyze(Graph graph, Config config) {
         int size = graph.n();
         int edgesCount = graph.edgeList().size();
-        double maxEdges = config.isSelfLoopsAllowed() ? size * size : size * size - 1;
+        double maxEdges = config.isSelfLoopsAllowed() ? size * size : size * (size - 1);
         double density = edgesCount / maxEdges;
         return edgesCount == maxEdges || density >= 0.5;
     }
