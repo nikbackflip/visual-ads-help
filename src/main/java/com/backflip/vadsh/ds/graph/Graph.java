@@ -1,11 +1,9 @@
 package com.backflip.vadsh.ds.graph;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.IntStream;
 
+import static com.backflip.vadsh.ds.graph.Edge.edge;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
@@ -15,6 +13,19 @@ public class Graph {
     public Graph(List<Edge> edges, int n) {
         this.edgeList = edges;
         this.n = n;
+    }
+
+    public static Graph graphFromMatrix(double[][] matrix) {
+        int n = matrix.length;
+        List<Edge> edges = new LinkedList<>();
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (matrix[i][j] != 0) {
+                    edges.add(edge(i, j, matrix[i][j]));
+                }
+            }
+        }
+        return new Graph(edges, n);
     }
 
     private final List<Edge> edgeList;
