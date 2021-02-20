@@ -14,7 +14,8 @@ public enum AnalyticDefinition {
     DISCONNECTED("disconnected", new DisconnectedAnalyzer()),
     EULERIAN_PATH("eulerian path", new EulerianPathAnalyzer()),
     DENSE("dense", new DenseAnalyzer()),
-    SPARSE("sparse", new SparseAnalyzer());
+    SPARSE("sparse", new SparseAnalyzer()),
+    CYCLIC("cyclic", new CyclicAnalyzer());
 
     AnalyticDefinition(String label, Analyzer analyzer) {
         this.label = label;

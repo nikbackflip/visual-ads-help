@@ -91,8 +91,8 @@ public class GeneratorOptionTest {
         Set<GeneratorOption> remainingOptions = DENSE.compatibleOptions();
 
         //then
-        assertThat(remainingOptions, containsInAnyOrder(DIRECTED, NOT_DIRECTED, WEIGHTED, NOT_WEIGHTED, DAG, CYCLIC, ACYCLIC, RANDOM));
-        assertThat(remainingOptions, not(containsInAnyOrder(COMPLETE, SPARSE, DENSE)));
+        assertThat(remainingOptions, containsInAnyOrder(DIRECTED, NOT_DIRECTED, WEIGHTED, NOT_WEIGHTED, CYCLIC, RANDOM));
+        assertThat(remainingOptions, not(containsInAnyOrder(COMPLETE, SPARSE, DENSE, DAG, ACYCLIC)));
     }
 
     @Test
@@ -103,8 +103,8 @@ public class GeneratorOptionTest {
         Set<GeneratorOption> remainingOptions = DAG.compatibleOptions();
 
         //then
-        assertThat(remainingOptions, containsInAnyOrder(DIRECTED, WEIGHTED, NOT_WEIGHTED, SPARSE, DENSE, ACYCLIC));
-        assertThat(remainingOptions, not(containsInAnyOrder(NOT_DIRECTED, COMPLETE, DAG, CYCLIC, RANDOM)));
+        assertThat(remainingOptions, containsInAnyOrder(DIRECTED, WEIGHTED, NOT_WEIGHTED, SPARSE, ACYCLIC));
+        assertThat(remainingOptions, not(containsInAnyOrder(NOT_DIRECTED, COMPLETE, DAG, CYCLIC, RANDOM, DENSE)));
     }
 
     @Test
@@ -127,8 +127,8 @@ public class GeneratorOptionTest {
         Set<GeneratorOption> remainingOptions = ACYCLIC.compatibleOptions();
 
         //then
-        assertThat(remainingOptions, containsInAnyOrder(DIRECTED, NOT_DIRECTED, WEIGHTED, NOT_WEIGHTED, SPARSE, DENSE, DAG));
-        assertThat(remainingOptions, not(containsInAnyOrder(COMPLETE, CYCLIC, ACYCLIC, RANDOM)));
+        assertThat(remainingOptions, containsInAnyOrder(DIRECTED, NOT_DIRECTED, WEIGHTED, NOT_WEIGHTED, SPARSE, DAG));
+        assertThat(remainingOptions, not(containsInAnyOrder(COMPLETE, CYCLIC, ACYCLIC, RANDOM, DENSE)));
     }
 
     @Test
@@ -146,7 +146,7 @@ public class GeneratorOptionTest {
     @Test
     public void verifyOptionsCompatible() {
         //given
-        Set<GeneratorOption> options = Set.of(DIRECTED, WEIGHTED, DAG, DENSE);
+        Set<GeneratorOption> options = Set.of(DIRECTED, WEIGHTED, DAG, SPARSE);
 
         //when
         boolean result = compatible(options);

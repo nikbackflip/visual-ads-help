@@ -102,7 +102,16 @@ public class AnalyzersTest {
                 Arguments.of(sparseAnalyzer, singleNode, notSelfLoopConfig, false),
                 Arguments.of(sparseAnalyzer, sparseGraph, notSelfLoopConfig, true),
                 Arguments.of(sparseAnalyzer, denseGraph, notSelfLoopConfig, false),
-                Arguments.of(sparseAnalyzer, completeGraphWithoutSelfLoops, notSelfLoopConfig, false)
+                Arguments.of(sparseAnalyzer, completeGraphWithoutSelfLoops, notSelfLoopConfig, false),
+
+                Arguments.of(cyclicAnalyzer, singleNode, defaultConfig, false),
+                Arguments.of(cyclicAnalyzer, singleNodeSelfLoop, defaultConfig, true),
+                Arguments.of(cyclicAnalyzer, singleNodeSelfLoop, notDirectionalConfig, true),
+                Arguments.of(cyclicAnalyzer, twoNodesGraph, defaultConfig, true),
+                Arguments.of(cyclicAnalyzer, twoNodesGraph, notDirectionalConfig, false),
+                Arguments.of(cyclicAnalyzer, twoNodesGraph, notDirectionalConfig, false),
+                Arguments.of(cyclicAnalyzer, negativeCycle, defaultConfig, true),
+                Arguments.of(cyclicAnalyzer, treeNotDirectional, notDirectionalConfig, false)
         );
     }
 
@@ -116,6 +125,7 @@ public class AnalyzersTest {
     private final static Analyzer eulerianPathAnalyzer = new EulerianPathAnalyzer();
     private final static Analyzer denseAnalyzer = new DenseAnalyzer();
     private final static Analyzer sparseAnalyzer = new SparseAnalyzer();
+    private final static Analyzer cyclicAnalyzer = new CyclicAnalyzer();
 
     private final static Config defaultConfig = new Config(true, true, true);
     private final static Config weightedConfig = new Config(false, true, false);
@@ -147,6 +157,7 @@ public class AnalyzersTest {
     private final static Graph doubleDiagonalsSquare = new Graph(List.of(new Edge(0, 3, 1.0), new Edge(3, 0, 1.0), new Edge(3, 2, 1.0), new Edge(2, 3, 1.0), new Edge(2, 1, 1.0), new Edge(1, 2, 1.0), new Edge(1, 0, 1.0), new Edge(0, 1, 1.0), new Edge(0, 2, 1.0), new Edge(2, 0, 1.0), new Edge(1, 3, 1.0), new Edge(3, 1, 1.0)), 4);
     private final static Graph sparseGraph = new Graph(List.of(new Edge(0, 1, 1.0), new Edge(1, 2, 1.0), new Edge(2, 4, 1.0), new Edge(4, 3, 1.0)), 5);
     private final static Graph denseGraph = new Graph(List.of(new Edge(0, 1, 1.0), new Edge(1, 2, 1.0), new Edge(2, 1, 1.0), new Edge(2, 4, 1.0), new Edge(4, 3, 1.0), new Edge(0, 2, 1.0), new Edge(2, 0, 1.0), new Edge(0, 4, 1.0), new Edge(4, 0, 1.0), new Edge(4, 1, 1.0), new Edge(1, 3, 1.0), new Edge(2, 3, 1.0), new Edge(3, 2, 1.0), new Edge(0, 3, 1.0), new Edge(3, 0, 1.0)), 5);
+    private final static Graph twoNodesGraph = new Graph(List.of(new Edge(0, 1, 1.0), new Edge(1, 0, 1.0)), 2);
 }
 
 
