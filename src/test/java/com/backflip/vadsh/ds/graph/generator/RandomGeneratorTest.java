@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
 import static com.backflip.vadsh.ds.graph.generator.GeneratorOption.*;
@@ -34,35 +35,31 @@ public class RandomGeneratorTest {
 
     private static Stream<Arguments> input() {
         return Stream.of(
-                Arguments.of(
-                        5, WEIGHTED, DIRECTED, DENSE,
-                        List.of(AnalyticDefinition.WEIGHTED, AnalyticDefinition.DIRECTIONAL, AnalyticDefinition.DENSE),
-                        List.of(AnalyticDefinition.SPARSE, AnalyticDefinition.COMPLETE)),
-                Arguments.of(
-                        6, WEIGHTED, DIRECTED, SPARSE,
-                        List.of(AnalyticDefinition.WEIGHTED, AnalyticDefinition.DIRECTIONAL, AnalyticDefinition.SPARSE),
-                        List.of(AnalyticDefinition.DENSE, AnalyticDefinition.COMPLETE)),
-                Arguments.of(
-                        7, WEIGHTED, NOT_DIRECTED, SPARSE,
-                        List.of(AnalyticDefinition.WEIGHTED, AnalyticDefinition.SPARSE),
-                        List.of(AnalyticDefinition.DENSE, AnalyticDefinition.DIRECTIONAL, AnalyticDefinition.COMPLETE)),
-                Arguments.of(
-                        8, NOT_WEIGHTED, NOT_DIRECTED, DENSE,
-                        List.of(AnalyticDefinition.DENSE),
-                        List.of(AnalyticDefinition.WEIGHTED, AnalyticDefinition.SPARSE, AnalyticDefinition.DIRECTIONAL, AnalyticDefinition.COMPLETE)),
-                Arguments.of(
-                        1, WEIGHTED, DIRECTED, DENSE,
-                        List.of(AnalyticDefinition.WEIGHTED, AnalyticDefinition.DIRECTIONAL, AnalyticDefinition.COMPLETE, AnalyticDefinition.DENSE),
-                        List.of(AnalyticDefinition.SPARSE)),
-                Arguments.of(
-                        2, WEIGHTED, DIRECTED, DENSE,
-                        List.of(AnalyticDefinition.WEIGHTED, AnalyticDefinition.DIRECTIONAL, AnalyticDefinition.DENSE),
-                        List.of(AnalyticDefinition.SPARSE)),
-                Arguments.of(
-                        2, WEIGHTED, DIRECTED, SPARSE,
-                        List.of(AnalyticDefinition.WEIGHTED, AnalyticDefinition.DIRECTIONAL/*, AnalyticDefinition.SPARSE*/),
-                        List.of(AnalyticDefinition.DENSE, AnalyticDefinition.COMPLETE))
-        );
+                Stream.generate(
+                        () -> Arguments.of(
+                                ThreadLocalRandom.current().nextInt(3, 15), WEIGHTED, DIRECTED, SPARSE, //FIXME from 1
+                                List.of(AnalyticDefinition.DIRECTIONAL, AnalyticDefinition.SPARSE, AnalyticDefinition.WEIGHTED),
+                                List.of(AnalyticDefinition.DENSE)))
+                        .limit(100),
+                Stream.generate(
+                        () -> Arguments.of(
+                                ThreadLocalRandom.current().nextInt(3, 15), NOT_WEIGHTED, NOT_DIRECTED, SPARSE, //FIXME from 1
+                                List.of(AnalyticDefinition.SPARSE),
+                                List.of(AnalyticDefinition.DIRECTIONAL, AnalyticDefinition.DENSE, AnalyticDefinition.WEIGHTED)))
+                        .limit(100),
+                Stream.generate(
+                        () -> Arguments.of(
+                                ThreadLocalRandom.current().nextInt(3, 15), NOT_WEIGHTED, DIRECTED, DENSE, //FIXME from 1
+                                List.of(AnalyticDefinition.DIRECTIONAL, AnalyticDefinition.DENSE),
+                                List.of(AnalyticDefinition.SPARSE, AnalyticDefinition.WEIGHTED)))
+                        .limit(100),
+                Stream.generate(
+                        () -> Arguments.of(
+                                ThreadLocalRandom.current().nextInt(3, 15), WEIGHTED, NOT_DIRECTED, DENSE, //FIXME from 1
+                                List.of(AnalyticDefinition.DENSE, AnalyticDefinition.WEIGHTED),
+                                List.of(AnalyticDefinition.DIRECTIONAL, AnalyticDefinition.SPARSE)))
+                        .limit(100)
+        ).flatMap(s -> s);
     }
 
 }

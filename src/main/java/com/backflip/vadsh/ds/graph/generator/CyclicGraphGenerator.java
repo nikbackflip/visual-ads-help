@@ -101,7 +101,7 @@ public class CyclicGraphGenerator implements GraphGenerator {
             g = graphFromMatrix(matrix);
         }
 
-        //TODO FAILS SOMETIMES FOR NOT_DIRECTED
+        //FIXME FAILS SOMETIMES FOR NOT_DIRECTED
 //        if (g.edgeList().size() != edgesCount) throw new IllegalStateException(g.edgeList().size() + " != " + edgesCount);
 
         return g;
@@ -195,7 +195,7 @@ public class CyclicGraphGenerator implements GraphGenerator {
         return (Collector<T, ?, List<T>>) SHUFFLER;
     }
 
-//    TODO FAILS SOMETIMES
+//    FIXME FAILS SOMETIMES
 //    public static void main(String[] args) {
 //        new CyclicGraphGenerator(3, NOT_WEIGHTED, NOT_DIRECTED, DENSE).generate();
 //    }
