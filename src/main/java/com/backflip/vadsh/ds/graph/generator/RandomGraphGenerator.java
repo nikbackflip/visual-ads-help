@@ -24,8 +24,7 @@ public class RandomGraphGenerator implements GraphGenerator {
         this.density = density;
     }
 
-    @Override
-    public Graph getGraph() {
+    private Graph getGraph() {
         double density = calculateDensity();
         int maxEdges = size * (size - 1);
         int edgesCount = calculateExpectedEdges(maxEdges, density);
@@ -98,11 +97,15 @@ public class RandomGraphGenerator implements GraphGenerator {
         return random.nextDouble(0.1, 0.3);
     }
 
-    @Override
-    public Config getConfig() {
+    private Config getConfig() {
         return new Config(
                 direction == GeneratorOption.DIRECTED,
                 weight == GeneratorOption.WEIGHTED,
                 false);
+    }
+
+    @Override
+    public GeneratedGraph generate() {
+        return new GeneratedGraph(getGraph(), getConfig());
     }
 }

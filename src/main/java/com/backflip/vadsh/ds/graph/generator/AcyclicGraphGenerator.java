@@ -25,8 +25,7 @@ public class AcyclicGraphGenerator implements GraphGenerator {
         this.direction = direction;
     }
 
-    @Override
-    public Graph getGraph() {
+    private Graph getGraph() {
 
         if (direction == DIRECTED) {
             double density = calculateDensity();
@@ -104,8 +103,7 @@ public class AcyclicGraphGenerator implements GraphGenerator {
         return random.nextDouble(0.1, 0.3);
     }
 
-    @Override
-    public Config getConfig() {
+    private Config getConfig() {
         return new Config(
                 direction == GeneratorOption.DIRECTED,
                 weight == GeneratorOption.WEIGHTED,
@@ -125,4 +123,10 @@ public class AcyclicGraphGenerator implements GraphGenerator {
             }
         }
     }
+
+    @Override
+    public GeneratedGraph generate() {
+        return new GeneratedGraph(getGraph(), getConfig());
+    }
+
 }

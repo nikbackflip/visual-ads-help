@@ -26,8 +26,7 @@ public class CyclicGraphGenerator implements GraphGenerator {
         this.density = density;
     }
 
-    @Override
-    public Graph getGraph() {
+    private Graph getGraph() {
         LinkedList<Edge> edges = new LinkedList<>();
         int cycleSize = calculateCycleSize();
 
@@ -68,8 +67,7 @@ public class CyclicGraphGenerator implements GraphGenerator {
         }
     }
 
-    @Override
-    public Config getConfig() {
+    private Config getConfig() {
         return new Config(
                 direction == GeneratorOption.DIRECTED,
                 weight == GeneratorOption.WEIGHTED,
@@ -128,8 +126,10 @@ public class CyclicGraphGenerator implements GraphGenerator {
             }
         }
     }
-    public static void main(String[] args) {
-        new CyclicGraphGenerator(3, NOT_WEIGHTED, NOT_DIRECTED, SPARSE).getGraph();
+
+    @Override
+    public GeneratedGraph generate() {
+        return new GeneratedGraph(getGraph(), getConfig());
     }
 
 }

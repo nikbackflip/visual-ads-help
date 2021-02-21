@@ -23,8 +23,7 @@ public interface GraphGenerator {
         };
     }
 
-    Graph getGraph();
-    Config getConfig();
+    GeneratedGraph generate();
 
     private static GeneratorOption directionDescriptor(Collection<GeneratorOption> c) {
         if (c.contains(NOT_DIRECTED)) return NOT_DIRECTED;

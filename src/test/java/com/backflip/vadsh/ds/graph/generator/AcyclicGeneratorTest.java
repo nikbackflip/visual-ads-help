@@ -23,8 +23,8 @@ public class AcyclicGeneratorTest {
         GraphGenerator generator = new AcyclicGraphGenerator(size, weight, direction);
 
         //when
-        Graph graph = generator.getGraph();
-        Config config = generator.getConfig();
+        Graph graph = generator.generate().getGraph();
+        Config config = generator.generate().getConfig();
 
         //then
         assertEquals(size, graph.n());
