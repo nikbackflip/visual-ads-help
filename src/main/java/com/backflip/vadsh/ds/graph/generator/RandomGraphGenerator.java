@@ -1,14 +1,11 @@
 package com.backflip.vadsh.ds.graph.generator;
 
 import com.backflip.vadsh.ds.graph.Config;
-import com.backflip.vadsh.ds.graph.Edge;
 import com.backflip.vadsh.ds.graph.Graph;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static com.backflip.vadsh.ds.graph.Edge.edge;
+import static com.backflip.vadsh.ds.graph.Graph.graphFromMatrix;
 import static com.backflip.vadsh.ds.graph.generator.GeneratorOption.*;
 
 public class RandomGraphGenerator implements GraphGenerator {
@@ -27,48 +24,68 @@ public class RandomGraphGenerator implements GraphGenerator {
         this.density = density;
     }
 
-    @Override
-    public Graph getGraph() {
+    private Graph getGraph() {
         double density = calculateDensity();
         int maxEdges = size * (size - 1);
-        int edgesCount = (int) Math.floor(maxEdges * density);
-
-        List<Edge> edges = new LinkedList<>();
+        int edgesCount = calculateExpectedEdges(maxEdges, density);
         double[][] matrix = new double[size][size];
 
         if (direction == DIRECTED) {
+            boolean[] connected = new boolean[size*(size-1)];
+            for (int i = 0; i < edgesCount; i++) {
+                connected[i] = true;
+            }
+            shuffleArray(connected);
 
-            do {
-                int fromNode = random.nextInt(size);
-                int toNode = random.nextInt(size);
-                if (fromNode == toNode) continue;
-                if (matrix[fromNode][toNode] != 0) continue;
-
-                edges.add(edge(fromNode, toNode, calculateWeight(weight)));
-                matrix[fromNode][toNode] = 1;
-                edgesCount--;
-
-            } while (edgesCount > 0);
-
+            int c = 0;
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+                    if (i == j) continue;
+                    if (connected[c]) {
+                        matrix[i][j] = calculateWeight(weight);
+                    }
+                    c++;
+                }
+            }
         } else {
+            edgesCount = edgesCount / 2;
+            boolean[] connected = new boolean[size*(size-1) / 2];
+            for (int i = 0; i < edgesCount; i++) {
+                connected[i] = true;
+            }
+            shuffleArray(connected);
 
-            do {
-                int fromNode = random.nextInt(size);
-                int toNode = random.nextInt(size);
-                double edgeWeight = calculateWeight(weight);
-                if (fromNode == toNode) continue;
-                if (matrix[fromNode][toNode] != 0) continue;
-
-                edges.add(edge(fromNode, toNode, edgeWeight));
-                edges.add(edge(toNode, fromNode, edgeWeight));
-                matrix[fromNode][toNode] = 1;
-                matrix[toNode][fromNode] = 1;
-                edgesCount -= 2;
-
-            } while (edgesCount > 1);
+            int c = 0;
+            for (int i = 1; i < size; i++) {
+                for (int j = 0; j < i; j++) {
+                    if (connected[c]) {
+                        double calcWeight = calculateWeight(weight);
+                        matrix[i][j] = calcWeight;
+                        matrix[j][i] = calcWeight;
+                    }
+                    c++;
+                }
+            }
         }
+        return graphFromMatrix(matrix);
+    }
 
-        return new Graph(edges, size);
+    private int calculateExpectedEdges(int maxEdges, double density) {
+        if (this.density == DENSE) return (int) Math.ceil(maxEdges * density);
+        else return (int) Math.floor(maxEdges * density);
+    }
+
+    //Fisher–Yates
+    private void shuffleArray(boolean[] array) {
+        int index;
+        for (int i = array.length - 1; i > 0; i--) {
+            index = random.nextInt(i + 1);
+            if (index != i) {
+                array[index] ^= array[i];
+                array[i] ^= array[index];
+                array[index] ^= array[i];
+            }
+        }
     }
 
     private double calculateWeight(GeneratorOption weight) {
@@ -80,11 +97,15 @@ public class RandomGraphGenerator implements GraphGenerator {
         return random.nextDouble(0.1, 0.3);
     }
 
-    @Override
-    public Config getConfig() {
+    private Config getConfig() {
         return new Config(
                 direction == GeneratorOption.DIRECTED,
                 weight == GeneratorOption.WEIGHTED,
                 false);
+    }
+
+    @Override
+    public GeneratedGraph generate() {
+        return new GeneratedGraph(getGraph(), getConfig());
     }
 }

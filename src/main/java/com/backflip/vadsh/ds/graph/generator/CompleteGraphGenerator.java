@@ -25,8 +25,7 @@ public class CompleteGraphGenerator implements GraphGenerator {
         this.direction = direction;
     }
 
-    @Override
-    public Graph getGraph() {
+    private Graph getGraph() {
         List<Edge> edges = new LinkedList<>();
 
         for (int i = 0; i < size - 1; i++) {
@@ -43,11 +42,16 @@ public class CompleteGraphGenerator implements GraphGenerator {
         return weightOption == NOT_WEIGHTED ? 1.0 : random.nextInt(1, 20);
     }
 
-    @Override
-    public Config getConfig() {
+    private Config getConfig() {
         return new Config(
                 direction == GeneratorOption.DIRECTED,
                 weight == GeneratorOption.WEIGHTED,
                 false);
     }
+
+    @Override
+    public GeneratedGraph generate() {
+        return new GeneratedGraph(getGraph(), getConfig());
+    }
+
 }

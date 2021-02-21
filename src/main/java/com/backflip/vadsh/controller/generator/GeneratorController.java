@@ -30,8 +30,8 @@ public class GeneratorController {
     public GraphResponse generateGraph(@RequestParam(name = "for") List<GeneratorOption> forOptions) {
         GraphGenerator generator = GraphGenerator.getGenerator(ThreadLocalRandom.current().nextInt(3, 15), forOptions);
         return GraphResponse.builder()
-                .graph(generator.getGraph().adjacencyMatrix())
-                .config(generator.getConfig())
+                .graph(generator.generate().getGraph().adjacencyMatrix())
+                .config(generator.generate().getConfig())
                 .build();
     }
 

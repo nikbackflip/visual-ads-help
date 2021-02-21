@@ -23,8 +23,8 @@ public class RandomGeneratorTest {
         GraphGenerator generator = new RandomGraphGenerator(size, weight, direction, density);
 
         //when
-        Graph graph = generator.getGraph();
-        Config config = generator.getConfig();
+        Graph graph = generator.generate().getGraph();
+        Config config = generator.generate().getConfig();
 
         //then
         assertEquals(size, graph.n());

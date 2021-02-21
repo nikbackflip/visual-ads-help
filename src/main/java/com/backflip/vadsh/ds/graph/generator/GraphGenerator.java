@@ -16,15 +16,14 @@ public interface GraphGenerator {
 
         return switch (typeDescriptor(options)) {
             case COMPLETE -> new CompleteGraphGenerator(size, weighedDescriptor(options), directionDescriptor(options));
+            case DAG -> new AcyclicGraphGenerator(size, weighedDescriptor(options), DIRECTED);
+            case ACYCLIC -> new AcyclicGraphGenerator(size, weighedDescriptor(options), directionDescriptor(options));
             case CYCLIC -> new CyclicGraphGenerator(size, weighedDescriptor(options), directionDescriptor(options), densityDescriptor(options));
-            case ACYCLIC -> new AcyclicGraphGenerator(size, weighedDescriptor(options), directionDescriptor(options), densityDescriptor(options));
-            case DAG -> new DagGraphGenerator(size, weighedDescriptor(options), directionDescriptor(options), densityDescriptor(options));
             default -> new RandomGraphGenerator(size, weighedDescriptor(options), directionDescriptor(options), densityDescriptor(options));
         };
     }
 
-    Graph getGraph();
-    Config getConfig();
+    GeneratedGraph generate();
 
     private static GeneratorOption directionDescriptor(Collection<GeneratorOption> c) {
         if (c.contains(NOT_DIRECTED)) return NOT_DIRECTED;

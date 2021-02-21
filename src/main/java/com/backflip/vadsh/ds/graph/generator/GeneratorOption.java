@@ -12,13 +12,13 @@ public enum GeneratorOption {
     NOT_WEIGHTED(   true,      true,          false,     false,         true,      true,    true,   true,   true,    true,     true),
     COMPLETE(       true,      true,          true,      true,          false,     false,   false,  false,  true,    false,    false),
     SPARSE(         true,      true,          true,      true,          false,     false,   false,  true,   true,    true,     true),
-    DENSE(          true,      true,          true,      true,          false,     false,   false,  true,   true,    true,     true),
-    DAG(            true,      false,         true,      true,          false,     true,    true,   false,  false,   true,     false),
+    DENSE(          true,      true,          true,      true,          false,     false,   false,  false,  true,    false,    true),
+    DAG(            true,      false,         true,      true,          false,     true,    false,  false,  false,   true,     false),
     CYCLIC(         true,      true,          true,      true,          true,      true,    true,   false,  false,   false,    false),
-    ACYCLIC(        true,      true,          true,      true,          false,     true,    true,   true,   false,   false,    false),
+    ACYCLIC(        true,      true,          true,      true,          false,     true,    false,  true,   false,   false,    false),
     RANDOM(         true,      true,          true,      true,          false,     true,    true,   false,  false,   false,    false);
 
-    private final boolean[] compatibility;
+    private boolean[] compatibility;
 
     private final static int size;
     private final static boolean[][] optionsMatrix;
@@ -88,8 +88,6 @@ public enum GeneratorOption {
         for (int i = 0; i < size; i++) {
             Set<GeneratorOption> tempSet = EnumSet.noneOf(GeneratorOption.class);
             for (int j = 0; j < size; j++) {
-                if (values()[i].compatibility[j] != values()[j].compatibility[i])
-                    throw new IllegalStateException("Incorrect compatibility matrix");
                 if (optionsMatrix[i][j]) tempSet.add(values()[j]);
             }
             optionsMap.put(values()[i], tempSet);
