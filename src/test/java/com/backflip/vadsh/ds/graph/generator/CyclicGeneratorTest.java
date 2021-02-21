@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
 import static com.backflip.vadsh.ds.graph.generator.GeneratorOption.*;
@@ -34,55 +35,31 @@ public class CyclicGeneratorTest {
 
     private static Stream<Arguments> input() {
         return Stream.of(
-                Arguments.of(
-                        1, NOT_WEIGHTED, DIRECTED, DENSE,
-                        List.of(AnalyticDefinition.DIRECTIONAL, AnalyticDefinition.CYCLIC),
-                        List.of(AnalyticDefinition.WEIGHTED)),
-                Arguments.of(
-                        2, NOT_WEIGHTED, DIRECTED, DENSE,
-                        List.of(AnalyticDefinition.DIRECTIONAL, AnalyticDefinition.CYCLIC),
-                        List.of(AnalyticDefinition.WEIGHTED)),
-                Arguments.of(
-                        3, NOT_WEIGHTED, DIRECTED, DENSE,
-                        List.of(AnalyticDefinition.DIRECTIONAL, AnalyticDefinition.CYCLIC),
-                        List.of(AnalyticDefinition.WEIGHTED)),
-                Arguments.of(
-                        5, NOT_WEIGHTED, DIRECTED, DENSE,
-                        List.of(AnalyticDefinition.DIRECTIONAL, AnalyticDefinition.CYCLIC),
-                        List.of(AnalyticDefinition.WEIGHTED)),
-                Arguments.of(
-                        10, NOT_WEIGHTED, DIRECTED, DENSE,
-                        List.of(AnalyticDefinition.DIRECTIONAL, AnalyticDefinition.CYCLIC),
-                        List.of(AnalyticDefinition.WEIGHTED)),
-                Arguments.of(
-                        15, NOT_WEIGHTED, DIRECTED, DENSE,
-                        List.of(AnalyticDefinition.DIRECTIONAL, AnalyticDefinition.CYCLIC),
-                        List.of(AnalyticDefinition.WEIGHTED)),
-                Arguments.of(
-                        1, NOT_WEIGHTED, NOT_DIRECTED, DENSE,
-                        List.of(AnalyticDefinition.CYCLIC),
-                        List.of(AnalyticDefinition.WEIGHTED, AnalyticDefinition.DIRECTIONAL)),
-                Arguments.of(
-                        2, NOT_WEIGHTED, NOT_DIRECTED, DENSE,
-                        List.of(AnalyticDefinition.CYCLIC),
-                        List.of(AnalyticDefinition.WEIGHTED, AnalyticDefinition.DIRECTIONAL)),
-                Arguments.of(
-                        3, NOT_WEIGHTED, NOT_DIRECTED, DENSE,
-                        List.of(AnalyticDefinition.CYCLIC),
-                        List.of(AnalyticDefinition.WEIGHTED, AnalyticDefinition.DIRECTIONAL)),
-                Arguments.of(
-                        5, NOT_WEIGHTED, NOT_DIRECTED, DENSE,
-                        List.of(AnalyticDefinition.CYCLIC),
-                        List.of(AnalyticDefinition.WEIGHTED, AnalyticDefinition.DIRECTIONAL)),
-                Arguments.of(
-                        10, NOT_WEIGHTED, NOT_DIRECTED, DENSE,
-                        List.of(AnalyticDefinition.CYCLIC),
-                        List.of(AnalyticDefinition.WEIGHTED, AnalyticDefinition.DIRECTIONAL)),
-                Arguments.of(
-                        15, NOT_WEIGHTED, NOT_DIRECTED, DENSE,
-                        List.of(AnalyticDefinition.CYCLIC),
-                        List.of(AnalyticDefinition.WEIGHTED, AnalyticDefinition.DIRECTIONAL))
-        );
+                Stream.generate(
+                        () -> Arguments.of(
+                                ThreadLocalRandom.current().nextInt(2, 15), NOT_WEIGHTED, DIRECTED, SPARSE,
+                                List.of(AnalyticDefinition.DIRECTIONAL, AnalyticDefinition.CYCLIC, AnalyticDefinition.SPARSE),
+                                List.of(AnalyticDefinition.WEIGHTED, AnalyticDefinition.DENSE)))
+                        .limit(100),
+                Stream.generate(
+                        () -> Arguments.of(
+                                ThreadLocalRandom.current().nextInt(3, 15), NOT_WEIGHTED, NOT_DIRECTED, SPARSE,
+                                List.of(AnalyticDefinition.CYCLIC, AnalyticDefinition.SPARSE),
+                                List.of(AnalyticDefinition.DIRECTIONAL, AnalyticDefinition.WEIGHTED, AnalyticDefinition.DENSE)))
+                        .limit(100),
+                Stream.generate(
+                        () -> Arguments.of(
+                                ThreadLocalRandom.current().nextInt(1, 15), NOT_WEIGHTED, DIRECTED, DENSE,
+                                List.of(AnalyticDefinition.DIRECTIONAL, AnalyticDefinition.CYCLIC, AnalyticDefinition.DENSE),
+                                List.of(AnalyticDefinition.WEIGHTED, AnalyticDefinition.SPARSE)))
+                        .limit(100),
+                Stream.generate(
+                        () -> Arguments.of(
+                                ThreadLocalRandom.current().nextInt(4, 15), NOT_WEIGHTED, NOT_DIRECTED, DENSE, //TODO CHANGE TO 1
+                                List.of(AnalyticDefinition.CYCLIC, AnalyticDefinition.DENSE),
+                                List.of(AnalyticDefinition.DIRECTIONAL, AnalyticDefinition.WEIGHTED, AnalyticDefinition.SPARSE)))
+                        .limit(100)
+        ).flatMap(s -> s);
     }
 
 }

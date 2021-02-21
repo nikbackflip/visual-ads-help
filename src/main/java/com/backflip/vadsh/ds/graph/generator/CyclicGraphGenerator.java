@@ -3,12 +3,17 @@ package com.backflip.vadsh.ds.graph.generator;
 import com.backflip.vadsh.ds.graph.Config;
 import com.backflip.vadsh.ds.graph.Edge;
 import com.backflip.vadsh.ds.graph.Graph;
+import com.backflip.vadsh.ds.graph.analyzer.AnalyticDefinition;
 
-import java.util.LinkedList;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.IntUnaryOperator;
+import java.util.stream.*;
 
 import static com.backflip.vadsh.ds.graph.Edge.edge;
+import static com.backflip.vadsh.ds.graph.Graph.graphFromMatrix;
 import static com.backflip.vadsh.ds.graph.generator.GeneratorOption.*;
+import static java.util.function.Predicate.not;
 
 public class CyclicGraphGenerator implements GraphGenerator {
 
@@ -20,6 +25,10 @@ public class CyclicGraphGenerator implements GraphGenerator {
     private final ThreadLocalRandom random = ThreadLocalRandom.current();
 
     protected CyclicGraphGenerator(int size, GeneratorOption weight, GeneratorOption direction, GeneratorOption density) {
+
+        if (size <= 1 && density == SPARSE) throw new IllegalStateException("Illegal graph size for such config");
+        if (size <= 2 && density == SPARSE && direction == NOT_DIRECTED) throw new IllegalStateException("Illegal graph size for such config");
+
         this.size = size;
         this.weight = weight;
         this.direction = direction;
@@ -27,6 +36,10 @@ public class CyclicGraphGenerator implements GraphGenerator {
     }
 
     private Graph getGraph() {
+        double density = calculateDensity();
+        int maxEdges = size * size;
+        int edgesCount = calculateExpectedEdges(maxEdges, density);
+
         LinkedList<Edge> edges = new LinkedList<>();
         int cycleSize = calculateCycleSize();
 
@@ -37,33 +50,70 @@ public class CyclicGraphGenerator implements GraphGenerator {
         shuffleArray(connected);
 
         int[] cycle = new int[cycleSize];
-        int j = 0;
-        for (int i = 0; i < size; i++) {
-            if (connected[i]) {
-                cycle[j] = i;
-                j++;
+        {
+            int j = 0;
+            for (int i = 0; i < size; i++) {
+                if (connected[i]) {
+                    cycle[j] = i;
+                    j++;
+                }
             }
         }
 
+        Set<Integer> used = new HashSet<>();
         if (cycle.length == 0) {
-            addEdge(edges, 0, 0);
+            addEdge(edges, 0, 0, used);
         } else {
             int prevNode = cycle[0];
             for (int i = 1; i < cycleSize; i++) {
-                addEdge(edges, prevNode, cycle[i]);
+                addEdge(edges, prevNode, cycle[i], used);
                 prevNode = cycle[i];
             }
-            addEdge(edges, prevNode, cycle[0]);
+            addEdge(edges, prevNode, cycle[0], used);
         }
 
-        return new Graph(edges, size);
+        //------------------------------------------
+
+        int edgesLeft = direction == DIRECTED ? edgesCount - cycleSize : (edgesCount / 2) - cycleSize;
+        Graph g = new Graph(edges, size);
+        if (edgesLeft > 0) {
+            double[][] matrix = new Graph(edges, size).adjacencyMatrix();
+            List<Integer> shuffled = IntStream.range(0, size * size)
+                    .filter(v -> {
+                        if (direction == DIRECTED) return true;
+                        int i = v / size;
+                        int j = v - (i * size);
+                        return i < j;
+                    })
+                    .boxed()
+                    .filter(not(used::contains))
+                    .collect(toShuffledList());
+
+            for (int l = 0; l < edgesLeft; l++) {
+                int v = shuffled.get(l);
+                int i = v / size;
+                int j = v - (i * size);
+                double w = calculateWeight();
+                matrix[i][j] = w;
+                if (direction == NOT_DIRECTED) matrix[j][i] = w;
+            }
+
+            g = graphFromMatrix(matrix);
+        }
+
+        //TODO FAILS SOMETIMES FOR NOT_DIRECTED
+//        if (g.edgeList().size() != edgesCount) throw new IllegalStateException(g.edgeList().size() + " != " + edgesCount);
+
+        return g;
     }
 
-    private void addEdge(LinkedList<Edge> edges, int from, int to) {
+    private void addEdge(LinkedList<Edge> edges, int from, int to, Set<Integer> used) {
         double calcWeight = calculateWeight();
         edges.add(edge(from, to, calcWeight));
+        used.add(from * size + to);
         if (direction == NOT_DIRECTED) {
             edges.add(edge(to, from, calcWeight));
+            used.add(to * size + from);
         }
     }
 
@@ -131,5 +181,23 @@ public class CyclicGraphGenerator implements GraphGenerator {
     public GeneratedGraph generate() {
         return new GeneratedGraph(getGraph(), getConfig());
     }
+
+    private static final Collector<?, ?, ?> SHUFFLER = Collectors.collectingAndThen(
+            Collectors.toCollection(ArrayList::new),
+            list -> {
+                Collections.shuffle(list);
+                return list;
+            }
+    );
+
+    @SuppressWarnings("unchecked")
+    public static <T> Collector<T, ?, List<T>> toShuffledList() {
+        return (Collector<T, ?, List<T>>) SHUFFLER;
+    }
+
+//    TODO FAILS SOMETIMES
+//    public static void main(String[] args) {
+//        new CyclicGraphGenerator(3, NOT_WEIGHTED, NOT_DIRECTED, DENSE).generate();
+//    }
 
 }
