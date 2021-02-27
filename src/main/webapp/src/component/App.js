@@ -93,6 +93,8 @@ class App extends React.Component {
                             config={this.state.config}
                             handleGraphUpdate={this.handleGraphUpdate}
                             handleConfigUpdate={this.handleConfigUpdate}
+                            stageHeight={this.state.stageHeight}
+                            stageWidth={this.state.stageWidth}
                         />
                     </PropagatingResizablePanels>
                 </div>
