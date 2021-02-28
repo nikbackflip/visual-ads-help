@@ -38,7 +38,7 @@ public class GeneratorController {
                 .config(generatedGraph.getConfig());
 
         if (x != null && y != null) {
-            response.coordinates(getLayout(generatedGraph.getGraph(), generatedGraph.getConfig()).layout(x, y));
+            response.coordinates(getLayout(generatedGraph.getGraph(), generatedGraph.getConfig(), x, y).layout());
         }
 
         return response.build();

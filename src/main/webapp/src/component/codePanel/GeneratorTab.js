@@ -48,7 +48,7 @@ class GeneratorTab extends React.Component {
         let self = this;
 
         const options = this.state.selectedOptions.join(",");
-        fetch('/generator/generate?for=' + options + '&x=' + this.props.stageWidth + '&y=' + this.props.stageHeight, {
+        fetch('/generator/generate?for=' + options + '&x=' + Math.floor(this.props.stageWidth) + '&y=' + Math.floor(this.props.stageHeight), {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -67,17 +67,23 @@ class GeneratorTab extends React.Component {
         let n = matrix.length;
 
         //create nodes
-        [...Array(n).keys()].forEach(i => {
-            nodes.push({
-                name: i,
-                id: i,
-                color: colors.sample(),
-                selected: false,
-                highlighted: false,
-                x: coordinates[i].x,
-                y: coordinates[i].y
+        if (coordinates === undefined || coordinates === null) {
+            [...Array(n).keys()].forEach(i => {
+                nodes.push({id: i});
             });
-        });
+        } else {
+            [...Array(n).keys()].forEach(i => {
+                nodes.push({
+                    name: i,
+                    id: i,
+                    color: colors.sample(),
+                    selected: false,
+                    highlighted: false,
+                    x: coordinates[i].x,
+                    y: coordinates[i].y
+                });
+            });
+        }
 
         //create edges
         for (let i = 0; i < n; i++) {

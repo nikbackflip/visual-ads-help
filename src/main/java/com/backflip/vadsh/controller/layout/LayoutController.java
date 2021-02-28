@@ -36,7 +36,7 @@ public class LayoutController {
                 graphRequest.getConfig().isSelfLoopsAllowed());
 
         return LayoutResponse.builder()
-                .coordinates(Layout.getLayout(graph, config).layout(x, y))
+                .coordinates(Layout.getLayout(graph, config, x, y).layout())
                 .build();
     }
 }

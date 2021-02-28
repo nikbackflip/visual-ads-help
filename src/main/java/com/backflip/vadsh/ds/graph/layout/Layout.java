@@ -8,12 +8,12 @@ import java.util.Map;
 
 public interface Layout {
 
-    static Layout getLayout(Graph graph, Config config) {
-        if (AnalyticDefinition.DAG.analyze(graph, config)) return new DagLayout(graph, config);
-        if (AnalyticDefinition.COMPLETE.analyze(graph, config)) return new CompleteLayout(graph, config);
-        return new RandomLayout(graph, config);
+    static Layout getLayout(Graph graph, Config config, int x, int y) {
+        if (AnalyticDefinition.DAG.analyze(graph, config)) return new DagLayout(graph, config, x, y);
+        if (AnalyticDefinition.COMPLETE.analyze(graph, config)) return new CompleteLayout(graph, config, x, y);
+        return new RandomLayout(graph, config, x, y);
     }
 
-    Map<Integer, Coordinates> layout(int x, int y);
+    Map<Integer, Coordinates> layout();
 
 }

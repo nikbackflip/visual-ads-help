@@ -7,11 +7,11 @@ import java.util.Map;
 
 public class DagLayout implements Layout {
 
-    public DagLayout(Graph graph, Config config) {
+    public DagLayout(Graph graph, Config config, int x, int y) {
     }
 
     @Override
-    public Map<Integer, Coordinates> layout(int x, int y) {
+    public Map<Integer, Coordinates> layout() {
         return null;
     }
 }
