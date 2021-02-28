@@ -39,6 +39,8 @@ class CodePanel extends React.Component {
                     graph={this.props.graph}
                     config={this.props.config}
                     handleGraphUpdate={this.props.handleGraphUpdate}
+                    stageHeight={this.props.stageHeight}
+                    stageWidth={this.props.stageWidth}
                 />
                 break;
             }

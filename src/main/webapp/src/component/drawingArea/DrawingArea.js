@@ -452,6 +452,40 @@ class DrawingArea extends React.Component {
         this.props.handleConfigUpdate(config);
     }
 
+    layout = () => {
+        const graph = {
+            edges: this.props.graph.edges.slice().filter(e => e.direction !== ABSENT_DIRECTION),
+            nodes: this.props.graph.nodes
+        }
+        let self = this;
+        fetch("/layout" + '?x=' + Math.floor(this.props.stageWidth) + '&y=' + Math.floor(this.props.stageHeight), {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                nodes: graph.nodes,
+                edges: graph.edges,
+                config: this.props.config
+            })
+        }).then((response) => {
+            return response.json();
+        }).then((data) => {
+            let nodes = this.props.graph.nodes.slice();
+            let coordinates = data.coordinates;
+
+            if (coordinates !== null && coordinates !== undefined) {
+                nodes.forEach(i => {
+                    i.x = coordinates[i.id].x;
+                    i.y = coordinates[i.id].y;
+                });
+
+                self.props.handleGraphUpdate({
+                    nodes: nodes,
+                    edges: this.props.graph.edges
+                });
+            }
+        });
+    }
+
     render() {
         this.customizeIfExternallyGenerated();
         let excludedEdges = [];
@@ -464,6 +498,7 @@ class DrawingArea extends React.Component {
                     graphReset={this.resetGraph}
                     config={this.props.config}
                     handleConfigUpdate = {this.updateGraphOnConfigUpdate}
+                    layoutGraph = {this.layout}
                 />
                 <div className="App-line-split"/>
 

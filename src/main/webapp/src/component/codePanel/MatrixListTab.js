@@ -13,6 +13,8 @@ class MatrixListTab extends React.Component {
                         graph={this.props.graph}
                         config={this.props.config}
                         handleGraphUpdate={this.props.handleGraphUpdate}
+                        stageHeight={this.props.stageHeight}
+                        stageWidth={this.props.stageWidth}
                     />
                 </div>
                 <div className="Code-panel-space"/>
@@ -22,6 +24,8 @@ class MatrixListTab extends React.Component {
                         graph={this.props.graph}
                         config={this.props.config}
                         handleGraphUpdate={this.props.handleGraphUpdate}
+                        stageHeight={this.props.stageHeight}
+                        stageWidth={this.props.stageWidth}
                     />
                 </div>
             </div>
