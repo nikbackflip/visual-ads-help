@@ -4,14 +4,21 @@ import com.backflip.vadsh.ds.graph.Config;
 import com.backflip.vadsh.ds.graph.Graph;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static com.backflip.vadsh.util.Collectors.toShuffledList;
 
-public class RandomLayout extends HexGridLayout {
+public class RandomLayout implements Layout {
 
     private final Graph graph;
     private final Config config;
+
+    private final int gridX;
+    private final int gridY;
+    private final int radius = 40; //hexagon outer radius
+    private final double w = radius * Math.cos(Math.toRadians(30));
+    private final double h = Math.sqrt(3 * w * w);
 
     private int[] pos;
     private int[] gridPos;
@@ -20,9 +27,10 @@ public class RandomLayout extends HexGridLayout {
 
 
     public RandomLayout(Graph graph, Config config, int x, int y) {
-        super(x, y);
         this.graph = graph;
         this.config = config;
+        this.gridX = (int) Math.floor((x - w) / (2 * w)) - 1;
+        this.gridY = (int) Math.floor((y - h) / h);
     }
 
     public Map<Integer, Coordinates> layout() {
@@ -165,4 +173,61 @@ public class RandomLayout extends HexGridLayout {
         }
     }
 
+    //------------------------------------------------------------------------
+
+    protected int distanceOnGrid(int from, int to) {
+        int xi = from % gridX;
+        int yi = from / gridX;
+        int xj = to % gridX;
+        int yj = to / gridX;
+
+        int calcDist = Math.abs(xi - xj) + Math.abs(yi - yj);
+
+        int availableShortcuts = 0;
+        if (Math.abs(yi - yj) != 0) {
+            boolean movementBack = xi - xj > 0;
+            boolean evenStart = yi % 2 == 0;
+            if ((movementBack && evenStart) || (!movementBack && !evenStart))
+                availableShortcuts = (int) Math.ceil((float) Math.abs(yi - yj) / 2);
+            if ((movementBack && !evenStart) || (!movementBack && evenStart))
+                availableShortcuts = (int) Math.floor((float) Math.abs(yi - yj) / 2);
+        }
+        return calcDist - Math.min(availableShortcuts, Math.abs(xi - xj));
+    }
+
+    protected List<Integer> getNeighboursOnGris(int i) {
+
+        int xi = i % gridX;
+        int yi = i / gridX;
+
+        List<Integer> neighbours = new LinkedList<>();
+
+        if (xi != 0) neighbours.add(i - 1);
+        if (xi != gridX - 1) neighbours.add(i + 1);
+
+        boolean even = yi % 2 != 0;
+        if (yi != 0) {
+            if (!(xi == 0 && !even)) neighbours.add(even ? i - gridX : i - gridX - 1);
+            if (!(xi == gridX - 1 && even)) neighbours.add(even ? i - gridX + 1 : i - gridX);
+        }
+
+        if (yi != gridY - 1) {
+            if (!(xi == 0 && !even)) neighbours.add(even ? i + gridX : i + gridX - 1);
+            if (!(xi == gridX - 1 && even)) neighbours.add(even ? i + gridX + 1 : i + gridX);
+        }
+        return neighbours;
+    }
+
+    protected Map<Integer, Coordinates> toCoordinates(int[] pos) {
+        return IntStream.range(0, pos.length)
+                .boxed()
+                .collect(Collectors.toMap(
+                        i -> i, i -> {
+                            double margin = (pos[i] / gridX) % 2 == 0 ? 0 : w;
+                            double cx = (pos[i] % gridX) * (2 * w) + margin + w + w;
+                            double cy = (pos[i] / gridX) * h + h;
+                            return new Coordinates((int)cx, (int)cy);
+                        }
+                ));
+    }
 }
