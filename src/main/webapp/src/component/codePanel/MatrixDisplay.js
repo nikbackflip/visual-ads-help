@@ -10,7 +10,7 @@ import EditableView, {
 import HighlighableTd from "./HighlighableTd";
 import {
     ABSENT_DIRECTION,
-    BOTH_DIRECTIONS,
+    BOTH_DIRECTIONS, colors,
     FORWARD_DIRECTION,
     NO_DIRECTIONS,
     SELF_DIRECTION,
@@ -134,10 +134,41 @@ export class MatrixDisplay extends React.Component {
         })
         edges.push(...pairs);
 
-        //submit graph
-        this.props.handleGraphUpdate({
+        this.layout({
             nodes: nodes,
             edges: edges
+        });
+    }
+
+    layout = (graph) => {
+        let self = this;
+        fetch("/layout" + '?x=' + Math.floor(this.props.stageWidth) + '&y=' + Math.floor(this.props.stageHeight), {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                nodes: graph.nodes,
+                edges: graph.edges,
+                config: this.props.config
+            })
+        }).then((response) => {
+            return response.json();
+        }).then((data) => {
+            console.log(JSON.stringify(data));
+            let nodes = graph.nodes;
+            let coordinates = data.coordinates;
+
+            if (coordinates !== null && coordinates !== undefined) {
+                console.log("setting coords");
+                nodes.forEach(i => {
+                    i.x = coordinates[i.id].x;
+                    i.y = coordinates[i.id].y;
+                    i.name = i.id;
+                    i.color = colors.sample();
+                    i.selected = false;
+                    i.highlighted = false;
+                });
+            }
+            self.props.handleGraphUpdate(graph);
         });
     }
 

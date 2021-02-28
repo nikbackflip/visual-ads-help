@@ -1,6 +1,6 @@
 import React from "react";
 import {
-    ABSENT_DIRECTION, BOTH_DIRECTIONS,
+    ABSENT_DIRECTION, BOTH_DIRECTIONS, colors,
     FORWARD_DIRECTION, NO_DIRECTIONS,
     SELF_DIRECTION,
     SPLIT_DIRECTION
@@ -48,7 +48,7 @@ class GeneratorTab extends React.Component {
         let self = this;
 
         const options = this.state.selectedOptions.join(",");
-        fetch('/generator/generate?for=' + options, {
+        fetch('/generator/generate?for=' + options + '&x=' + Math.floor(this.props.stageWidth) + '&y=' + Math.floor(this.props.stageHeight), {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -56,20 +56,34 @@ class GeneratorTab extends React.Component {
         }).then((response) => {
             return response.json();
         }).then((data) => {
-            self.resetGraphFromMatrix(data.graph, data.config)
+            self.resetGraphFromMatrix(data.graph, data.config, data.coordinates)
         });
     }
 
-    resetGraphFromMatrix = (matrix, config) => {
+    resetGraphFromMatrix = (matrix, config, coordinates) => {
         let nodes = [];
         let edges = [];
         let nextEdgeId = 0;
         let n = matrix.length;
 
         //create nodes
-        [...Array(n).keys()].forEach(i => {
-            nodes.push({id: i});
-        });
+        if (coordinates === undefined || coordinates === null) {
+            [...Array(n).keys()].forEach(i => {
+                nodes.push({id: i});
+            });
+        } else {
+            [...Array(n).keys()].forEach(i => {
+                nodes.push({
+                    name: i,
+                    id: i,
+                    color: colors.sample(),
+                    selected: false,
+                    highlighted: false,
+                    x: coordinates[i].x,
+                    y: coordinates[i].y
+                });
+            });
+        }
 
         //create edges
         for (let i = 0; i < n; i++) {

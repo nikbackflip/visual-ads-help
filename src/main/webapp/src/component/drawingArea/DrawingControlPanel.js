@@ -76,6 +76,12 @@ class DrawingControlPanel extends React.Component {
                     />
 
                     <button
+                        className={"Control-panel-button Drawing-area-beautify-button"}
+                        onClick={this.props.layoutGraph}
+                    >
+                        <i className="fa fa-asterisk"/>
+                    </button>
+                    <button
                         className={(this.state.configDisplay ? "Control-panel-button-selected" : "Control-panel-button")
                             + " Drawing-area-config-button"}
                         onClick={() => this.setState({

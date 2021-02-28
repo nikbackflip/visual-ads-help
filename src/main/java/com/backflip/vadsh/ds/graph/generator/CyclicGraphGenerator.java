@@ -13,6 +13,7 @@ import java.util.stream.*;
 import static com.backflip.vadsh.ds.graph.Edge.edge;
 import static com.backflip.vadsh.ds.graph.Graph.graphFromMatrix;
 import static com.backflip.vadsh.ds.graph.generator.GeneratorOption.*;
+import static com.backflip.vadsh.util.Collectors.toShuffledList;
 import static java.util.function.Predicate.not;
 
 public class CyclicGraphGenerator implements GraphGenerator {
@@ -101,7 +102,7 @@ public class CyclicGraphGenerator implements GraphGenerator {
             g = graphFromMatrix(matrix);
         }
 
-        //TODO FAILS SOMETIMES FOR NOT_DIRECTED
+        //FIXME FAILS SOMETIMES FOR NOT_DIRECTED
 //        if (g.edgeList().size() != edgesCount) throw new IllegalStateException(g.edgeList().size() + " != " + edgesCount);
 
         return g;
@@ -182,20 +183,7 @@ public class CyclicGraphGenerator implements GraphGenerator {
         return new GeneratedGraph(getGraph(), getConfig());
     }
 
-    private static final Collector<?, ?, ?> SHUFFLER = Collectors.collectingAndThen(
-            Collectors.toCollection(ArrayList::new),
-            list -> {
-                Collections.shuffle(list);
-                return list;
-            }
-    );
-
-    @SuppressWarnings("unchecked")
-    public static <T> Collector<T, ?, List<T>> toShuffledList() {
-        return (Collector<T, ?, List<T>>) SHUFFLER;
-    }
-
-//    TODO FAILS SOMETIMES
+//    FIXME FAILS SOMETIMES
 //    public static void main(String[] args) {
 //        new CyclicGraphGenerator(3, NOT_WEIGHTED, NOT_DIRECTED, DENSE).generate();
 //    }
