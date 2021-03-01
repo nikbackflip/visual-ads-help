@@ -168,10 +168,10 @@ class DrawingArea extends React.Component {
         let y = node.y;
 
         x = x < circleRadius ? circleRadius : x;
-        x = x > this.props.stageWidth - circleRadius ? this.props.stageWidth - circleRadius : x;
+        x = x > this.props.stage.width - circleRadius ? this.props.stage.width - circleRadius : x;
 
         y = y < circleRadius ? circleRadius : y;
-        y = y > this.props.stageHeight - circleRadius ? this.props.stageHeight - circleRadius : y;
+        y = y > this.props.stage.height - circleRadius ? this.props.stage.height - circleRadius : y;
 
         node.x = x;
         node.y = y;
@@ -396,8 +396,8 @@ class DrawingArea extends React.Component {
             this.props.graph.nodes.forEach(n => {
                 n.color = colors.sample();
                 n.name = n.id;
-                n.x = Math.floor(Math.random() * (this.props.stageWidth - circleRadius - circleRadius + 1) + circleRadius);
-                n.y = Math.floor(Math.random() * (this.props.stageHeight - circleRadius - circleRadius + 1) + circleRadius);
+                n.x = Math.floor(Math.random() * (this.props.stage.width - circleRadius - circleRadius + 1) + circleRadius);
+                n.y = Math.floor(Math.random() * (this.props.stage.height - circleRadius - circleRadius + 1) + circleRadius);
                 n.selected = false;
                 n.highlighted = false;
             });
@@ -458,7 +458,7 @@ class DrawingArea extends React.Component {
             nodes: this.props.graph.nodes
         }
         let self = this;
-        fetch("/layout" + '?x=' + Math.floor(this.props.stageWidth) + '&y=' + Math.floor(this.props.stageHeight), {
+        fetch("/layout" + '?x=' + Math.floor(this.props.stage.width) + '&y=' + Math.floor(this.props.stage.height), {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -506,8 +506,8 @@ class DrawingArea extends React.Component {
                     ref={ref => {
                         this.stageRef = ref;
                     }}
-                    width={this.props.stageWidth}
-                    height={this.props.stageHeight}
+                    width={this.props.stage.width}
+                    height={this.props.stage.height}
                     onClick={this.handleStageClick}
                     onContentMouseup={this.cleanStageState}
                     onMouseMove={this.drawTempEdge}

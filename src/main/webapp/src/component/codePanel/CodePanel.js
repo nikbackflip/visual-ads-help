@@ -10,7 +10,6 @@ import {GENERATOR_MODE, JAVA_MODE, MATRIX_EDGE_MODE, TASKS_MODE} from "./CodePan
 import MatrixListTab from "./MatrixListTab";
 import TasksTab from "./TasksTab";
 import GeneratorTab from "./GeneratorTab";
-import DrawingArea from "../drawingArea/DrawingArea";
 
 
 class CodePanel extends React.Component {
@@ -39,8 +38,7 @@ class CodePanel extends React.Component {
                     graph={this.props.graph}
                     config={this.props.config}
                     handleGraphUpdate={this.props.handleGraphUpdate}
-                    stageHeight={this.props.stageHeight}
-                    stageWidth={this.props.stageWidth}
+                    stage={this.props.stage}
                 />
                 break;
             }
@@ -58,8 +56,7 @@ class CodePanel extends React.Component {
                     config={this.props.config}
                     handleGraphUpdate={this.props.handleGraphUpdate}
                     handleConfigUpdate={this.props.handleConfigUpdate}
-                    stageHeight={this.props.stageHeight}
-                    stageWidth={this.props.stageWidth}
+                    stage={this.props.stage}
                 />
                 break;
             }

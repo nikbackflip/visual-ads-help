@@ -48,7 +48,7 @@ class GeneratorTab extends React.Component {
         let self = this;
 
         const options = this.state.selectedOptions.join(",");
-        fetch('/generator/generate?for=' + options + '&x=' + Math.floor(this.props.stageWidth) + '&y=' + Math.floor(this.props.stageHeight), {
+        fetch('/generator/generate?for=' + options + '&x=' + Math.floor(this.props.stage.width) + '&y=' + Math.floor(this.props.stage.height), {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'

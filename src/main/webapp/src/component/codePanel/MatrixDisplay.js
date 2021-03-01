@@ -142,7 +142,7 @@ export class MatrixDisplay extends React.Component {
 
     layout = (graph) => {
         let self = this;
-        fetch("/layout" + '?x=' + Math.floor(this.props.stageWidth) + '&y=' + Math.floor(this.props.stageHeight), {
+        fetch("/layout" + '?x=' + Math.floor(this.props.stage.width) + '&y=' + Math.floor(this.props.stage.height), {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({

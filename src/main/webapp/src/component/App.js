@@ -22,6 +22,10 @@ class App extends React.Component {
                 graphDirectional: true,
                 graphWeighted: true,
                 selfLoopsAllowed: true
+            },
+            stage: {
+                height: 0,
+                width: 0
             }
         };
     }
@@ -53,8 +57,10 @@ class App extends React.Component {
     onPanelsSizeUpdate = () => {
         let percent = this.resizables.current.state.panelsSize[1] !== undefined ? this.resizables.current.state.panelsSize[1] : 70;
         this.setState({
-            stageHeight: this.container.current.getBoundingClientRect().height - 90,
-            stageWidth: this.container.current.getBoundingClientRect().width / 100 * percent - 10
+            stage: {
+                height: this.container.current.getBoundingClientRect().height - 90,
+                width: this.container.current.getBoundingClientRect().width / 100 * percent - 10
+            }
         })
     }
 
@@ -85,16 +91,14 @@ class App extends React.Component {
                             config={this.state.config}
                             handleGraphUpdate={this.handleGraphUpdate}
                             handleConfigUpdate={this.handleConfigUpdate}
-                            stageHeight={this.state.stageHeight}
-                            stageWidth={this.state.stageWidth}
+                            stage={this.state.stage}
                         />
                         <CodePanel
                             graph={this.state.graph}
                             config={this.state.config}
                             handleGraphUpdate={this.handleGraphUpdate}
                             handleConfigUpdate={this.handleConfigUpdate}
-                            stageHeight={this.state.stageHeight}
-                            stageWidth={this.state.stageWidth}
+                            stage={this.state.stage}
                         />
                     </PropagatingResizablePanels>
                 </div>
