@@ -20,6 +20,7 @@ import KonvaNode from "./KonvaNode";
 import KonvaEdge from "./KonvaEdge";
 import TempKonvaEdge from "./TempKonvaEdge";
 import SelfKonvaLoop from "./SelfKonvaLoop";
+import layout from "../../util/LayoutUtil";
 
 class DrawingArea extends React.Component {
 
@@ -396,8 +397,8 @@ class DrawingArea extends React.Component {
             this.props.graph.nodes.forEach(n => {
                 n.color = colors.sample();
                 n.name = n.id;
-                n.x = Math.floor(Math.random() * (this.props.stage.width - circleRadius - circleRadius + 1) + circleRadius);
-                n.y = Math.floor(Math.random() * (this.props.stage.height - circleRadius - circleRadius + 1) + circleRadius);
+                n.x = n.x === undefined ? Math.floor(Math.random() * (this.props.stage.width - circleRadius - circleRadius + 1) + circleRadius) : n.x;
+                n.y = n.y === undefined ? Math.floor(Math.random() * (this.props.stage.height - circleRadius - circleRadius + 1) + circleRadius) : n.y;
                 n.selected = false;
                 n.highlighted = false;
             });
@@ -457,33 +458,8 @@ class DrawingArea extends React.Component {
             edges: this.props.graph.edges.slice().filter(e => e.direction !== ABSENT_DIRECTION),
             nodes: this.props.graph.nodes
         }
-        let self = this;
-        fetch("/layout" + '?x=' + Math.floor(this.props.stage.width) + '&y=' + Math.floor(this.props.stage.height), {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                nodes: graph.nodes,
-                edges: graph.edges,
-                config: this.props.config
-            })
-        }).then((response) => {
-            return response.json();
-        }).then((data) => {
-            let nodes = this.props.graph.nodes.slice();
-            let coordinates = data.coordinates;
-
-            if (coordinates !== null && coordinates !== undefined) {
-                nodes.forEach(i => {
-                    i.x = coordinates[i.id].x;
-                    i.y = coordinates[i.id].y;
-                });
-
-                self.props.handleGraphUpdate({
-                    nodes: nodes,
-                    edges: this.props.graph.edges
-                });
-            }
-        });
+        layout(graph, this.props.config, this.props.stage)
+            .then((graphAfterLayout) => {this.props.handleGraphUpdate(graphAfterLayout)});
     }
 
     render() {

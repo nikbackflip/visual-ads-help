@@ -170,11 +170,7 @@ function createNodes(n, coordinates) {
     } else {
         [...Array(n).keys()].forEach(i => {
             nodes.push({
-                name: i,
                 id: i,
-                color: colors.sample(),
-                selected: false,
-                highlighted: false,
                 x: coordinates[i].x,
                 y: coordinates[i].y
             });

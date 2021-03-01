@@ -8,8 +8,8 @@ import EditableView, {
     unhighlight
 } from "./EditableView";
 import HighlighableTd from "./HighlighableTd";
-import { colors } from "../drawingArea/DrawingModeConstants";
 import {internalGraphToMatrix, matrixToInternalGraph} from "../../util/GraphTransformationUtil"
+import layout from "../../util/LayoutUtil";
 
 
 export class MatrixDisplay extends React.Component {
@@ -52,39 +52,9 @@ export class MatrixDisplay extends React.Component {
         }
 
         let generatedGraph = matrixToInternalGraph(matrix, this.props.config);
-        this.layout(generatedGraph);
-    }
+        layout(generatedGraph, this.props.config, this.props.stage)
+            .then((graphAfterLayout) => {this.props.handleGraphUpdate(graphAfterLayout)});
 
-    layout = (graph) => {
-        let self = this;
-        fetch("/layout" + '?x=' + Math.floor(this.props.stage.width) + '&y=' + Math.floor(this.props.stage.height), {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                nodes: graph.nodes,
-                edges: graph.edges,
-                config: this.props.config
-            })
-        }).then((response) => {
-            return response.json();
-        }).then((data) => {
-            console.log(JSON.stringify(data));
-            let nodes = graph.nodes;
-            let coordinates = data.coordinates;
-
-            if (coordinates !== null && coordinates !== undefined) {
-                console.log("setting coords");
-                nodes.forEach(i => {
-                    i.x = coordinates[i.id].x;
-                    i.y = coordinates[i.id].y;
-                    i.name = i.id;
-                    i.color = colors.sample();
-                    i.selected = false;
-                    i.highlighted = false;
-                });
-            }
-            self.props.handleGraphUpdate(graph);
-        });
     }
 
     renderTable = () => {
