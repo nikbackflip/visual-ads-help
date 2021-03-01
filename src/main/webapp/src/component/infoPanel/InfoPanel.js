@@ -1,25 +1,11 @@
 import React from 'react';
 import "../css/InfoPanel.css"
 import ElementsCounter from "./ElementsCounter";
-import DisplayNode from "./DisplayNode";
 import DisplayEdge from "./DisplayEdge";
 import {ABSENT_DIRECTION, SELF_DIRECTION} from "../drawingArea/DrawingModeConstants";
 import GraphAnalytics from "./GraphAnalytics";
 
 class InfoPanel extends React.Component {
-
-    updateNode = (node) => {
-        let nodes = this.props.graph.nodes.slice();
-        const index = nodes.findIndex(n => {
-            return n.id === node.id
-        });
-        nodes[index] = node;
-
-        this.props.handleGraphUpdate({
-            nodes: nodes,
-            edges: this.props.graph.edges.slice()
-        });
-    }
 
     updateEdge = (edge) => {
         let edges = this.props.graph.edges.slice();
@@ -62,9 +48,6 @@ class InfoPanel extends React.Component {
         const nodes = this.props.graph.nodes;
         const edges = this.props.graph.edges;
 
-        const selectedNodes = nodes.filter(n => {
-            return n.selected === true;
-        });
         const selectedEdges = edges.filter(e => {
             return e.selected === true;
         });
@@ -104,15 +87,6 @@ class InfoPanel extends React.Component {
                             />
                     })}
                 </div>
-{/*
-                {selectedNodes.map(n => {
-                    return <DisplayNode
-                        key={n.id}
-                        element={n}
-                        updateElement={this.updateNode}
-                    />
-                })}
-*/}
             </div>
         );
     }
