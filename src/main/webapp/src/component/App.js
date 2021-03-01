@@ -45,10 +45,6 @@ class App extends React.Component {
         });
     }
 
-    resetGraphFromMatrix = (matrix, config) => {
-
-    }
-
     componentDidMount() {
         this.onPanelsSizeUpdate();
         window.addEventListener("resize", this.onPanelsSizeUpdate);

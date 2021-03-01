@@ -8,13 +8,8 @@ import EditableView, {
     unhighlight
 } from "./EditableView";
 import HighlighableTd from "./HighlighableTd";
-import {
-    ABSENT_DIRECTION,
-    BOTH_DIRECTIONS, colors,
-    FORWARD_DIRECTION,
-    NO_DIRECTIONS,
-    SELF_DIRECTION
-} from "../drawingArea/DrawingModeConstants";
+import { colors } from "../drawingArea/DrawingModeConstants";
+import {internalGraphToList, listToInternalGraph, matrixToInternalGraph} from "../../util/GraphTransformationUtil"
 
 export class ListDisplay extends React.Component {
 
@@ -26,29 +21,7 @@ export class ListDisplay extends React.Component {
         }
     }
 
-    graphToCode = () => {
-        let graph = this.props.graph;
-        const n = graph.nodes.length;
-
-        let code = [];
-        [...Array(n).keys()].forEach(() => {
-            code.push([]);
-        });
-
-        //filer placeholder absent edges
-        let edges = graph.edges.slice().filter(e => e.direction !== ABSENT_DIRECTION);
-
-        edges.forEach(e => {
-            code[e.fromId].push(e.toId);
-        });
-        return code;
-    }
-
     codeToGraph = () => {
-        let nodes = [];
-        let edges = [];
-        let nextEdgeId = 0;
-
         //read text area
         let textInput = document.getElementById("textarea_list").value.trim();
 
@@ -90,59 +63,8 @@ export class ListDisplay extends React.Component {
             }
         }
 
-        //create nodes
-        [...Array(n).keys()].forEach(i => {
-            nodes.push({id: i});
-        });
-
-        //create edges
-        for (let i = 0; i < n; i++) {
-            list[i].forEach(toNode => {
-                edges.push({
-                    id: nextEdgeId++,
-                    fromId: i,
-                    toId: toNode,
-                    weight: 1
-                });
-            })
-        }
-
-        //set edge directions and create placeholder absent edges
-        let pairs = [];
-        edges.forEach(e => {
-            if (e.pairId === undefined) {
-                if (e.fromId === e.toId) {
-                    e.pairId = e.id;
-                    e.direction = SELF_DIRECTION;
-                    return;
-                }
-                let pair = edges.find(p => p.fromId === e.toId && p.toId === e.fromId);
-                if (pair === undefined) {
-                    pair = {
-                        id: nextEdgeId++,
-                        pairId: e.id,
-                        fromId: e.toId,
-                        toId: e.fromId,
-                        weight: 0,
-                        direction: ABSENT_DIRECTION
-                    }
-                    pairs.push(pair);
-                    e.pairId = pair.id;
-                    e.direction = FORWARD_DIRECTION;
-                } else {
-                    e.direction = this.props.config.graphDirectional ? BOTH_DIRECTIONS : NO_DIRECTIONS;
-                    pair.direction = this.props.config.graphDirectional ? BOTH_DIRECTIONS : NO_DIRECTIONS;
-                    e.pairId = pair.id;
-                    pair.pairId = e.id;
-                }
-            }
-        })
-        edges.push(...pairs);
-
-        this.layout({
-            nodes: nodes,
-            edges: edges
-        });
+        let generatedGraph = listToInternalGraph(list, this.props.config);
+        this.layout(generatedGraph);
     }
 
     layout = (graph) => {
@@ -178,7 +100,7 @@ export class ListDisplay extends React.Component {
     }
 
     renderTable = () => {
-        let code = this.graphToCode();
+        let code = internalGraphToList(this.props.graph);
         let selectedEdges = getSelectedEdge(this.props.graph);
         let selectedNodes = getSelectedNodes(this.props.graph);
         let highlightedEdges = getHighlightedEdge(this.props.graph);
@@ -224,7 +146,7 @@ export class ListDisplay extends React.Component {
     }
 
     render() {
-        let code = this.graphToCode();
+        let code = internalGraphToList(this.props.graph);
 
         let newCode;
         if (code !== undefined) {
