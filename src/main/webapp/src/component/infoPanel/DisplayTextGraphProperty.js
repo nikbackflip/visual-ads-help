@@ -1,4 +1,5 @@
 import React from "react";
+import {Grid, Input, Typography} from "@material-ui/core";
 
 class DisplayTextGraphProperty extends React.Component {
 
@@ -33,12 +34,13 @@ class DisplayTextGraphProperty extends React.Component {
 
     render() {
         return (
-            <div className="Info-panel-div">
-                <label className="Info-panel-text">{this.props.label}: </label>
-                <span
-                    className="Info-panel-span">
-                    <input
-                        className="Info-panel-input"
+            <Grid container direction="row" justify="space-between" alignItems="center" wrap="nowrap">
+                <Grid item>
+                    <Typography noWrap>{this.props.label}: </Typography>
+                </Grid>
+                <Grid item>
+                    <Input
+                        style = {{width: 100}}
                         type={this.props.inputFormat == null ? "text" : this.props.inputFormat}
                         value={this.state.value}
                         onBlur={this.onInputEnd}
@@ -46,8 +48,8 @@ class DisplayTextGraphProperty extends React.Component {
                         readOnly={this.props.readOnly == null ? false : this.props.readOnly}
                         maxLength={this.props.maxLength}
                     />
-                </span>
-            </div>
+                </Grid>
+            </Grid>
         )
     }
 }

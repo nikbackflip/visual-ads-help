@@ -1,4 +1,5 @@
 import React from "react";
+import {Grid, MenuItem, Select, Typography} from "@material-ui/core";
 
 
 class DisplayDropdownGraphProperty extends React.Component {
@@ -9,28 +10,28 @@ class DisplayDropdownGraphProperty extends React.Component {
 
     render() {
         return (
-            <div className="Info-panel-div">
-                <label className="Info-panel-text">{this.props.label}: </label>
-                <span
-                    className="Info-panel-span">
-                    <select
-                        className="Info-panel-input"
+            <Grid container direction="row" justify="space-between" alignItems="center" wrap="nowrap">
+                <Grid item>
+                    <Typography noWrap>{this.props.label}: </Typography>
+                </Grid>
+                <Grid item>
+                    <Select
                         value={this.props.value}
                         onChange={this.onChange}
+                        style = {{width: 100}}
                     >
-
                          {Object.entries(this.props.options).map(d => {
                              return (
-                                 <option
+                                 <MenuItem
                                      key={d[0]}
                                      value={d[0]}
                                  >
                                      {d[1]}
-                                 </option>)
+                                 </MenuItem>)
                          })}
-                    </select>
-                </span>
-            </div>
+                    </Select>
+                </Grid>
+            </Grid>
         )
     }
 }

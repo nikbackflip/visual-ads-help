@@ -54,10 +54,8 @@ export class ListDisplay extends React.Component {
             list[fromNode] = validatedToNodes;
         }
         if (!this.props.config.graphDirectional) {
-            console.log(list);
             for (let i = 0; i < n; i++) {
                 list[i].forEach(j => {
-                    console.log("for each in " + i + " : " + list[i]);
                     if (list[j].find(e => e === i) === undefined) throw "Graph is configured to be undirectional.";
                 })
             }

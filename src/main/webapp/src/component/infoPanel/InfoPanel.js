@@ -4,6 +4,7 @@ import ElementsCounter from "./ElementsCounter";
 import DisplayEdge from "./DisplayEdge";
 import {ABSENT_DIRECTION, SELF_DIRECTION} from "../drawingArea/DrawingModeConstants";
 import GraphAnalytics from "./GraphAnalytics";
+import {Box, Grid, Paper} from "@material-ui/core";
 
 class InfoPanel extends React.Component {
 
@@ -61,33 +62,40 @@ class InfoPanel extends React.Component {
         }
 
         return (
-            <div className="App-info-panel">
-                <ElementsCounter entityName={"nodes"} count={nodes.length}/>
-                <ElementsCounter entityName={"edges"} count={totalEdges}/>
-                <div className="App-line-split"/>
-                <div>
-                    <GraphAnalytics
-                        config={this.props.config}
-                        graph={this.props.graph}
-                    />
-                </div>
-                <div className="Info-panel-scroll Info-panel-edges">
+            <Box m={2} className="Info-panel-scroll full-height">
+                <Grid container direction="column" justify="flex-start" alignItems="stretch" spacing={2} wrap="nowrap" style={{maxWidth: 300}}>
+                    <Grid item>
+                        <Paper elevation={5}>
+                            <ElementsCounter entityName={"nodes"} count={nodes.length}/>
+                            <ElementsCounter entityName={"edges"} count={totalEdges}/>
+                        </Paper>
+                    </Grid>
+                    <Grid item>
+                        <Paper elevation={5}>
+                            <GraphAnalytics
+                                config={this.props.config}
+                                graph={this.props.graph}
+                            />
+                        </Paper>
+                    </Grid>
                     {selectedEdges.map(e => {
                         if (e.direction === ABSENT_DIRECTION) return null;
                         if (e.direction !== SELF_DIRECTION) excludedEdges.push(e.pairId);
                         return excludedEdges.find(ex => ex === e.id) ? null :
-                            <DisplayEdge
-                                key={e.id}
-                                element={e}
-                                config={this.props.config}
-                                pair={edges.find(p => p.id === e.pairId)}
-                                getNodeName={this.getNodeName}
-                                updateElement={this.updateEdge}
-                                updateBoth={this.updateTwoEdges}
-                            />
+                            <Grid item>
+                                <DisplayEdge
+                                    key={e.id}
+                                    element={e}
+                                    config={this.props.config}
+                                    pair={edges.find(p => p.id === e.pairId)}
+                                    getNodeName={this.getNodeName}
+                                    updateElement={this.updateEdge}
+                                    updateBoth={this.updateTwoEdges}
+                                />
+                            </Grid>
                     })}
-                </div>
-            </div>
+                </Grid>
+            </Box>
         );
     }
 }

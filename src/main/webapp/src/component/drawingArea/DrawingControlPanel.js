@@ -7,119 +7,96 @@ import {
     MODE_DEL_EDGE,
     BUTTON_NAMES
 } from './DrawingModeConstants';
-import ControlButton from "../controlPanel/ControlButton";
 import GlobalGraphConfig from "./GlobalGraphConfig";
+import {AppBar, Button, ButtonGroup, Grid, Tab, Tabs} from "@material-ui/core";
+import LoopIcon from '@material-ui/icons/Loop';
+import SettingsIcon from '@material-ui/icons/Settings';
+import FilterVintageIcon from '@material-ui/icons/FilterVintage';
 
 
 class DrawingControlPanel extends React.Component {
 
     shouldComponentUpdate(nextProps, nextState, nextContext) {
-        return nextState.drawingAreaMode !== this.state.drawingAreaMode || nextState.configDisplay !== this.state.configDisplay;
+        return nextState.activeMode !== this.state.activeMode || nextState.globalConfigAnchor !== this.state.globalConfigAnchor;
     }
 
     constructor(props) {
         super(props);
         this.state = {
-            drawingAreaMode: MODE_NONE,
-            configDisplay: false
+            activeMode: MODE_NONE
         }
     }
 
-    setDrawingMode = (mode) => {
-        this.props.modeChange(mode);
+    handleTabChange = (event, newValue) => {
+        this.props.modeChange(newValue);
         this.setState({
-            drawingAreaMode: mode
+            activeMode: newValue
         });
     }
 
-    isButtonActive = (mode) => {
-        return this.state.drawingAreaMode === mode;
+    a11yProps = (index) => {
+        return {
+            id: `scrollable-auto-tab-${index}`,
+            'aria-controls': `scrollable-auto-tabpanel-${index}`,
+        };
     }
 
     render() {
         return (
             <div>
-                <div className="Control-panel-header">
-                    <ControlButton
-                        mode={MODE_NONE}
-                        name={BUTTON_NAMES[MODE_NONE]}
-                        handleButtonClick={this.setDrawingMode}
-                        isActive={this.isButtonActive(MODE_NONE)}
-                    />
+                <AppBar position="static" color="default">
 
-                    <ControlButton
-                        mode={MODE_ADD_NODE}
-                        name={BUTTON_NAMES[MODE_ADD_NODE]}
-                        handleButtonClick={this.setDrawingMode}
-                        isActive={this.isButtonActive(MODE_ADD_NODE)}
-                    />
+                    <Grid container direction="row" justify="space-between" alignItems="flex-start" color="primary" wrap="nowrap">
 
-                    <ControlButton
-                        mode={MODE_ADD_EDGE}
-                        name={BUTTON_NAMES[MODE_ADD_EDGE]}
-                        handleButtonClick={this.setDrawingMode}
-                        isActive={this.isButtonActive(MODE_ADD_EDGE)}
-                    />
+                        <Grid item>
+                            <ButtonGroup variant="text">
+                                <Button onClick={this.props.layoutGraph}>
+                                    <FilterVintageIcon />
+                                </Button>
+                                <Button
+                                    onClick={(event) => {
+                                        this.setState({
+                                            globalConfigAnchor: event.currentTarget
+                                        })
+                                    }}>
+                                    <SettingsIcon />
+                                </Button>
+                                <Button onClick={this.props.graphReset}>
+                                    <LoopIcon />
+                                </Button>
+                            </ButtonGroup>
+                        </Grid>
 
-                    <ControlButton
-                        mode={MODE_DEL_NODE}
-                        name={BUTTON_NAMES[MODE_DEL_NODE]}
-                        handleButtonClick={this.setDrawingMode}
-                        isActive={this.isButtonActive(MODE_DEL_NODE)}
-                    />
+                        <Tabs variant="scrollable" scrollButtons="auto" value={this.state.activeMode} onChange={this.handleTabChange}>
+                            <Tab style={{minWidth: 72}} label={BUTTON_NAMES[MODE_NONE]} {...this.a11yProps(MODE_NONE)}/>
+                            <Tab style={{minWidth: 72}} label={BUTTON_NAMES[MODE_ADD_NODE]} {...this.a11yProps(MODE_ADD_NODE)}/>
+                            <Tab style={{minWidth: 72}} label={BUTTON_NAMES[MODE_ADD_EDGE]} {...this.a11yProps(MODE_ADD_EDGE)}/>
+                            <Tab style={{minWidth: 72}} label={BUTTON_NAMES[MODE_DEL_NODE]} {...this.a11yProps(MODE_DEL_NODE)}/>
+                            <Tab style={{minWidth: 72}} label={BUTTON_NAMES[MODE_DEL_EDGE]} {...this.a11yProps(MODE_DEL_EDGE)}/>
+                        </Tabs>
+                    </Grid>
+                </AppBar>
 
-                    <ControlButton
-                        mode={MODE_DEL_EDGE}
-                        name={BUTTON_NAMES[MODE_DEL_EDGE]}
-                        handleButtonClick={this.setDrawingMode}
-                        isActive={this.isButtonActive(MODE_DEL_EDGE)}
-                    />
-
-                    <button
-                        className={"Control-panel-button Drawing-area-beautify-button"}
-                        onClick={this.props.layoutGraph}
-                    >
-                        <i className="fa fa-asterisk"/>
-                    </button>
-                    <button
-                        className={(this.state.configDisplay ? "Control-panel-button-selected" : "Control-panel-button")
-                            + " Drawing-area-config-button"}
-                        onClick={() => this.setState({
-                            configDisplay: !this.state.configDisplay
+                <GlobalGraphConfig
+                    open={Boolean(this.state.globalConfigAnchor)}
+                    config={this.props.config}
+                    anchorEl={this.state.globalConfigAnchor}
+                    cancelConfig={() => {
+                        this.setState({
+                            globalConfigAnchor: null
                         })}
-                    >
-                        <i className="fa fa-cog" aria-hidden="true" />
-                    </button>
-
-                    <button
-                        className={"Control-panel-button Drawing-area-refresh-button"}
-                        onClick={this.props.graphReset}
-                    >
-                        <i className="fa fa-refresh"/>
-                    </button>
-                </div>
-                {
-                    this.state.configDisplay ?
-                        <GlobalGraphConfig
-                            config={this.props.config}
-                            cancelConfig={() => {
-                                this.setState({
-                                    configDisplay: false
-                                })}
-                            }
-                            applyConfig={(graphDirectional, graphWeighted, selfLoopsAllowed) => {
-                                this.setState({
-                                    configDisplay: false
-                                })
-                                this.props.handleConfigUpdate({
-                                    graphDirectional: graphDirectional,
-                                    graphWeighted: graphWeighted,
-                                    selfLoopsAllowed: selfLoopsAllowed
-                                });
-                            }}
-                        />
-                    : null
-                }
+                    }
+                    applyConfig={(graphDirectional, graphWeighted, selfLoopsAllowed) => {
+                        this.setState({
+                            globalConfigAnchor: null
+                        })
+                        this.props.handleConfigUpdate({
+                            graphDirectional: graphDirectional,
+                            graphWeighted: graphWeighted,
+                            selfLoopsAllowed: selfLoopsAllowed
+                        });
+                    }}
+                />
             </div>
         )
     }

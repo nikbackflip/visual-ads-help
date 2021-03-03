@@ -10,6 +10,8 @@ import {
     SPLIT_DIRECTION,
     getDirectionOptions
 } from "../drawingArea/DrawingModeConstants";
+import {Button, Paper} from "@material-ui/core";
+import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
 
 
 class DisplayEdge extends React.Component {
@@ -79,7 +81,17 @@ class DisplayEdge extends React.Component {
         const edge = this.props.element;
         const pair = this.props.pair;
         return this.props.element == null ? <div/> : (
-            <div>
+            <Paper elevation={5}>
+                <DisplayTextGraphProperty
+                    label="From"
+                    value={this.props.getNodeName(edge.fromId).name}
+                    readOnly={true}
+                />
+                <DisplayTextGraphProperty
+                    label="To"
+                    value={this.props.getNodeName(edge.toId).name}
+                    readOnly={true}
+                />
                 <DisplayTextGraphProperty
                     label="Forward cost"
                     propertyName="weight"
@@ -118,29 +130,14 @@ class DisplayEdge extends React.Component {
                     }}
                     options={edge.direction === SELF_DIRECTION ? EDGE_DIRECTION_SELF : getDirectionOptions(this.props.config)}
                 />
-                <DisplayTextGraphProperty
-                    label="From"
-                    value={this.props.getNodeName(edge.fromId).name}
-                    readOnly={true}
-                />
-                <DisplayTextGraphProperty
-                    label="To"
-                    value={this.props.getNodeName(edge.toId).name}
-                    readOnly={true}
-                />
                 {
                     (edge.direction === FORWARD_DIRECTION || edge.direction === SPLIT_DIRECTION) ?
-                        <button
-                            className={"Control-panel-button Info-panel-button"}
-                            onClick={this.toggleFromTo}
-                        >
-                            <i className="fa fa-exchange fa-lg"/>
-                        </button>
+                        <Button onClick={this.toggleFromTo}>
+                            <SwapHorizIcon />
+                        </Button>
                         : null
                 }
-
-                <div className="App-line-split"/>
-            </div>
+            </Paper>
         );
     }
 }

@@ -105,7 +105,6 @@ class EditableView extends React.Component {
                 errorMessage: ""
             });
         } catch (e) {
-            this.buttons.current.flash();
             this.setState({
                 editMode: true,
                 errorMessage: e

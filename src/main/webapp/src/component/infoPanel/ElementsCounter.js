@@ -1,4 +1,5 @@
 import React from "react";
+import {Typography} from "@material-ui/core";
 
 
 class ElementsCounter extends React.Component {
@@ -7,7 +8,7 @@ class ElementsCounter extends React.Component {
         const label = "Total " + this.props.entityName + ": ";
 
         return (
-            <p className="Info-panel-label">{label}{this.props.count}</p>
+            <Typography noWrap variant="h6">{label}{this.props.count}</Typography>
         );
     }
 }

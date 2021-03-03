@@ -1,5 +1,6 @@
 import React from "react";
 import {matrixToInternalGraph} from "../../util/GraphTransformationUtil";
+import {Box, Button, Chip, Paper, Typography} from "@material-ui/core";
 
 class GeneratorTab extends React.Component {
 
@@ -75,92 +76,45 @@ class GeneratorTab extends React.Component {
 
 
     render() {
-        return <div className="Code-panel-options">
-
-            <div>
-                <div>
-                    <p/>
-                    Selected:
-                    <p/>
-                </div>
-                <div className="Code-panel-row">
+        const selectedPresent = Boolean(this.state.selectedOptions) && this.state.selectedOptions.length > 0;
+        const optionsPresent = Boolean(this.state.availableOptions) && this.state.availableOptions.length > 0;
+        return <Box m={2}>
+            <Paper elevation={5}>
+                <Box overflow="hidden" p={2}>
                     {
-                        this.state.selectedOptions.map(n => {
-                            return <Option
-                                key={n}
-                                id={n}
-                                onClick={this.deselectOption}
-                            />
-                        })
+                        optionsPresent ?
+                            <Box>
+                                <Typography variant="h6">Select Options:</Typography>
+                                {this.state.availableOptions.map(n => {
+                                    return <Chip
+                                        key={n}
+                                        label={n.replace(/_/g, ' ')}
+                                        style = {{margin: 2}}
+                                        onClick={() => this.selectOption(n)}/>
+                                })}
+                            </Box> : <Box/>
                     }
-                </div>
-            </div>
-
-            <div>
-                <div>
                     <p/>
-                    Select Options:
-                    <p/>
-                </div>
-                <div className="Code-panel-row">
                     {
-                        this.state.availableOptions.map(n => {
-                            return <Option
-                                key={n}
-                                id={n}
-                                onClick={this.selectOption}
-                            />
-                        })
+                        selectedPresent ?
+                            <Box>
+                                <Typography variant="h6">Selected:</Typography>
+                                {this.state.selectedOptions.map(n => {
+                                    return <Chip
+                                        key={n}
+                                        label={n.replace(/_/g, ' ')}
+                                        style={{margin: 2}}
+                                        onClick={() => this.deselectOption(n)}/>
+                                })}
+                            </Box> : <Box/>
                     }
-                </div>
-            </div>
-
-            <button
-                className="Control-panel-button Code-panel-generate-button"
-                onClick={this.generateGraph}
-            >
-                GENERATE
-            </button>
-
-
-        </div>
-    }
-}
-
-class Option extends React.Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            highlighted: false
-        };
-    }
-
-    onMouseEnter = () => {
-        this.setState({
-            highlighted: true
-        })
-    }
-    onMouseLeave = () => {
-        this.setState({
-            highlighted: false
-        })
-    }
-    onClick = () => {
-        this.props.onClick(this.props.id);
-    }
-
-    render() {
-        let style = "Code-panel-option ";
-        if (this.state.highlighted) style = style + "Code-panel-highlight-half";
-        return <div
-            className={style}
-            onMouseEnter={this.onMouseEnter}
-            onMouseLeave={this.onMouseLeave}
-            onClick={this.onClick}
-        >
-            {this.props.id}
-        </div>
+                    <p/>
+                    <Button variant="contained" size="large" onClick={this.generateGraph}>
+                        GENERATE
+                    </Button>
+                </Box>
+            </Paper>
+        </Box>
     }
 }
 

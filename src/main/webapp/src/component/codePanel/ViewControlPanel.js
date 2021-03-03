@@ -1,78 +1,86 @@
 import React from "react";
-
+import {Box, Grid, IconButton, Popover, Typography} from "@material-ui/core";
+import EditIcon from '@material-ui/icons/Edit';
+import CheckIcon from '@material-ui/icons/Check';
+import CloseIcon from '@material-ui/icons/Close';
+import HelpIcon from '@material-ui/icons/Help';
 
 class ViewControlPanel extends React.Component {
+    okRef = null;
 
     constructor(props) {
         super(props);
         this.state = {
-            highlighted: false,
-            hovering: false
+            errorDisplayed: false
         };
     }
 
     editButton = () => {
         return (
-            <button
+            <IconButton
+                size="small"
                 key="edit"
-                className={"Control-panel-button"}
                 onClick={this.props.initEdit}
             >
-                <i className="fa fa-edit"/>
-            </button>
+                <EditIcon />
+            </IconButton>
         )
     }
 
     okButton = () => {
         return (
-            <button
+            <IconButton
+                ref={ref => {
+                    this.okRef = ref;
+                }}
+                size="small"
                 key="ok"
-                className={this.state.highlighted ? "Control-panel-button Control-panel-button-error" : "Control-panel-button" }
-                onClick={this.props.updateGraph}
+                onClick={() => {
+                    this.setState({errorDisplayed: false});
+                    this.props.updateGraph();
+                }}
             >
-                <i className="fa fa-check"/>
-            </button>
+                <CheckIcon />
+            </IconButton>
         )
     }
 
     cancelButton = () => {
         return (
-            <button
+            <IconButton
+                size="small"
                 key="cancel"
-                className={"Control-panel-button"}
                 onClick={this.props.cancelEdit}
             >
-                <i className="fa fa-close"/>
-            </button>
+                <CloseIcon />
+            </IconButton>
         )
     }
 
     infoButton = () => {
         return (
-            <button
+            <IconButton
+                size="small"
                 key="info"
-                className="Control-panel-button"
-                onMouseEnter={() => this.setState({hovering: true})}
-                onMouseLeave={() => this.setState({hovering: false})}
+                onClick={(event) => {
+                    this.setState({
+                        infoAnchor: event.currentTarget
+                    })
+                }}
             >
-                <i className="fa fa-question" aria-hidden="true"/>
-            </button>
+                <HelpIcon />
+            </IconButton>
         )
     }
 
-    infoText = () => {
+    text = (text) => {
         return (
-            <div className="Code-panel-help">
-                {this.state.hovering ? this.props.help : this.props.errorMessage}
-            </div>
+            <Box maxWidth={300}>
+                <Typography variant="body2">
+                    {text}
+                </Typography>
+            </Box>
         )
-    }
-
-    flash = () => {
-        this.setState({ highlighted: true });
-        setTimeout(() => {
-            this.setState({ highlighted: false });
-        }, 1000);
     }
 
     render() {
@@ -83,11 +91,51 @@ class ViewControlPanel extends React.Component {
             buttons = [this.editButton()];
         }
         return (
-            <div className="Control-panel-header Code-panel-text">
-                {this.props.header}
-                {buttons}
-                {this.infoText()}
-            </div>
+            <Grid container direction="row" justify="flex-start" alignItems="flex-start">
+                <Grid item>
+                    <Typography variant="h6">{this.props.header}</Typography>
+                </Grid>
+                <Grid item>
+                    {buttons}
+                </Grid>
+                <Popover
+                    open={Boolean(this.state.infoAnchor)}
+                    anchorEl={this.state.infoAnchor}
+                    onClose={() => {
+                        this.setState({
+                            infoAnchor: null
+                        })
+                    }}
+                    anchorOrigin={{
+                        vertical: 'center',
+                        horizontal: 'right',
+                    }}
+                    transformOrigin={{
+                        vertical: 'center',
+                        horizontal: 'left',
+                    }}>
+                    {this.text(this.props.help)}
+                </Popover>
+                <Popover
+                    open={Boolean(this.props.errorMessage) && !this.state.errorDisplayed && Boolean(this.okRef)}
+                    anchorEl={this.okRef}
+                    onClose={() => {
+                        this.okRef = null;
+                        this.setState({
+                            errorDisplayed: true
+                        })
+                    }}
+                    anchorOrigin={{
+                        vertical: 'center',
+                        horizontal: 'right',
+                    }}
+                    transformOrigin={{
+                        vertical: 'center',
+                        horizontal: 'left',
+                    }}>
+                    {this.text(this.props.errorMessage)}
+                </Popover>
+            </Grid>
         )
     }
 

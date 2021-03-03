@@ -169,10 +169,10 @@ class DrawingArea extends React.Component {
         let y = node.y;
 
         x = x < circleRadius ? circleRadius : x;
-        x = x > this.props.stage.width - circleRadius ? this.props.stage.width - circleRadius : x;
+        x = x > this.props.stage.width - circleRadius - 3 ? this.props.stage.width - circleRadius - 3 : x;
 
         y = y < circleRadius ? circleRadius : y;
-        y = y > this.props.stage.height - circleRadius ? this.props.stage.height - circleRadius : y;
+        y = y > this.props.stage.height - circleRadius - 3 ? this.props.stage.height - circleRadius - 3 : y;
 
         node.x = x;
         node.y = y;
@@ -467,8 +467,7 @@ class DrawingArea extends React.Component {
         let excludedEdges = [];
 
         return (
-            <div className="App-drawing-area">
-
+            <div>
                 <DrawingControlPanel
                     modeChange={this.handleModeChange}
                     graphReset={this.resetGraph}
@@ -476,7 +475,6 @@ class DrawingArea extends React.Component {
                     handleConfigUpdate = {this.updateGraphOnConfigUpdate}
                     layoutGraph = {this.layout}
                 />
-                <div className="App-line-split"/>
 
                 <Stage
                     ref={ref => {
