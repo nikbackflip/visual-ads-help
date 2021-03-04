@@ -61,7 +61,7 @@ class InfoPanel extends React.Component {
         }
 
         return (
-            <Box m={2} className="invisible-scroll half-height-info-panel">
+            <Box m={2} className="invisible-scroll full-height-info-panel">
                 <Grid container direction="column" justify="flex-start" alignItems="stretch" spacing={2} wrap="nowrap" style={{maxWidth: 300}}>
                     <Grid item>
                         <Paper elevation={3}>
