@@ -1,5 +1,4 @@
 import React from 'react';
-import "../css/InfoPanel.css"
 import ElementsCounter from "./ElementsCounter";
 import DisplayEdge from "./DisplayEdge";
 import {ABSENT_DIRECTION, SELF_DIRECTION} from "../drawingArea/DrawingModeConstants";
@@ -62,7 +61,7 @@ class InfoPanel extends React.Component {
         }
 
         return (
-            <Box m={2} className="Info-panel-scroll full-height">
+            <Box m={2} className="invisible-scroll half-height-info-panel">
                 <Grid container direction="column" justify="flex-start" alignItems="stretch" spacing={2} wrap="nowrap" style={{maxWidth: 300}}>
                     <Grid item>
                         <Paper elevation={3}>

@@ -120,7 +120,7 @@ class TasksDropdown extends React.Component {
         const displayResult = this.state.response !== undefined;
 
         return (
-            <Box m={2}>
+            <Box m={2} className="full-height-with-tabs invisible-scroll">
                 <Paper elevation={3}>
                     <Box overflow="hidden" p={2}>
                         <Grid container direction="row" alignItems="flex-start" justify="space-between" wrap="nowrap">

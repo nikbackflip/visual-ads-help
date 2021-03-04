@@ -8,9 +8,9 @@ class MatrixListTab extends React.Component {
 
     render() {
         return (
-            <Box className="full-height-code">
+            <Box className="full-height-with-tabs">
                 <Box m={2}
-                     className="half-height-code"
+                     className="half-height"
                      overflow="hidden"
                 >
                     <MatrixDisplay
@@ -21,7 +21,7 @@ class MatrixListTab extends React.Component {
                     />
                 </Box>
                 <Box m={2}
-                     className="half-height-code"
+                     className="half-height"
                      overflow="hidden"
                 >
                     <ListDisplay
