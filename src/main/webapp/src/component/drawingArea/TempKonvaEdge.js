@@ -1,6 +1,7 @@
 import React from "react";
 import {black} from "color-name";
 import {Line} from "react-konva";
+import {lightDrawing} from "../../util/ColorUtil";
 
 
 class KonvaTempEdge extends React.Component {
@@ -17,7 +18,7 @@ class KonvaTempEdge extends React.Component {
 
         return <Line
                 points={[fromX, fromY, toX, toY]}
-                stroke={black}
+                stroke={lightDrawing.edge}
                 strokeWidth={2}
             />
     }
