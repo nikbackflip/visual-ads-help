@@ -50,10 +50,11 @@ class DrawingControlPanel extends React.Component {
 
                         <Grid item>
                             <ButtonGroup variant="text">
-                                <Button onClick={this.props.layoutGraph}>
+                                <Button color="secondary" onClick={this.props.layoutGraph}>
                                     <FilterVintageIcon />
                                 </Button>
                                 <Button
+                                    color="secondary"
                                     onClick={(event) => {
                                         this.setState({
                                             globalConfigAnchor: event.currentTarget
@@ -61,7 +62,7 @@ class DrawingControlPanel extends React.Component {
                                     }}>
                                     <SettingsIcon />
                                 </Button>
-                                <Button onClick={this.props.graphReset}>
+                                <Button color="secondary" onClick={this.props.graphReset}>
                                     <LoopIcon />
                                 </Button>
                             </ButtonGroup>

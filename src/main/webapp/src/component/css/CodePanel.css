@@ -50,15 +50,6 @@
     background-color: transparent;
 }
 
-.Code-panel-highlight-full {
-    background-color: #1d9797;
-}
-
-.Code-panel-highlight-half {
-    background-color: #1d9797;
-    opacity: 50%;
-}
-
 .Code-panel-table {
     height: 95%;
     width: calc(100% - 3px);

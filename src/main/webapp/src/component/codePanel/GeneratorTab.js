@@ -79,7 +79,7 @@ class GeneratorTab extends React.Component {
         const selectedPresent = Boolean(this.state.selectedOptions) && this.state.selectedOptions.length > 0;
         const optionsPresent = Boolean(this.state.availableOptions) && this.state.availableOptions.length > 0;
         return <Box m={2}>
-            <Paper elevation={5}>
+            <Paper elevation={3}>
                 <Box overflow="hidden" p={2}>
                     {
                         optionsPresent ?
@@ -109,7 +109,7 @@ class GeneratorTab extends React.Component {
                             </Box> : <Box/>
                     }
                     <p/>
-                    <Button variant="contained" size="large" onClick={this.generateGraph}>
+                    <Button variant="contained" size="large" color="secondary" onClick={this.generateGraph}>
                         GENERATE
                     </Button>
                 </Box>

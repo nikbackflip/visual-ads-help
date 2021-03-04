@@ -24,7 +24,6 @@
 
 .Info-panel-scroll::-webkit-scrollbar-thumb {
     border-radius: 10px;
-    /*background-color: #141719;*/
 }
 
 .Info-panel-scroll::-webkit-scrollbar-track {

@@ -121,7 +121,7 @@ class TasksDropdown extends React.Component {
 
         return (
             <Box m={2}>
-                <Paper elevation={5}>
+                <Paper elevation={3}>
                     <Box overflow="hidden" p={2}>
                         <Grid container direction="row" alignItems="flex-start" justify="space-between" wrap="nowrap">
                             <Grid item>
@@ -137,7 +137,7 @@ class TasksDropdown extends React.Component {
                                 </Select>
                             </Grid>
                             <Grid item>
-                                <Button variant="contained" onClick={this.executeTask}>
+                                <Button variant="contained" color="secondary" onClick={this.executeTask}>
                                     EXECUTE
                                 </Button>
                             </Grid>
@@ -254,7 +254,7 @@ class Node extends React.Component {
 
     render() {
         return <Chip
-            color={this.props.selected || this.props.highlighted ? "primary" : undefined}
+            color={this.props.selected || this.props.highlighted ? "secondary" : undefined}
             onMouseEnter={this.onMouseEnter}
             onMouseLeave={this.onMouseLeave}
             onClick={this.onClick}
@@ -342,7 +342,7 @@ class Edge extends React.Component {
 
     render() {
         return <Chip
-            color={this.props.selected || this.props.highlighted ? "primary" : undefined}
+            color={this.props.selected || this.props.highlighted ? "secondary" : undefined}
             onMouseEnter={this.onMouseEnter}
             onMouseLeave={this.onMouseLeave}
             onClick={this.onClick}

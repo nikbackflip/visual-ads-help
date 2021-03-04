@@ -17,12 +17,8 @@ class DisplayTextGraphProperty extends React.Component {
     }
 
     onInputEnd = (e) => {
-        if (this.props.inputIsValid(e.target.value)) {
+        if (!Boolean(this.props.readOnly) && this.props.inputIsValid(e.target.value)) {
             this.props.updateElementProperty(this.props.propertyName, e.target.value)
-        } else {
-            this.setState({
-                value: this.props.value
-            })
         }
     }
 

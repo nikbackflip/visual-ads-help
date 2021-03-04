@@ -81,7 +81,7 @@ class DisplayEdge extends React.Component {
         const edge = this.props.element;
         const pair = this.props.pair;
         return this.props.element == null ? <div/> : (
-            <Paper elevation={5}>
+            <Paper elevation={3}>
                 <DisplayTextGraphProperty
                     label="From"
                     value={this.props.getNodeName(edge.fromId).name}
@@ -132,7 +132,7 @@ class DisplayEdge extends React.Component {
                 />
                 {
                     (edge.direction === FORWARD_DIRECTION || edge.direction === SPLIT_DIRECTION) ?
-                        <Button onClick={this.toggleFromTo}>
+                        <Button color="secondary" onClick={this.toggleFromTo}>
                             <SwapHorizIcon />
                         </Button>
                         : null

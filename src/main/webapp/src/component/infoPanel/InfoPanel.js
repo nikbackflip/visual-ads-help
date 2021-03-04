@@ -65,13 +65,13 @@ class InfoPanel extends React.Component {
             <Box m={2} className="Info-panel-scroll full-height">
                 <Grid container direction="column" justify="flex-start" alignItems="stretch" spacing={2} wrap="nowrap" style={{maxWidth: 300}}>
                     <Grid item>
-                        <Paper elevation={5}>
+                        <Paper elevation={3}>
                             <ElementsCounter entityName={"nodes"} count={nodes.length}/>
                             <ElementsCounter entityName={"edges"} count={totalEdges}/>
                         </Paper>
                     </Grid>
                     <Grid item>
-                        <Paper elevation={5}>
+                        <Paper elevation={3}>
                             <GraphAnalytics
                                 config={this.props.config}
                                 graph={this.props.graph}
@@ -82,9 +82,8 @@ class InfoPanel extends React.Component {
                         if (e.direction === ABSENT_DIRECTION) return null;
                         if (e.direction !== SELF_DIRECTION) excludedEdges.push(e.pairId);
                         return excludedEdges.find(ex => ex === e.id) ? null :
-                            <Grid item>
+                            <Grid item key={e.id}>
                                 <DisplayEdge
-                                    key={e.id}
                                     element={e}
                                     config={this.props.config}
                                     pair={edges.find(p => p.id === e.pairId)}

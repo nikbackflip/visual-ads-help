@@ -21,6 +21,7 @@ class ViewControlPanel extends React.Component {
                 size="small"
                 key="edit"
                 onClick={this.props.initEdit}
+                color="secondary"
             >
                 <EditIcon />
             </IconButton>
@@ -39,6 +40,7 @@ class ViewControlPanel extends React.Component {
                     this.setState({errorDisplayed: false});
                     this.props.updateGraph();
                 }}
+                color="secondary"
             >
                 <CheckIcon />
             </IconButton>
@@ -51,6 +53,7 @@ class ViewControlPanel extends React.Component {
                 size="small"
                 key="cancel"
                 onClick={this.props.cancelEdit}
+                color="secondary"
             >
                 <CloseIcon />
             </IconButton>
@@ -67,6 +70,7 @@ class ViewControlPanel extends React.Component {
                         infoAnchor: event.currentTarget
                     })
                 }}
+                color="secondary"
             >
                 <HelpIcon />
             </IconButton>
