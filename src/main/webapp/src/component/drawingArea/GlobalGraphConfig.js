@@ -47,8 +47,8 @@ class GlobalGraphConfig extends React.Component {
                     vertical: 'top',
                     horizontal: 'center',
                 }}>
-                <Box m = {2}>
-                    <Paper elevation={0} >
+                <Box m={2}>
+                    <Paper elevation={0}>
                         <Grid container direction="row" justify="space-between" alignItems="center" wrap="nowrap" spacing={2}>
                             <Grid item>
                                 <Typography>Directional</Typography>
@@ -61,7 +61,7 @@ class GlobalGraphConfig extends React.Component {
                                         this.edit("graphDirectional", e.target.checked)
                                     }}
                                     size="small"
-                                    color="primary"
+                                    color="secondary"
                                     inputProps={{ 'aria-label': 'primary checkbox' }}/>
                             </Grid>
                         </Grid>
@@ -78,7 +78,7 @@ class GlobalGraphConfig extends React.Component {
                                         this.edit("graphWeighted", e.target.checked)
                                     }}
                                     size="small"
-                                    color="primary"
+                                    color="secondary"
                                     inputProps={{ 'aria-label': 'primary checkbox' }}/>
                             </Grid>
                         </Grid>
@@ -95,7 +95,7 @@ class GlobalGraphConfig extends React.Component {
                                         this.edit("selfLoopsAllowed", e.target.checked)
                                     }}
                                     size="small"
-                                    color="primary"
+                                    color="secondary"
                                     inputProps={{ 'aria-label': 'primary checkbox' }}/>
                             </Grid>
                         </Grid>

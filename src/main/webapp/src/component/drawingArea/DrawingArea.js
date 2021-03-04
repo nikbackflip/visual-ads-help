@@ -1,6 +1,5 @@
 import React from 'react';
 import {Layer, Stage} from 'react-konva';
-import '../css/DrawingArea.css';
 import DrawingControlPanel from "./DrawingControlPanel";
 import {
     MODE_NONE,

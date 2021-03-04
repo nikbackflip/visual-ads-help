@@ -72,7 +72,7 @@ class App extends React.Component {
                 <div
                      ref={this.container}>
                     <ControlHeader/>
-                    <div className="App-body">
+                    <div className="full-height">
                         <PropagatingResizablePanels
                             displayDirection="row"
                             width="100%"
