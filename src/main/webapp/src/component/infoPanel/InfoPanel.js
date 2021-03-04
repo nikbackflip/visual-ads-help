@@ -1,25 +1,12 @@
 import React from 'react';
 import "../css/InfoPanel.css"
 import ElementsCounter from "./ElementsCounter";
-import DisplayNode from "./DisplayNode";
 import DisplayEdge from "./DisplayEdge";
 import {ABSENT_DIRECTION, SELF_DIRECTION} from "../drawingArea/DrawingModeConstants";
 import GraphAnalytics from "./GraphAnalytics";
+import {Box, Grid, Paper} from "@material-ui/core";
 
 class InfoPanel extends React.Component {
-
-    updateNode = (node) => {
-        let nodes = this.props.graph.nodes.slice();
-        const index = nodes.findIndex(n => {
-            return n.id === node.id
-        });
-        nodes[index] = node;
-
-        this.props.handleGraphUpdate({
-            nodes: nodes,
-            edges: this.props.graph.edges.slice()
-        });
-    }
 
     updateEdge = (edge) => {
         let edges = this.props.graph.edges.slice();
@@ -62,9 +49,6 @@ class InfoPanel extends React.Component {
         const nodes = this.props.graph.nodes;
         const edges = this.props.graph.edges;
 
-        const selectedNodes = nodes.filter(n => {
-            return n.selected === true;
-        });
         const selectedEdges = edges.filter(e => {
             return e.selected === true;
         });
@@ -78,42 +62,39 @@ class InfoPanel extends React.Component {
         }
 
         return (
-            <div className="App-info-panel">
-                <ElementsCounter entityName={"nodes"} count={nodes.length}/>
-                <ElementsCounter entityName={"edges"} count={totalEdges}/>
-                <div className="App-line-split"/>
-                <div>
-                    <GraphAnalytics
-                        config={this.props.config}
-                        graph={this.props.graph}
-                    />
-                </div>
-                <div className="Info-panel-scroll Info-panel-edges">
+            <Box m={2} className="Info-panel-scroll full-height">
+                <Grid container direction="column" justify="flex-start" alignItems="stretch" spacing={2} wrap="nowrap" style={{maxWidth: 300}}>
+                    <Grid item>
+                        <Paper elevation={3}>
+                            <ElementsCounter entityName={"nodes"} count={nodes.length}/>
+                            <ElementsCounter entityName={"edges"} count={totalEdges}/>
+                        </Paper>
+                    </Grid>
+                    <Grid item>
+                        <Paper elevation={3}>
+                            <GraphAnalytics
+                                config={this.props.config}
+                                graph={this.props.graph}
+                            />
+                        </Paper>
+                    </Grid>
                     {selectedEdges.map(e => {
                         if (e.direction === ABSENT_DIRECTION) return null;
                         if (e.direction !== SELF_DIRECTION) excludedEdges.push(e.pairId);
                         return excludedEdges.find(ex => ex === e.id) ? null :
-                            <DisplayEdge
-                                key={e.id}
-                                element={e}
-                                config={this.props.config}
-                                pair={edges.find(p => p.id === e.pairId)}
-                                getNodeName={this.getNodeName}
-                                updateElement={this.updateEdge}
-                                updateBoth={this.updateTwoEdges}
-                            />
+                            <Grid item key={e.id}>
+                                <DisplayEdge
+                                    element={e}
+                                    config={this.props.config}
+                                    pair={edges.find(p => p.id === e.pairId)}
+                                    getNodeName={this.getNodeName}
+                                    updateElement={this.updateEdge}
+                                    updateBoth={this.updateTwoEdges}
+                                />
+                            </Grid>
                     })}
-                </div>
-{/*
-                {selectedNodes.map(n => {
-                    return <DisplayNode
-                        key={n.id}
-                        element={n}
-                        updateElement={this.updateNode}
-                    />
-                })}
-*/}
-            </div>
+                </Grid>
+            </Box>
         );
     }
 }

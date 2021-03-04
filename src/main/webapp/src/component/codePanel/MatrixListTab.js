@@ -1,34 +1,37 @@
 import React from 'react';
 import MatrixDisplay from "./MatrixDisplay";
 import ListDisplay from "./ListDisplay";
+import {Box} from "@material-ui/core";
 
 
 class MatrixListTab extends React.Component {
 
     render() {
         return (
-            <div className="Code-panel-whole-height">
-                <div className="Code-panel-half-height">
+            <Box className="full-height-code">
+                <Box m={2}
+                     className="half-height-code"
+                     overflow="hidden"
+                >
                     <MatrixDisplay
                         graph={this.props.graph}
                         config={this.props.config}
                         handleGraphUpdate={this.props.handleGraphUpdate}
-                        stageHeight={this.props.stageHeight}
-                        stageWidth={this.props.stageWidth}
+                        stage={this.props.stage}
                     />
-                </div>
-                <div className="Code-panel-space"/>
-                <div className="App-line-split"/>
-                <div className="Code-panel-half-height">
+                </Box>
+                <Box m={2}
+                     className="half-height-code"
+                     overflow="hidden"
+                >
                     <ListDisplay
                         graph={this.props.graph}
                         config={this.props.config}
                         handleGraphUpdate={this.props.handleGraphUpdate}
-                        stageHeight={this.props.stageHeight}
-                        stageWidth={this.props.stageWidth}
+                        stage={this.props.stage}
                     />
-                </div>
-            </div>
+                </Box>
+            </Box>
         )
     }
 

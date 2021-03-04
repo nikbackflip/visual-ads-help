@@ -1,25 +1,3 @@
-.Info-panel-label {
-    font-family: Verdana, monospace;
-    font-weight: bold;
-    margin-top: 3px;
-    margin-bottom: 10px;
-}
-
-.Info-panel-text {
-    word-break: break-all;
-    font-family: Verdana, monospace;
-    font-weight: bold;
-    float: left;
-}
-
-.Info-panel-analytic {
-    margin-left: 30px;
-    margin-top: 3px;
-    font-weight: bold;
-    word-break: break-all;
-    font-family: Verdana, monospace;
-}
-
 .Info-panel-analytic-green {
     color: #1d9797;
 }
@@ -28,33 +6,29 @@
     color: #873434;
 }
 
-.Info-panel-input {
-    font-family: Verdana, monospace;
-    font-weight: bold;
-    background-color: #3C3F41;
-    width: 100%;
-    border: 0;
-    border-bottom: 2px solid;
-    outline: 0;
+.Info-panel-scroll {
+    overflow: scroll;
+    /*overflow-x: hidden;*/
 }
 
-.Info-panel-input::-webkit-outer-spin-button,
-.Info-panel-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
+.Info-panel-scroll::-webkit-scrollbar {
+    width: 10px;
+    height: 0;
+    background-color: transparent;
 }
 
-.Info-panel-span {
-    display: block;
-    overflow: hidden;
-    padding: 0 4px 0 6px;
+.Info-panel-scroll::-webkit-scrollbar-corner {
+    background-color: transparent;
+    border-color: transparent;
 }
 
-.Info-panel-div {
-    padding: 7px 0;
+.Info-panel-scroll::-webkit-scrollbar-thumb {
+    border-radius: 10px;
 }
 
-.Info-panel-button {
-    padding: 10px 15px;
+.Info-panel-scroll::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: transparent;
 }
 
 .Info-panel-edges {

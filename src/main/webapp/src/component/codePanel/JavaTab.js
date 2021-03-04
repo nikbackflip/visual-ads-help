@@ -47,7 +47,7 @@ class JavaTab extends React.Component {
                     lineNumbers: true,
                     mode: "text/x-java",
                     matchBrackets: true,
-                    theme: "darcula",
+                    // theme: "darcula",
                     scrollbarStyle: null,
                     readOnly: true
                 }}

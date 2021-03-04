@@ -1,5 +1,6 @@
 import {Group, Line, Text} from "react-konva";
 import React from "react";
+import {darkDrawing, lightDrawing} from "../../util/ColorUtil";
 
 
 class SelfKonvaLoop extends React.Component {
@@ -20,9 +21,9 @@ class SelfKonvaLoop extends React.Component {
             <Line
                 id={this.props.id}
                 points={[this.props.x, this.props.y, this.props.x-50, this.props.y-25, this.props.x-50, this.props.y+25, this.props.x, this.props.y]}
-                strokeWidth={3}
-                stroke={this.props.selected || this.props.highlighted ? "#1d9797" : "black"}
-                fill={this.props.selected || this.props.highlighted ? "#1d9797" : "black"}
+                strokeWidth={2}
+                stroke={this.props.selected || this.props.highlighted ? lightDrawing.selected : lightDrawing.edge}
+                fill={this.props.selected || this.props.highlighted ? lightDrawing.selected : lightDrawing.edge}
                 tension={1}
                 onClick={this.props.handleEdgeClick}
                 onMouseEnter={this.props.onMouseEnter}
@@ -34,8 +35,8 @@ class SelfKonvaLoop extends React.Component {
                 text={this.props.weight}
                 strokeWidth={1}
                 fontSize={18}
-                fill={"#1d9797"}
-                stroke={"#1d9797"}
+                fill={lightDrawing.selected}
+                stroke={lightDrawing.selected}
                 fontFamily={"Verdana, monospace"}
             />
         </Group>

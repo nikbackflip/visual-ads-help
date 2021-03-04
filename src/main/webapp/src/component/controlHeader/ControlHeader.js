@@ -1,5 +1,5 @@
 import React from 'react';
-import "../css/ControlHeader.css"
+import {AppBar, Toolbar, Typography} from "@material-ui/core";
 
 class ControlHeader extends React.Component {
 
@@ -28,17 +28,16 @@ class ControlHeader extends React.Component {
 
     render() {
         return (
-            <div>
-                <div className="App-control-header">
-                    <header className="Control-header-title">
+            <AppBar position="static" color="primary">
+                <Toolbar variant="dense">
+                    <Typography variant="h6">
                         Visual ADS Helper
-                    </header>
-                    <label className="Control-header-version">
-                         version: {this.state.version}
-                    </label>
-                </div>
-                <div className="App-line-split"/>
-            </div>
+                    </Typography>
+                    <Typography variant="caption" style = {{marginLeft: "auto"}}>
+                        v {this.state.version}
+                    </Typography>
+                </Toolbar>
+            </AppBar>
         );
     }
 }

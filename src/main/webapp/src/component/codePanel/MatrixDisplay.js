@@ -8,14 +8,8 @@ import EditableView, {
     unhighlight
 } from "./EditableView";
 import HighlighableTd from "./HighlighableTd";
-import {
-    ABSENT_DIRECTION,
-    BOTH_DIRECTIONS, colors,
-    FORWARD_DIRECTION,
-    NO_DIRECTIONS,
-    SELF_DIRECTION,
-    SPLIT_DIRECTION
-} from "../drawingArea/DrawingModeConstants";
+import {internalGraphToMatrix, matrixToInternalGraph} from "../../util/GraphTransformationUtil"
+import layout from "../../util/LayoutUtil";
 
 
 export class MatrixDisplay extends React.Component {
@@ -28,28 +22,7 @@ export class MatrixDisplay extends React.Component {
         }
     }
 
-    graphToCode = () => {
-        let graph = this.props.graph;
-        const n = graph.nodes.length;
-
-        //create nxn matrix and fill with 0
-        let code = Array.from(Array(n), _ => Array(n).fill(0.0));
-
-        //filer placeholder absent edges
-        let edges = graph.edges.slice().filter(e => e.direction !== ABSENT_DIRECTION);
-
-        //set weights
-        edges.forEach(e => {
-            code[e.fromId][e.toId] = e.weight;
-        })
-        return code;
-    }
-
     codeToGraph = () => {
-        let nodes = [];
-        let edges = [];
-        let nextEdgeId = 0;
-
         //read text area
         let textInput = document.getElementById("textarea_matrix").value.trim();
 
@@ -78,102 +51,14 @@ export class MatrixDisplay extends React.Component {
             }
         }
 
-        //create nodes
-        [...Array(n).keys()].forEach(i => {
-            nodes.push({id: i});
-        });
+        let generatedGraph = matrixToInternalGraph(matrix, this.props.config);
+        layout(generatedGraph, this.props.config, this.props.stage)
+            .then((graphAfterLayout) => {this.props.handleGraphUpdate(graphAfterLayout)});
 
-        //create edges
-        for (let i = 0; i < n; i++) {
-            matrix[i].forEach((weight, j) => {
-                if (weight !== 0) {
-                    edges.push({
-                        id: nextEdgeId++,
-                        fromId: i,
-                        toId: j,
-                        weight: weight
-                    });
-                }
-            })
-        }
-
-        //set edge directions and create placeholder absent edges
-        let pairs = [];
-        edges.forEach(e => {
-            if (e.pairId === undefined) {
-                if (e.fromId === e.toId) {
-                    e.pairId = e.id;
-                    e.direction = SELF_DIRECTION;
-                    return;
-                }
-                let pair = edges.find(p => p.fromId === e.toId && p.toId === e.fromId);
-                if (pair === undefined) {
-                    pair = {
-                        id: nextEdgeId++,
-                        pairId: e.id,
-                        fromId: e.toId,
-                        toId: e.fromId,
-                        weight: 0,
-                        direction: ABSENT_DIRECTION
-                    }
-                    pairs.push(pair);
-                    e.pairId = pair.id;
-                    e.direction = FORWARD_DIRECTION;
-                } else {
-                    if (e.weight !== pair.weight) {
-                        e.direction = SPLIT_DIRECTION;
-                        pair.direction = SPLIT_DIRECTION;
-                    } else {
-                        e.direction = this.props.config.graphDirectional ? BOTH_DIRECTIONS : NO_DIRECTIONS;
-                        pair.direction = this.props.config.graphDirectional ? BOTH_DIRECTIONS : NO_DIRECTIONS;
-                    }
-                    e.pairId = pair.id;
-                    pair.pairId = e.id;
-                }
-            }
-        })
-        edges.push(...pairs);
-
-        this.layout({
-            nodes: nodes,
-            edges: edges
-        });
-    }
-
-    layout = (graph) => {
-        let self = this;
-        fetch("/layout" + '?x=' + Math.floor(this.props.stageWidth) + '&y=' + Math.floor(this.props.stageHeight), {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                nodes: graph.nodes,
-                edges: graph.edges,
-                config: this.props.config
-            })
-        }).then((response) => {
-            return response.json();
-        }).then((data) => {
-            console.log(JSON.stringify(data));
-            let nodes = graph.nodes;
-            let coordinates = data.coordinates;
-
-            if (coordinates !== null && coordinates !== undefined) {
-                console.log("setting coords");
-                nodes.forEach(i => {
-                    i.x = coordinates[i.id].x;
-                    i.y = coordinates[i.id].y;
-                    i.name = i.id;
-                    i.color = colors.sample();
-                    i.selected = false;
-                    i.highlighted = false;
-                });
-            }
-            self.props.handleGraphUpdate(graph);
-        });
     }
 
     renderTable = () => {
-        let code = this.graphToCode();
+        let code = internalGraphToMatrix(this.props.graph);
         let selectedEdges = getSelectedEdge(this.props.graph);
         let selectedNodes = getSelectedNodes(this.props.graph);
         let highlightedEdges = getHighlightedEdge(this.props.graph);
@@ -240,7 +125,7 @@ export class MatrixDisplay extends React.Component {
     }
 
     render() {
-        let code = this.graphToCode();
+        let code = internalGraphToMatrix(this.props.graph);
 
         return <EditableView
             renderTable={this.renderTable}

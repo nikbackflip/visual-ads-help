@@ -1,21 +1,6 @@
 import React from "react";
-import {withStyles} from "@material-ui/core/styles";
 import Switch from "@material-ui/core/Switch";
-
-
-const ColoredSwitch = withStyles({
-    switchBase: {
-        color: '#1d9797',
-        '&$checked': {
-            color: '#1d9797',
-        },
-        '&$checked + $track': {
-            backgroundColor: '#1d9797',
-        },
-    },
-    checked: {},
-    track: {},
-})(Switch);
+import {Box, Button, ButtonGroup, Grid, Paper, Popover, Typography} from "@material-ui/core";
 
 class GlobalGraphConfig extends React.Component {
 
@@ -49,79 +34,94 @@ class GlobalGraphConfig extends React.Component {
     }
 
     render() {
-
         return (
-            <div className="Drawing-area-config">
-                <div className="App-line-split"/>
-                <div className="Drawing-area-config-item">
-                    <label>Directional</label>
-                    <ColoredSwitch
-                        className="Drawing-area-config-toggle"
-                        checked={this.state.graphDirectional}
-                        onChange={e => {
-                            e.persist();
-                            this.edit("graphDirectional", e.target.checked)
-                        }}
-                        size="small"
-                        color="primary"
-                        inputProps={{ 'aria-label': 'primary checkbox' }}
-                    />
-                </div>
-                <div className="Drawing-area-config-item">
-                    <label>Weighted</label>
-                    <ColoredSwitch
-                        className="Drawing-area-config-toggle"
-                        checked={this.state.graphWeighted}
-                        onChange={e => {
-                            e.persist();
-                            this.edit("graphWeighted", e.target.checked)
-                        }}
-                        size="small"
-                        color="primary"
-                        inputProps={{ 'aria-label': 'primary checkbox' }}
-                    />
-                </div>
-                <div className="Drawing-area-config-item">
-                    <label>Self Loops</label>
-                    <ColoredSwitch
-                        className="Drawing-area-config-toggle"
-                        checked={this.state.selfLoopsAllowed}
-                        onChange={e => {
-                            e.persist();
-                            this.edit("selfLoopsAllowed", e.target.checked)
-                        }}
-                        size="small"
-                        color="primary"
-                        inputProps={{ 'aria-label': 'primary checkbox' }}
-                    />
-                </div>
-                <div className="Drawing-area-config-submit">
-                    <button
-                        className={"Control-panel-button Drawing-area-config-button"}
-                        onClick={() => {
-                            if (this.configsUpdated())
-                                this.props.applyConfig(
-                                    this.state.graphDirectional,
-                                    this.state.graphWeighted,
-                                    this.state.selfLoopsAllowed
-                                )
-                            else this.props.cancelConfig()
-                        }}
-                    >
-                        Apply
-                    </button>
-                    <button
-                        className={"Control-panel-button Drawing-area-config-button"}
-                        onClick={this.props.cancelConfig}
-                    >
-                        Cancel
-                    </button>
-                </div>
+            <Popover
+                open={this.props.open}
+                anchorEl={this.props.anchorEl}
+                onClose={this.props.cancelConfig}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center',
+                }}>
+                <Box m = {2}>
+                    <Paper elevation={0} >
+                        <Grid container direction="row" justify="space-between" alignItems="center" wrap="nowrap" spacing={2}>
+                            <Grid item>
+                                <Typography>Directional</Typography>
+                            </Grid>
+                            <Grid item>
+                                <Switch
+                                    checked={this.state.graphDirectional}
+                                    onChange={e => {
+                                        e.persist();
+                                        this.edit("graphDirectional", e.target.checked)
+                                    }}
+                                    size="small"
+                                    color="primary"
+                                    inputProps={{ 'aria-label': 'primary checkbox' }}/>
+                            </Grid>
+                        </Grid>
 
-            </div>
+                        <Grid container direction="row" justify="space-between" alignItems="center" wrap="nowrap">
+                            <Grid item>
+                                <Typography>Weighted</Typography>
+                            </Grid>
+                            <Grid item>
+                                <Switch
+                                    checked={this.state.graphWeighted}
+                                    onChange={e => {
+                                        e.persist();
+                                        this.edit("graphWeighted", e.target.checked)
+                                    }}
+                                    size="small"
+                                    color="primary"
+                                    inputProps={{ 'aria-label': 'primary checkbox' }}/>
+                            </Grid>
+                        </Grid>
+
+                        <Grid container direction="row" justify="space-between" alignItems="center" wrap="nowrap">
+                            <Grid item>
+                                <Typography>Self Loops</Typography>
+                            </Grid>
+                            <Grid item>
+                                <Switch
+                                    checked={this.state.selfLoopsAllowed}
+                                    onChange={e => {
+                                        e.persist();
+                                        this.edit("selfLoopsAllowed", e.target.checked)
+                                    }}
+                                    size="small"
+                                    color="primary"
+                                    inputProps={{ 'aria-label': 'primary checkbox' }}/>
+                            </Grid>
+                        </Grid>
+                        <p/>
+                        <ButtonGroup variant="text">
+                            <Button
+                                onClick={() => {
+                                    if (this.configsUpdated())
+                                        this.props.applyConfig(
+                                            this.state.graphDirectional,
+                                            this.state.graphWeighted,
+                                            this.state.selfLoopsAllowed
+                                        )
+                                    else this.props.cancelConfig()
+                                }}>
+                                Apply
+                            </Button>
+                            <Button onClick={this.props.cancelConfig}>
+                                Cancel
+                            </Button>
+                        </ButtonGroup>
+                    </Paper>
+                </Box>
+            </Popover>
         )
     }
-
 }
 
 export default GlobalGraphConfig;

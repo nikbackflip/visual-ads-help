@@ -1,5 +1,6 @@
 import React from "react";
 import {ABSENT_DIRECTION} from "../drawingArea/DrawingModeConstants";
+import {Typography} from "@material-ui/core";
 
 class FetchingAnalytic extends React.Component {
 
@@ -43,17 +44,13 @@ class FetchingAnalytic extends React.Component {
 
     render() {
         return (
-            <div>
-                {
-                    this.state.analytics.map((analytic) => {
-                        return <Analytic
-                            key={analytic.name}
-                            label={analytic.name}
-                            checked={analytic.result}
-                        />
-                    })
-                }
-            </div>
+            this.state.analytics.map((analytic) => {
+                return <Analytic
+                    key={analytic.name}
+                    label={analytic.name}
+                    checked={analytic.result}
+                />
+            })
             )
     }
 }
@@ -61,13 +58,15 @@ class FetchingAnalytic extends React.Component {
 class Analytic extends React.Component {
     render() {
         return (
-            <div className="Info-panel-analytic">
-                <span>{" • " + this.props.label + ": "}</span>
+            <div>
+                <Typography noWrap>
+                    {" • " + this.props.label + ": "}
                 {
                     this.props.checked ?
                         <i className="fa fa-check Info-panel-analytic-green" aria-hidden="true"/> :
                         <i className="fa fa-close Info-panel-analytic-red" aria-hidden="true"/>
                 }
+                </Typography>
             </div>
         )
     }
@@ -83,12 +82,11 @@ class GraphAnalytics extends React.Component {
         if (this.graphIsEmpty()) return null;
         return (
             <div>
-                <div className="Info-panel-label">Graph is:</div>
-                <FetchingAnalytic className="Info-panel-scroll Info-panel-analytics"
+                <Typography noWrap variant="h6">Graph is:</Typography>
+                <FetchingAnalytic
                     config={this.props.config}
                     graph={this.props.graph}
                 />
-                <div className="App-line-split"/>
             </div>
         );
     }

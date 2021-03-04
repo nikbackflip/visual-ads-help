@@ -52,4 +52,19 @@ public class GeneratorControllerTest {
                 .andExpect(jsonPath("$.graph", not(empty())))
                 .andExpect(jsonPath("$.config", not(empty())));
     }
+
+    @Test
+    public void generateWithLayout() throws Exception {
+        mockMvc.perform(get("/generator/generate")
+                .contentType(APPLICATION_JSON)
+                .queryParam("for", "WEIGHTED, DIRECTED, COMPLETE")
+                .queryParam("x", "100")
+                .queryParam("y", "100"))
+
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.graph", not(empty())))
+                .andExpect(jsonPath("$.config", not(empty())))
+                .andExpect(jsonPath("$.coordinates", notNullValue()));
+    }
 }

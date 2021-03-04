@@ -1,6 +1,7 @@
 import React from "react";
 import {Circle, Group, Text} from "react-konva";
 import {circleRadius} from "./DrawingModeConstants";
+import {darkDrawing, lightDrawing} from "../../util/ColorUtil";
 
 
 class KonvaNode extends React.Component {
@@ -23,14 +24,14 @@ class KonvaNode extends React.Component {
                 x={this.props.x}
                 y={this.props.y}
                 radius={circleRadius}
-                fill={this.props.selected || this.props.highlighted ? "#1d9797" : this.props.color}
+                fill={this.props.selected || this.props.highlighted ? lightDrawing.selected : this.props.color}
                 opacity={0.9}
                 draggable={true}
                 onDragMove={this.props.onDragMove}
                 onDragEnd={this.props.onDragEnd}
                 strokeEnabled={this.props.selected || this.props.highlighted}
-                strokeWidth={3}
-                stroke={"black"}
+                strokeWidth={2}
+                stroke={lightDrawing.selected}
                 onClick={this.props.handleCircleClick}
                 onMouseEnter={this.props.onMouseEnter}
                 onMouseLeave={this.props.onMouseLeave}

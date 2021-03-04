@@ -7,6 +7,7 @@ import {
     NO_DIRECTIONS,
     SPLIT_DIRECTION
 } from "./DrawingModeConstants";
+import {darkDrawing, lightDrawing} from "../../util/ColorUtil";
 
 
 class KonvaEdge extends React.Component {
@@ -96,9 +97,9 @@ class KonvaEdge extends React.Component {
             <Arrow
                 id={this.props.id}
                 points={points}
-                stroke={this.props.selected || this.props.highlighted ? "#1d9797" : "black"}
-                fill={this.props.selected || this.props.highlighted ? "#1d9797" : "black"}
-                strokeWidth={3}
+                stroke={this.props.selected || this.props.highlighted ? lightDrawing.selected : lightDrawing.edge}
+                fill={this.props.selected || this.props.highlighted ? lightDrawing.selected : lightDrawing.edge}
+                strokeWidth={2}
                 onClick={this.props.handleEdgeClick}
                 tension={0.4}
                 pointerAtBeginning={this.props.direction === BOTH_DIRECTIONS}
@@ -112,8 +113,8 @@ class KonvaEdge extends React.Component {
                 text={this.props.weight}
                 strokeWidth={1}
                 fontSize={18}
-                fill={"#1d9797"}
-                stroke={"#1d9797"}
+                fill={lightDrawing.text}
+                stroke={lightDrawing.text}
                 fontFamily={"Verdana, monospace"}
                 visible={weightVisible}
             />

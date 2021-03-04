@@ -1,5 +1,6 @@
 import React from 'react';
 import {ABSENT_DIRECTION} from "../drawingArea/DrawingModeConstants";
+import {Box, Button, Chip, Grid, MenuItem, Paper, Select, TextField, Typography} from "@material-ui/core";
 
 class TasksDropdown extends React.Component {
 
@@ -105,97 +106,77 @@ class TasksDropdown extends React.Component {
         const inputFields = this.state.selectedTask ?
             this.state.selectedTask.parameters.map(p => {
                 return (
-                    <div
+                    <TextField
+                        id={this.state.selectedTask.id + ":" + p.id}
                         key={this.state.selectedTask.id + ":" + p.id}
-                        className="Code-panel-tasks-parameter-div"
-                    >
-                        <label className="Code-panel-tasks-parameter-label">{p.label}: </label>
-                        <span className="Code-panel-tasks-parameter-span">
-                            <input
-                                className="Code-panel-tasks-parameter-input"
-                                type="number"
-                                onBlur={(e) => this.onInputEnd(p.id, e.target.value)}
-                            />
-                        </span>
-                    </div>
-                )
-            }) : null;
+                        label={p.label}
+                        onChange={(e) => this.onInputEnd(p.id, e.target.value)}
+                        type="number"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />)}) : null;
 
         const displayResult = this.state.response !== undefined;
-        let resultHeader = "";
-        if (displayResult) {
-            resultHeader =  this.state.lastTask + " " + Object.entries(this.state.lastParams).map(p => {
-                return p[0] + " " + p[1];
-            }).join(" ");
-        }
 
         return (
-            <div className="Code-panel-whole-height">
-                <div className="Code-panel-tasks-up">
-                    <div className="Code-panel-tasks-input">
-                        <select
-                            className="Code-panel-tasks-dropdown"
-                            onChange={this.onTaskChange}
-                            value={this.state.selectedTask ? this.state.selectedTask.id : undefined}
-                        >
-                            {this.props.tasks.map(t => {
-                                return (
-                                    <option
-                                        key={t.id}
-                                        value={t.id}
-                                    >
-                                        {t.label}
-                                    </option>)
-                            })}
-                        </select>
-                        <div>
+            <Box m={2}>
+                <Paper elevation={3}>
+                    <Box overflow="hidden" p={2}>
+                        <Grid container direction="row" alignItems="flex-start" justify="space-between" wrap="nowrap">
+                            <Grid item>
+                                <Select
+                                    onChange={this.onTaskChange}
+                                    value={this.state.selectedTask ? this.state.selectedTask.id : ""}>
+                                        {this.props.tasks.map(t => {
+                                            return (
+                                                <MenuItem key={t.id} value={t.id}>
+                                                    {t.label}
+                                                </MenuItem>)
+                                        })}
+                                </Select>
+                            </Grid>
+                            <Grid item>
+                                <Button variant="contained" color="secondary" onClick={this.executeTask}>
+                                    EXECUTE
+                                </Button>
+                            </Grid>
+                        </Grid><p/><p/>
+                        <Box>
                             {inputFields}
-                        </div>
-                    </div>
-                    <div className="Code-panel-tasks-exec">
-                        <button
-                            className="Control-panel-button Code-panel-tasks-exec-button"
-                            onClick={this.executeTask}
-                        >
-                            EXECUTE
-                        </button>
-                    </div>
-                </div>
-                <div>
-                <div className="App-line-split"/>
-                {
-                    displayResult ?
-                        <div className="Code-panel-tasks-bottom Code-panel-task-response">
-                            {resultHeader}
-                            {
-                                !this.state.response.success ?
-                                    <div>
-                                        <p/>
-                                        {this.state.response.message}
-                                    </div> :
-                                    <div className="Task-result-scroll">
-                                        <NodesResponse
-                                            nodes={this.state.response.nodes}
-                                            handleGraphUpdate={this.props.handleGraphUpdate}
-                                            graph={this.props.graph}
-                                        />
-                                        <EdgesResponse
-                                            edges={this.state.response.edges}
-                                            handleGraphUpdate={this.props.handleGraphUpdate}
-                                            graph={this.props.graph}
-                                        />
-                                        <ComponentsResponse
-                                            components={this.state.response.components}
-                                            handleGraphUpdate={this.props.handleGraphUpdate}
-                                            graph={this.props.graph}
-                                        />
-                                    </div>
-                            }
-                        </div>
-                    : <div/>
-                }
-                </div>
-            </div>
+                        </Box><p/><p/>
+                        {
+                            displayResult ?
+                                <div>
+                                    {
+                                        !this.state.response.success ?
+                                            <Typography>
+                                                {this.state.response.message}
+                                            </Typography> :
+                                            <div>
+                                                <NodesResponse
+                                                    nodes={this.state.response.nodes}
+                                                    handleGraphUpdate={this.props.handleGraphUpdate}
+                                                    graph={this.props.graph}
+                                                />
+                                                <EdgesResponse
+                                                    edges={this.state.response.edges}
+                                                    handleGraphUpdate={this.props.handleGraphUpdate}
+                                                    graph={this.props.graph}
+                                                />
+                                                <ComponentsResponse
+                                                    components={this.state.response.components}
+                                                    handleGraphUpdate={this.props.handleGraphUpdate}
+                                                    graph={this.props.graph}
+                                                />
+                                            </div>
+                                    }
+                                </div>
+                            : <div/>
+                        }
+                    </Box>
+                </Paper>
+            </Box>
         )
     }
 }
@@ -227,36 +208,36 @@ class NodesResponse extends React.Component {
     render() {
         if (this.props.nodes.length === 0) return <div />
 
-        return <div className="Code-panel-tasks-result-container">
-            <p/>
-            <div>
-                <div className="Code-panel-tasks-result">
-                    <div className="Code-panel-row">
-                        {
-                            this.props.nodes.map(n => {
-                                const currNode = this.props.graph.nodes.find(nn => n === nn.id);
-                                return <Node
-                                    key={n}
-                                    id={n}
-                                    selected={currNode === undefined ? false : currNode.selected}
-                                    highlighted={currNode === undefined ? false : currNode.highlighted}
-                                    selectNode={this.selectNode}
-                                    highlightNode={this.highlightNode}
-                                />
-                            })
-                        }
-                    </div>
-                </div>
-                <div className="Code-panel-tasks-highlight">
-                    <button
-                        className="Control-panel-button Code-panel-tasks-highlight-button"
-                        onClick={this.selectAll}
-                    >
+        return <Box m = {2}>
+            <Grid
+                container
+                direction="row"
+                justify="space-between"
+                alignItems="center"
+                wrap="nowrap"
+            >
+                <Grid item>
+                    {
+                        this.props.nodes.map(n => {
+                            const currNode = this.props.graph.nodes.find(nn => n === nn.id);
+                            return <Node
+                                key={n}
+                                id={n}
+                                selected={currNode === undefined ? false : currNode.selected}
+                                highlighted={currNode === undefined ? false : currNode.highlighted}
+                                selectNode={this.selectNode}
+                                highlightNode={this.highlightNode}
+                            />
+                        })
+                    }
+                </Grid>
+                <Grid item>
+                    <Button onClick={this.selectAll}>
                         SELECT
-                    </button>
-                </div>
-            </div>
-        </div>
+                    </Button>
+                </Grid>
+            </Grid>
+        </Box>
     }
 }
 class Node extends React.Component {
@@ -272,17 +253,13 @@ class Node extends React.Component {
     }
 
     render() {
-        let style = "Code-panel-node ";
-        if (this.props.selected) style = style + "Code-panel-highlight-full";
-        else if (this.props.highlighted) style = style + "Code-panel-highlight-half";
-        return <div
-            className={style}
+        return <Chip
+            color={this.props.selected || this.props.highlighted ? "secondary" : undefined}
             onMouseEnter={this.onMouseEnter}
             onMouseLeave={this.onMouseLeave}
             onClick={this.onClick}
-        >
-            {this.props.id}
-        </div>
+            style = {{margin: 2}}
+            label={this.props.id} />
     }
 }
 class EdgesResponse extends React.Component {
@@ -311,11 +288,14 @@ class EdgesResponse extends React.Component {
     }
     render() {
         if (this.props.edges.length === 0) return <div />
-        return <div className="Code-panel-tasks-result-container">
-            <p/>
-            <div>
-                <div className="Code-panel-tasks-result">
-                    <div className="Code-panel-row">
+        return  <Grid
+            container
+            direction="row"
+            justify="space-between"
+            alignItems="center"
+            wrap="nowrap"
+        >
+            <Grid item>
                         {
                             this.props.edges.map(e => {
                                 const currEdge = this.props.graph.edges.find(ee => e.to === ee.toId && e.from === ee.fromId);
@@ -330,18 +310,13 @@ class EdgesResponse extends React.Component {
                                 />
                             })
                         }
-                    </div>
-                </div>
-                <div className="Code-panel-tasks-highlight">
-                    <button
-                        className="Control-panel-button Code-panel-tasks-highlight-button"
-                        onClick={this.selectAll}
-                    >
-                        SELECT
-                    </button>
-                </div>
-            </div>
-        </div>
+            </Grid>
+            <Grid item>
+                <Button onClick={this.selectAll}>
+                    SELECT
+                </Button>
+            </Grid>
+        </Grid>
     }
 }
 class Edge extends React.Component {
@@ -366,24 +341,19 @@ class Edge extends React.Component {
     }
 
     render() {
-        let style = "Code-panel-edge ";
-        if (this.props.selected) style = style + "Code-panel-highlight-full";
-        else if (this.props.highlighted) style = style + "Code-panel-highlight-half";
-        return <div
-            className={style}
+        return <Chip
+            color={this.props.selected || this.props.highlighted ? "secondary" : undefined}
             onMouseEnter={this.onMouseEnter}
             onMouseLeave={this.onMouseLeave}
             onClick={this.onClick}
-        >
-            {this.props.from + "→" + this.props.to}
-        </div>
+            style = {{margin: 2}}
+            label={this.props.from + " → " + this.props.to}/>
     }
 }
 class ComponentsResponse extends React.Component {
     render() {
         if (this.props.components.length === 0) return <div />
-        return <div>
-            <p/>
+        return <Box>
             {
                 this.props.components.map(c => {
                     return <NodesResponse
@@ -394,7 +364,7 @@ class ComponentsResponse extends React.Component {
                     />
                 })
             }
-        </div>
+        </Box>
     }
 }
 

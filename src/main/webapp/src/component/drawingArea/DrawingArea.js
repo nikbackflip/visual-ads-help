@@ -20,6 +20,7 @@ import KonvaNode from "./KonvaNode";
 import KonvaEdge from "./KonvaEdge";
 import TempKonvaEdge from "./TempKonvaEdge";
 import SelfKonvaLoop from "./SelfKonvaLoop";
+import layout from "../../util/LayoutUtil";
 
 class DrawingArea extends React.Component {
 
@@ -168,10 +169,10 @@ class DrawingArea extends React.Component {
         let y = node.y;
 
         x = x < circleRadius ? circleRadius : x;
-        x = x > this.props.stageWidth - circleRadius ? this.props.stageWidth - circleRadius : x;
+        x = x > this.props.stage.width - circleRadius - 3 ? this.props.stage.width - circleRadius - 3 : x;
 
         y = y < circleRadius ? circleRadius : y;
-        y = y > this.props.stageHeight - circleRadius ? this.props.stageHeight - circleRadius : y;
+        y = y > this.props.stage.height - circleRadius - 3 ? this.props.stage.height - circleRadius - 3 : y;
 
         node.x = x;
         node.y = y;
@@ -396,8 +397,8 @@ class DrawingArea extends React.Component {
             this.props.graph.nodes.forEach(n => {
                 n.color = colors.sample();
                 n.name = n.id;
-                n.x = Math.floor(Math.random() * (this.props.stageWidth - circleRadius - circleRadius + 1) + circleRadius);
-                n.y = Math.floor(Math.random() * (this.props.stageHeight - circleRadius - circleRadius + 1) + circleRadius);
+                n.x = n.x === undefined ? Math.floor(Math.random() * (this.props.stage.width - circleRadius - circleRadius + 1) + circleRadius) : n.x;
+                n.y = n.y === undefined ? Math.floor(Math.random() * (this.props.stage.height - circleRadius - circleRadius + 1) + circleRadius) : n.y;
                 n.selected = false;
                 n.highlighted = false;
             });
@@ -457,33 +458,8 @@ class DrawingArea extends React.Component {
             edges: this.props.graph.edges.slice().filter(e => e.direction !== ABSENT_DIRECTION),
             nodes: this.props.graph.nodes
         }
-        let self = this;
-        fetch("/layout" + '?x=' + Math.floor(this.props.stageWidth) + '&y=' + Math.floor(this.props.stageHeight), {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                nodes: graph.nodes,
-                edges: graph.edges,
-                config: this.props.config
-            })
-        }).then((response) => {
-            return response.json();
-        }).then((data) => {
-            let nodes = this.props.graph.nodes.slice();
-            let coordinates = data.coordinates;
-
-            if (coordinates !== null && coordinates !== undefined) {
-                nodes.forEach(i => {
-                    i.x = coordinates[i.id].x;
-                    i.y = coordinates[i.id].y;
-                });
-
-                self.props.handleGraphUpdate({
-                    nodes: nodes,
-                    edges: this.props.graph.edges
-                });
-            }
-        });
+        layout(graph, this.props.config, this.props.stage)
+            .then((graphAfterLayout) => {this.props.handleGraphUpdate(graphAfterLayout)});
     }
 
     render() {
@@ -491,8 +467,7 @@ class DrawingArea extends React.Component {
         let excludedEdges = [];
 
         return (
-            <div className="App-drawing-area">
-
+            <div>
                 <DrawingControlPanel
                     modeChange={this.handleModeChange}
                     graphReset={this.resetGraph}
@@ -500,14 +475,13 @@ class DrawingArea extends React.Component {
                     handleConfigUpdate = {this.updateGraphOnConfigUpdate}
                     layoutGraph = {this.layout}
                 />
-                <div className="App-line-split"/>
 
                 <Stage
                     ref={ref => {
                         this.stageRef = ref;
                     }}
-                    width={this.props.stageWidth}
-                    height={this.props.stageHeight}
+                    width={this.props.stage.width}
+                    height={this.props.stage.height}
                     onClick={this.handleStageClick}
                     onContentMouseup={this.cleanStageState}
                     onMouseMove={this.drawTempEdge}
