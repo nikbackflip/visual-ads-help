@@ -78,26 +78,28 @@ class DrawingControlPanel extends React.Component {
                     </Grid>
                 </AppBar>
 
-                <GlobalGraphConfig
-                    open={Boolean(this.state.globalConfigAnchor)}
-                    config={this.props.config}
-                    anchorEl={this.state.globalConfigAnchor}
-                    cancelConfig={() => {
-                        this.setState({
-                            globalConfigAnchor: null
-                        })}
-                    }
-                    applyConfig={(graphDirectional, graphWeighted, selfLoopsAllowed) => {
-                        this.setState({
-                            globalConfigAnchor: null
-                        })
-                        this.props.handleConfigUpdate({
-                            graphDirectional: graphDirectional,
-                            graphWeighted: graphWeighted,
-                            selfLoopsAllowed: selfLoopsAllowed
-                        });
-                    }}
-                />
+                {
+                    Boolean(this.state.globalConfigAnchor) ? <GlobalGraphConfig
+                        open={true}
+                        config={this.props.config}
+                        anchorEl={this.state.globalConfigAnchor}
+                        cancelConfig={() => {
+                            this.setState({
+                                globalConfigAnchor: null
+                            })}
+                        }
+                        applyConfig={(graphDirectional, graphWeighted, selfLoopsAllowed) => {
+                            this.setState({
+                                globalConfigAnchor: null
+                            })
+                            this.props.handleConfigUpdate({
+                                graphDirectional: graphDirectional,
+                                graphWeighted: graphWeighted,
+                                selfLoopsAllowed: selfLoopsAllowed
+                            });
+                        }}
+                    /> : null
+                }
             </div>
         )
     }

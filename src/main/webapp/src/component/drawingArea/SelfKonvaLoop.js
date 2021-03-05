@@ -35,8 +35,8 @@ class SelfKonvaLoop extends React.Component {
                 text={this.props.weight}
                 strokeWidth={1}
                 fontSize={18}
-                fill={lightDrawing.selected}
-                stroke={lightDrawing.selected}
+                fill={lightDrawing.text}
+                stroke={lightDrawing.text}
                 fontFamily={"Verdana, monospace"}
             />
         </Group>
