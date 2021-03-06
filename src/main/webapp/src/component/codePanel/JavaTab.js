@@ -1,6 +1,7 @@
 import React from 'react';
 import {UnControlled} from "react-codemirror2";
 import {ABSENT_DIRECTION} from "../drawingArea/DrawingModeConstants";
+import getDrawingColors from "../../util/ColorUtil";
 
 
 class JavaTab extends React.Component {
@@ -40,6 +41,7 @@ class JavaTab extends React.Component {
     }
 
     render() {
+        const style = getDrawingColors(this.props.themeType).codeMirrorStyle;
         return (
             <UnControlled
                 value={this.state.code}
@@ -47,7 +49,7 @@ class JavaTab extends React.Component {
                     lineNumbers: true,
                     mode: "text/x-java",
                     matchBrackets: true,
-                    // theme: "darcula",
+                    theme: style,
                     scrollbarStyle: null,
                     readOnly: true
                 }}

@@ -6,7 +6,7 @@ import DrawingArea from "./drawingArea/DrawingArea";
 import CodePanel from "./codePanel/CodePanel";
 import PropagatingResizablePanels from "./app/PropagatingResizablePanels";
 import {createMuiTheme, CssBaseline, MuiThemeProvider} from "@material-ui/core";
-import {dark, light, lightTheme} from "../util/ColorUtil";
+import {dark, light} from "../util/ColorUtil";
 
 class App extends React.Component {
 
@@ -28,8 +28,16 @@ class App extends React.Component {
             stage: {
                 height: 0,
                 width: 0
-            }
+            },
+            theme: localStorage.getItem("theme") || "light"
         };
+    }
+
+    handleThemeChange = (theme) => {
+        localStorage.setItem("theme", theme);
+        this.setState({
+            theme: theme
+        })
     }
 
     handleGraphUpdate = (graph) => {
@@ -62,16 +70,22 @@ class App extends React.Component {
         })
     }
 
+    getTheme = () => {
+        const theme = this.state.theme;
+        if (theme === "dark") return createMuiTheme(dark);
+        else return createMuiTheme(light);
+    }
+
     render() {
-
-        const lightTheme = createMuiTheme(light);
-
         return (
-            <MuiThemeProvider theme={lightTheme}>
+            <MuiThemeProvider theme={this.getTheme()}>
                 <CssBaseline />
                 <div
                      ref={this.container}>
-                    <ControlHeader/>
+                    <ControlHeader
+                        handleThemeUpdate={this.handleThemeChange}
+                        themeType={this.state.theme}
+                    />
                     <div className="full-height">
                         <PropagatingResizablePanels
                             displayDirection="row"
@@ -95,6 +109,7 @@ class App extends React.Component {
                                 handleGraphUpdate={this.handleGraphUpdate}
                                 handleConfigUpdate={this.handleConfigUpdate}
                                 stage={this.state.stage}
+                                themeType={this.state.theme}
                             />
                             <CodePanel
                                 graph={this.state.graph}
@@ -102,6 +117,7 @@ class App extends React.Component {
                                 handleGraphUpdate={this.handleGraphUpdate}
                                 handleConfigUpdate={this.handleConfigUpdate}
                                 stage={this.state.stage}
+                                themeType={this.state.theme}
                             />
                         </PropagatingResizablePanels>
                     </div>

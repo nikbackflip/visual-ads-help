@@ -7,7 +7,8 @@ import {
     NO_DIRECTIONS,
     SPLIT_DIRECTION
 } from "./DrawingModeConstants";
-import {darkDrawing, lightDrawing} from "../../util/ColorUtil";
+import {withTheme} from "@material-ui/core";
+import getDrawingColors from "../../util/ColorUtil";
 
 
 class KonvaEdge extends React.Component {
@@ -21,7 +22,8 @@ class KonvaEdge extends React.Component {
             this.props.selected === nextProps.selected &&
             this.props.highlighted === nextProps.highlighted &&
             this.props.weight === nextProps.weight &&
-            this.props.direction === nextProps.direction
+            this.props.direction === nextProps.direction &&
+            this.props.themeType === nextProps.themeType
         );
     }
 
@@ -93,12 +95,13 @@ class KonvaEdge extends React.Component {
             }
         }
 
+        const drawingColors = getDrawingColors(this.props.themeType);
         return <Group>
             <Arrow
                 id={this.props.id}
                 points={points}
-                stroke={this.props.selected || this.props.highlighted ? lightDrawing.selected : lightDrawing.edge}
-                fill={this.props.selected || this.props.highlighted ? lightDrawing.selected : lightDrawing.edge}
+                stroke={this.props.selected || this.props.highlighted ? drawingColors.selected : drawingColors.edge}
+                fill={this.props.selected || this.props.highlighted ? drawingColors.selected : drawingColors.edge}
                 strokeWidth={2}
                 onClick={this.props.handleEdgeClick}
                 tension={0.4}
@@ -113,8 +116,8 @@ class KonvaEdge extends React.Component {
                 text={this.props.weight}
                 strokeWidth={1}
                 fontSize={18}
-                fill={lightDrawing.text}
-                stroke={lightDrawing.text}
+                fill={drawingColors.text}
+                stroke={drawingColors.text}
                 fontFamily={"Verdana, monospace"}
                 visible={weightVisible}
             />
@@ -123,4 +126,4 @@ class KonvaEdge extends React.Component {
 
 }
 
-export default KonvaEdge;
+export default withTheme(KonvaEdge);

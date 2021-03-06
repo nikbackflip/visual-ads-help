@@ -13,40 +13,59 @@ export const light = {
             contrastText: '#ffffff',
         },
         background: {
-            // paper: '#c2d278',
             default: '#F2F2F2'
         }
     }
 };
 
-export const lightDrawing = {
+const lightDrawing = {
     edge: "#757575",
-    selected: "#ff3d00",
-    text: "#323232"
+        selected: "#ff3d00",
+        text: "#323232",
+        colors: [
+            '#607d8b',
+            '#9e9e9e',
+            '#795548',
+            '#cbad80'
+    ],
+    codeMirrorStyle: "default"
 }
+
 export const dark = {
     palette: {
         primary: {
-            light: '#505556',
+            light: '#545758',
             main: '#3c3c3c',
             dark: '#1a1a1a',
             contrastText: '#ffffff',
         },
         secondary: {
-            light: '#b4ffff',
-            main: '#80deea',
-            dark: '#4bacb8',
+            dark: '#40a8b5',
+            main: '#40a8b5',
             contrastText: '#000000',
         },
         background: {
-            paper: '#505556',
+            paper: '#545758',
             default: '#3c3c3c'
         }
     }
 };
 
-export const darkDrawing = {
+const darkDrawing = {
     edge: "#000000",
     selected: "#4bacb8",
-    text: "#000000"
+    text: "#000000",
+    colors: [
+        '#FF7EC7',
+        '#BF42FF',
+        '#8A4BFF',
+        '#4C80FF'
+    ],
+    codeMirrorStyle: "darcula"
+}
+
+export default function getDrawingColors(theme) {
+    if (theme === "dark") return darkDrawing;
+    return lightDrawing;
+
 }
