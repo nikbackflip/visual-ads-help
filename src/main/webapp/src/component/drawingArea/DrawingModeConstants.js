@@ -12,18 +12,7 @@ export const BUTTON_NAMES = Object.freeze({
     4: "Del Edge"
 })
 
-export const colors = [
-    '#607d8b',
-    '#9e9e9e',
-    '#795548',
-    '#cbad80'
-];
-// export const colors = [
-//     '#FF7EC7',
-//     '#BF42FF',
-//     '#8A4BFF',
-//     '#4C80FF'
-// ];
+export const colors = [0, 1, 2, 3];
 
 export const circleRadius = 20;
 

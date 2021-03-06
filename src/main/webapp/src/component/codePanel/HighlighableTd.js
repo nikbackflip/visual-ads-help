@@ -1,13 +1,14 @@
 import React from "react";
-import {dark, light} from "../../util/ColorUtil";
+import {withTheme} from "@material-ui/core";
 
 
 class HighlighableTd extends React.Component {
 
     render() {
+        const color = this.props.theme.palette.secondary.dark;
         let highlight = {};
         if (this.props.focused || this.props.halfFocused) {
-            highlight.backgroundColor = light.palette.secondary.dark;
+            highlight.backgroundColor = color;
             highlight.opacity = this.props.focused ? 1 : 0.5;
         }
         return (
@@ -25,4 +26,4 @@ class HighlighableTd extends React.Component {
 
 }
 
-export default HighlighableTd;
+export default withTheme(HighlighableTd);

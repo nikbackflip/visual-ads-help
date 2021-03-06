@@ -488,6 +488,7 @@ class DrawingArea extends React.Component {
                     <Layer>
                         <TempKonvaEdge
                             edge={this.state.tempEdge}
+                            themeType={this.props.themeType}
                         />
                         {this.props.graph.edges.map(edge => {
 
@@ -513,6 +514,7 @@ class DrawingArea extends React.Component {
                                     handleEdgeClick={this.handleEdgeClick}
                                     onMouseEnter={this.onMouseOverEdge}
                                     onMouseLeave={this.onMouseLeave}
+                                    themeType={this.props.themeType}
                                 />
                             } else {
                                 return <KonvaEdge
@@ -527,6 +529,7 @@ class DrawingArea extends React.Component {
                                     direction={edge.direction}
                                     onMouseEnter={this.onMouseOverEdge}
                                     onMouseLeave={this.onMouseLeave}
+                                    themeType={this.props.themeType}
                                 />
                             }
                         })}
@@ -545,6 +548,7 @@ class DrawingArea extends React.Component {
                                 handleCircleClick={this.handleCircleClick}
                                 onMouseEnter={this.onMouseOverNode}
                                 onMouseLeave={this.onMouseLeave}
+                                themeType={this.props.themeType}
                             />
                         })}
                     </Layer>

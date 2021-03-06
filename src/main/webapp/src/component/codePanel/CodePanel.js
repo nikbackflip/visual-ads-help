@@ -35,7 +35,7 @@ class CodePanel extends React.Component {
     render() {
         return (
             <div>
-                <AppBar position="static" color="default">
+                <AppBar position="static" color="primary">
                     <Tabs
                         value={this.state.activeTab}
                         onChange={this.handleTabChange}
@@ -51,6 +51,7 @@ class CodePanel extends React.Component {
                 <TabPanel value={this.state.activeTab} index={0}>
                     <JavaTab
                         graph={this.props.graph}
+                        themeType={this.props.themeType}
                     />
                 </TabPanel>
                 <TabPanel value={this.state.activeTab} index={1}>

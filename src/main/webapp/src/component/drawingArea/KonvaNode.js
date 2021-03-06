@@ -1,7 +1,8 @@
 import React from "react";
 import {Circle, Group, Text} from "react-konva";
 import {circleRadius} from "./DrawingModeConstants";
-import {darkDrawing, lightDrawing} from "../../util/ColorUtil";
+import {withTheme} from "@material-ui/core";
+import getDrawingColors from "../../util/ColorUtil";
 
 
 class KonvaNode extends React.Component {
@@ -11,27 +12,28 @@ class KonvaNode extends React.Component {
             this.props.y === nextProps.y &&
             this.props.name === nextProps.name &&
             this.props.selected === nextProps.selected &&
-            this.props.highlighted === nextProps.highlighted
+            this.props.highlighted === nextProps.highlighted &&
+            this.props.themeType === nextProps.themeType
         );
     }
 
     render() {
         const textLength = this.props.name.toString().length;
-
+        const drawingColors = getDrawingColors(this.props.themeType);
         return <Group>
             <Circle
                 id={this.props.id}
                 x={this.props.x}
                 y={this.props.y}
+                fill={this.props.selected || this.props.highlighted ? drawingColors.selected : drawingColors.colors[this.props.color]}
                 radius={circleRadius}
-                fill={this.props.selected || this.props.highlighted ? lightDrawing.selected : this.props.color}
                 opacity={0.9}
                 draggable={true}
                 onDragMove={this.props.onDragMove}
                 onDragEnd={this.props.onDragEnd}
                 strokeEnabled={this.props.selected || this.props.highlighted}
                 strokeWidth={2}
-                stroke={lightDrawing.selected}
+                stroke={drawingColors.selected}
                 onClick={this.props.handleCircleClick}
                 onMouseEnter={this.props.onMouseEnter}
                 onMouseLeave={this.props.onMouseLeave}
@@ -55,4 +57,4 @@ class KonvaNode extends React.Component {
 
 }
 
-export default KonvaNode;
+export default withTheme(KonvaNode);

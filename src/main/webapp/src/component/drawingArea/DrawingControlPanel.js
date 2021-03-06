@@ -44,7 +44,7 @@ class DrawingControlPanel extends React.Component {
     render() {
         return (
             <div>
-                <AppBar position="static" color="default">
+                <AppBar position="static" color="primary">
 
                     <Grid container direction="row" justify="space-between" alignItems="flex-start" color="primary" wrap="nowrap">
 

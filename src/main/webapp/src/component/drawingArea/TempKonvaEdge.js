@@ -1,12 +1,13 @@
 import React from "react";
-import {black} from "color-name";
 import {Line} from "react-konva";
-import {lightDrawing} from "../../util/ColorUtil";
+import {withTheme} from "@material-ui/core";
+import getDrawingColors from "../../util/ColorUtil";
 
 
 class KonvaTempEdge extends React.Component {
 
     render() {
+        const drawingColors = getDrawingColors(this.props.themeType);
         if (this.props.edge.from === undefined || this.props.edge.to === undefined) {
             return null;
         }
@@ -18,11 +19,11 @@ class KonvaTempEdge extends React.Component {
 
         return <Line
                 points={[fromX, fromY, toX, toY]}
-                stroke={lightDrawing.edge}
+                stroke={drawingColors.edge}
                 strokeWidth={2}
             />
     }
 
 }
 
-export default KonvaTempEdge;
+export default withTheme(KonvaTempEdge);
