@@ -116,8 +116,8 @@ class KonvaEdge extends React.Component {
                 text={this.props.weight}
                 strokeWidth={1}
                 fontSize={18}
-                fill={drawingColors.text}
-                stroke={drawingColors.text}
+                fill={this.props.selected || this.props.highlighted ? drawingColors.selected : drawingColors.text}
+                stroke={this.props.selected || this.props.highlighted ? drawingColors.selected : drawingColors.text}
                 fontFamily={"Verdana, monospace"}
                 visible={weightVisible}
             />
