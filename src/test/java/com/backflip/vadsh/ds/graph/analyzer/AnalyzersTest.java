@@ -89,6 +89,7 @@ public class AnalyzersTest {
                 Arguments.of(eulerianPathAnalyzer, disconnectedComponents, notDirectionalConfig, false),
                 Arguments.of(eulerianPathAnalyzer, singleDiagonalSquare, notDirectionalConfig, true),
                 Arguments.of(eulerianPathAnalyzer, doubleDiagonalsSquare, notDirectionalConfig, false),
+                Arguments.of(eulerianPathAnalyzer, completelyDisconnectedComponents, notDirectionalConfig, false),
 
                 Arguments.of(denseAnalyzer, singleNodeSelfLoop, defaultConfig, true),
                 Arguments.of(denseAnalyzer, singleNode, defaultConfig, false),
@@ -158,6 +159,7 @@ public class AnalyzersTest {
     private final static Graph sparseGraph = new Graph(List.of(new Edge(0, 1, 1.0), new Edge(1, 2, 1.0), new Edge(2, 4, 1.0), new Edge(4, 3, 1.0)), 5);
     private final static Graph denseGraph = new Graph(List.of(new Edge(0, 1, 1.0), new Edge(1, 2, 1.0), new Edge(2, 1, 1.0), new Edge(2, 4, 1.0), new Edge(4, 3, 1.0), new Edge(0, 2, 1.0), new Edge(2, 0, 1.0), new Edge(0, 4, 1.0), new Edge(4, 0, 1.0), new Edge(4, 1, 1.0), new Edge(1, 3, 1.0), new Edge(2, 3, 1.0), new Edge(3, 2, 1.0), new Edge(0, 3, 1.0), new Edge(3, 0, 1.0)), 5);
     private final static Graph twoNodesGraph = new Graph(List.of(new Edge(0, 1, 1.0), new Edge(1, 0, 1.0)), 2);
+    private final static Graph completelyDisconnectedComponents = new Graph(List.of(new Edge(2, 2, 1.0), new Edge(1, 1, 1.0), new Edge(2, 1, 1.0), new Edge(0, 0, 1.0)), 3);
 }
 
 

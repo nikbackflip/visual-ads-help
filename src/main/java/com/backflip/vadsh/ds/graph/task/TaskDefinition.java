@@ -53,6 +53,13 @@ public enum TaskDefinition {
             List.of(TaskPrerequisite.of(not(DISCONNECTED), "Graph must not contain disconnected components")),
             new FindMinimumSpanningTree()
     ),
+    FIND_CONNECTED_COMPONENTS(
+            "Find Connected Components",
+            Constants.CONNECTED_COMPONENTS_ID,
+            emptyList(),
+            emptyList(),
+            new FindConnectedComponents()
+    ),
     FIND_STRONGLY_CONNECTED_COMPONENTS(
             "Find Strongly Connected Components",
             Constants.STRONGLY_CONNECTED_COMPONENTS_ID,
@@ -122,6 +129,8 @@ public enum TaskDefinition {
                 return FIND_SHORTEST_PATH_BELLMAN_FORD;
             case Constants.MINIMUM_SPANNING_TREE_ID:
                 return FIND_MINIMUM_SPANNING_TREE;
+            case Constants.CONNECTED_COMPONENTS_ID:
+                return FIND_CONNECTED_COMPONENTS;
             case Constants.STRONGLY_CONNECTED_COMPONENTS_ID:
                 return FIND_STRONGLY_CONNECTED_COMPONENTS;
             case Constants.BRIDGES_ID:
@@ -232,6 +241,7 @@ public enum TaskDefinition {
         private static final String DAG_LONGEST_PATH_ID = "longestPathDag";
         private static final String TOPOLOGICAL_ORDER_ID = "topologicalOrder";
         private static final String EULERIAN_PATH_ID = "eulerianPath";
+        private static final String CONNECTED_COMPONENTS_ID = "connectedComponents";
     }
 }
 

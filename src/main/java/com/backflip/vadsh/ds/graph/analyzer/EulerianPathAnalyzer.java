@@ -3,13 +3,32 @@ package com.backflip.vadsh.ds.graph.analyzer;
 import com.backflip.vadsh.ds.graph.Config;
 import com.backflip.vadsh.ds.graph.Edge;
 import com.backflip.vadsh.ds.graph.Graph;
+import com.backflip.vadsh.ds.graph.task.TaskDefinition;
+import com.backflip.vadsh.ds.graph.task.TaskExecutionSuccess;
+import com.backflip.vadsh.ds.graph.task.TaskResult;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+
+import static com.backflip.vadsh.ds.graph.analyzer.AnalyticDefinition.DISCONNECTED;
 
 public class EulerianPathAnalyzer implements Analyzer {
 
     @Override
     public boolean analyze(Graph graph, Config config) {
+
+        List<List<Integer>> adjacencyList = graph.adjacencyList();
+
+        if (DISCONNECTED.analyze(graph, config)) {
+            TaskResult result = TaskDefinition.FIND_CONNECTED_COMPONENTS.execute(graph, config, Collections.emptyMap());
+            List<Set<Integer>> connectedComponents = ((TaskExecutionSuccess) result).getComponents();
+
+            boolean disconnectedEdgesExist = connectedComponents.stream()
+                    .filter(s -> s.stream().anyMatch(n -> adjacencyList.get(n).size() > 0))
+                    .count() > 1;
+            if (disconnectedEdgesExist) return false;
+        }
 
         List<Edge> edges = graph.edgeList();
         int n = graph.n();
