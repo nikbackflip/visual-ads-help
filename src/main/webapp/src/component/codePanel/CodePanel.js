@@ -8,7 +8,7 @@ import JavaTab from "./JavaTab";
 import {GENERATOR_MODE, JAVA_MODE, MATRIX_EDGE_MODE, TABS_NAMES, TASKS_MODE} from "./CodePanelConstants";
 import MatrixListTab from "./MatrixListTab";
 import TasksTab from "./TasksTab";
-import GeneratorTab from "./GeneratorTab";
+import GeneratorTab from "./generator/GeneratorTab";
 import {AppBar, Tab, Tabs} from "@material-ui/core";
 
 
