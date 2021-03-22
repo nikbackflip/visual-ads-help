@@ -91,7 +91,7 @@ class GeneratorTab extends React.Component {
                             options={this.state.availableOptions.map(n => {
                                     return <OptionChip
                                         key={n}
-                                        name={n}
+                                        name={n.replace(/_/g, ' ')}
                                         onDrop={() => this.selectOption(n)}
                                         type={OptionTypes.AVAILABLE}
                                     />
@@ -104,7 +104,7 @@ class GeneratorTab extends React.Component {
                             options={this.state.selectedOptions.map(n => {
                                     return <OptionChip
                                         key={n}
-                                        name={n}
+                                        name={n.replace(/_/g, ' ')}
                                         onDrop={() => this.deselectOption(n)}
                                         type={OptionTypes.SELECTED}
                                     />
